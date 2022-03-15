@@ -4,8 +4,8 @@ import { logoStyle, linksStyle } from "../../styles/navbar";
 
 export const Footer = () => (
   <div className="container-fluid" style={{ backgroundColor: "#f8f9fa" }}>
-    <footer className="row row-cols-6 py-5 my-5">
-      <div className="col offset-md-2">
+    <footer className="row row-cols-6 py-3 my-1">
+      <div className="col offset-md-2 pt-3">
         <div style={logoStyle}>ticketGo</div>
       </div>
       <div className="d-flex" style={{ width: "45px" }}>
