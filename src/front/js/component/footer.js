@@ -4,7 +4,7 @@ import { logoStyle, linksStyle } from "../../styles/navbar";
 
 export const Footer = () => (
   <div className="container-fluid" style={{ backgroundColor: "#f8f9fa" }}>
-    <footer className="row row-cols-6 py-3 my-1">
+    <footer className="row row-cols-6 py-3">
       <div className="col offset-md-2 pt-3">
         <div style={logoStyle}>ticketGo</div>
       </div>
