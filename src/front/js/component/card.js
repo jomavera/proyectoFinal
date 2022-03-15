@@ -12,10 +12,10 @@ export const Card = (props) => {
         ></img>
         <div className="card-body">
           <h5 className="card-title">{props.titulo}</h5>
-          <p className="card-text">{props.descripcion}.</p>
+          <p className="card-text">{props.descripcion}</p>
           <div className="btn btn-primary" style={buttonStyle2}>
             <Link
-              to={props.enlace}
+              to={`/evento/${props.idEvento}`}
               style={{ textDecoration: "none", color: "white" }}
             >
               Ver mas
