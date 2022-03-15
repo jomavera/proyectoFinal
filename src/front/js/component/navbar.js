@@ -21,7 +21,7 @@ export const Navbar = () => {
               </Link>
             </li>
             <li className="nav-item dropdown">
-              <a
+              <div
                 className="nav-link dropdown-toggle"
                 href="#"
                 id="navbarDropdown"
@@ -31,27 +31,27 @@ export const Navbar = () => {
                 style={dropDownsStyle}
               >
                 Categorias
-              </a>
+              </div>
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <div className="dropdown-item">
                     <Link
                       to="/"
                       style={{ textDecoration: "none", color: "#5BB2F5" }}
                     >
                       Teatro
                     </Link>
-                  </a>
+                  </div>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <div className="dropdown-item">
                     <Link
                       to="/"
                       style={{ textDecoration: "none", color: "#5BB2F5" }}
                     >
                       Cine
                     </Link>
-                  </a>
+                  </div>
                 </li>
               </ul>
             </li>
