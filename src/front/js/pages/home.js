@@ -3,41 +3,11 @@ import { Context } from "../store/appContext";
 import "../../styles/home.css";
 import { Box } from "../component/box.js";
 import { Cards } from "../component/cards.js";
+import { datos } from "../../../datosPrueba.js";
 
 export const Home = () => {
   const { store, actions } = useContext(Context);
-  const datos = [
-    {
-      titulo: "Evento 1",
-      descripcion:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus consectetur blandit. Nunc mauris ipsum, rhoncus in dolor nec, posuere dignissim nulla. Nam ac tincidunt.",
-      enlace: "/",
-    },
-    {
-      titulo: "Evento 2",
-      descripcion:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus consectetur blandit. Nunc mauris ipsum, rhoncus in dolor nec, posuere dignissim nulla. Nam ac tincidunt.",
-      enlace: "/",
-    },
-    {
-      titulo: "Evento 3",
-      descripcion:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus consectetur blandit. Nunc mauris ipsum, rhoncus in dolor nec, posuere dignissim nulla. Nam ac tincidunt.",
-      enlace: "/",
-    },
-    {
-      titulo: "Evento 4",
-      descripcion:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus consectetur blandit. Nunc mauris ipsum, rhoncus in dolor nec, posuere dignissim nulla. Nam ac tincidunt.",
-      enlace: "/",
-    },
-    {
-      titulo: "Evento 5",
-      descripcion:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus consectetur blandit. Nunc mauris ipsum, rhoncus in dolor nec, posuere dignissim nulla. Nam ac tincidunt.",
-      enlace: "/",
-    },
-  ];
+
   return (
     <div className="container-fluid" style={{ backgroundColor: "#e9ecef" }}>
       <div className="row pt-5">
