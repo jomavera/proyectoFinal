@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Link, useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { datos } from "../../../datosPrueba.js";
+import { CajaCompra } from "../component/cajaCompra";
 
 export const Evento = (props) => {
   const { store, actions } = useContext(Context);
@@ -16,7 +17,7 @@ export const Evento = (props) => {
     <div className="container-fluid">
       <div className="row row-cols-8 align-items-center">
         <div className="col"></div>
-        <div className="col">git d
+        <div className="col">
           <img
             src="https://via.placeholder.com/300x300"
             className="card-img-top p-1 align-items-center"
@@ -43,7 +44,9 @@ export const Evento = (props) => {
             <div className="fs-5">{datosEvento.duracion}</div>
           </div>
         </div>
-        <div className="col"></div>
+        <div className="col">
+          <CajaCompra />
+        </div>
         <div className="col"></div>
       </div>
     </div>
