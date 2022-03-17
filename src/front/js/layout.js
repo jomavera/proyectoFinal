@@ -5,6 +5,7 @@ import ScrollToTop from "./component/scrollToTop";
 import { Home } from "./pages/home";
 import { Demo } from "./pages/demo";
 import { Evento } from "./pages/evento";
+import { EventoUbicaciones } from "./pages/eventoUbicaciones";
 import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
@@ -30,6 +31,9 @@ const Layout = () => {
             </Route>
             <Route exact path="/evento/:theid">
               <Evento />
+            </Route>
+            <Route exact path="/eventoUbicaciones/:theid">
+              <EventoUbicaciones />
             </Route>
             <Route>
               <h1>Not found!</h1>
