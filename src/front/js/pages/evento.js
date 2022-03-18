@@ -14,9 +14,11 @@ export const Evento = (props) => {
   })[0];
   const actualizarStore = (e) => {
     actions.actualizarPedido(
+      params.theid,
       e.target.elements.fecha.value,
       e.target.elements.hora.value,
-      parseInt(e.target.elements.numero.value)
+      parseInt(e.target.elements.numero.value),
+      datosEvento.precio
     );
     console.log(store);
   };
