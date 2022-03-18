@@ -12,7 +12,14 @@ export const Evento = (props) => {
   const datosEvento = datos.filter((e) => {
     return e.id === parseInt(params.theid);
   })[0];
-
+  const actualizarStore = (e) => {
+    actions.actualizarPedido(
+      e.target.elements.fecha.value,
+      e.target.elements.hora.value,
+      parseInt(e.target.elements.numero.value)
+    );
+    console.log(store);
+  };
   return (
     <div className="container-fluid">
       <div className="row row-cols-8 align-items-center">
@@ -45,7 +52,7 @@ export const Evento = (props) => {
           </div>
         </div>
         <div className="col">
-          <CajaCompra />
+          <CajaCompra onSubmit={(e) => actualizarStore(e)} />
         </div>
         <div className="col"></div>
       </div>

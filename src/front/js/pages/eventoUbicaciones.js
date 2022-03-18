@@ -7,12 +7,29 @@ import "../../styles/seatpicker.scss";
 import { SeatPicker } from "../component/SeatPicker";
 
 export const EventoUbicaciones = (props) => {
+  const [numSelecc, SetNumSelecc] = useState(0);
   const { store, actions } = useContext(Context);
   const params = useParams();
   const datosEvento = datos.filter((e) => {
     return e.id === parseInt(params.theid);
   })[0];
 
+  const anadirUbicacion = ({ row, number, id }, addCb) => {
+    addCb(row, number, id);
+    console.log(store.numero);
+    if (numSelecc < store.numero) {
+      actions.anadirUbicacion(row, number, id);
+      SetNumSelecc(numSelecc + 1);
+    }
+    console.log(store);
+  };
+
+  const quitarUbicacion = ({ row, number, id }, removeCb) => {
+    SetNumSelecc(numSelecc - 1);
+    actions.quitarUbicacion(row, number, id);
+    removeCb(row, number);
+    console.log(store);
+  };
   return (
     <div className="container-fluid">
       <div className="row row-cols-8 align-items-center">
@@ -24,7 +41,7 @@ export const EventoUbicaciones = (props) => {
             alt="..."
           ></img>
         </div>
-        <div className="col">
+        <div className="col-md-auto">
           <div className="row">
             <div className="fs-4 fw-bold">Teatro:</div>
             <div className="fs-4">{datosEvento.locacion}</div>
@@ -35,7 +52,11 @@ export const EventoUbicaciones = (props) => {
           </div>
           <div className="row">
             <div className="fs-5 fw-bold">Fecha:</div>
-            <div className="fs-5">13 de agosto 2022</div>
+            <div className="fs-5">{store.fecha}</div>
+          </div>
+          <div className="row">
+            <div className="fs-5 fw-bold">Hora:</div>
+            <div className="fs-5">{store.hora}</div>
           </div>
           <div className="row">
             <div className="fs-5 fw-bold">Duración:</div>
@@ -43,15 +64,24 @@ export const EventoUbicaciones = (props) => {
           </div>
         </div>
         <div className="col">
-          <SeatPicker
-            rows={rows}
-            maxReservableSeats={3}
-            alpha
-            visible
-            selectedByDefault
-            loading={false}
-            continuous
-          />
+          <div className="row">
+            <SeatPicker
+              rows={rows}
+              maxReservableSeats={store.numero}
+              alpha
+              visible
+              selectedByDefault
+              loading={false}
+              continuous
+              addSeatCallback={anadirUbicacion}
+              removeSeatCallback={quitarUbicacion}
+            />
+          </div>
+          <div className="row">
+            <div className="fs-5">
+              {numSelecc} de {store.numero} seleccinados
+            </div>
+          </div>
         </div>
         <div className="col"></div>
       </div>

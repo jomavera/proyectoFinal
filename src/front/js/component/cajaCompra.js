@@ -1,9 +1,10 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { buttonStyle2 } from "../../styles/navbar.js";
 import { cajaStyle } from "../../styles/cajaCompra.js";
 export const CajaCompra = (props) => {
   const params = useParams();
+  const history = useHistory();
   const fechas = ["03-05-2022", "13-06-2022", "12-03-2022"];
   const horas = ["18h30", "22h00"];
   const fechasOptions = fechas.map((e, ix) => {
@@ -20,32 +21,45 @@ export const CajaCompra = (props) => {
       </option>
     );
   });
+
+  const manejarSubmit = (e) => {
+    const error = e.target.elements.numero.value ? false : true;
+    if (!error) {
+      props.onSubmit(e);
+      history.push(`/eventoUbicaciones/${params.theid}`);
+    } else {
+      alert("Seleccionar el numero de tickets!");
+    }
+  };
   return (
-    <form style={cajaStyle} className="rounded">
+    <form
+      style={cajaStyle}
+      className="rounded"
+      onSubmit={(e) => manejarSubmit(e)}
+    >
       <div className="mb-3">
         <label className="form-check-label">Seleccionar fecha</label>
-        <select className="form-select" aria-label="seleccion fecha">
+        <select
+          className="form-select"
+          aria-label="seleccion fecha"
+          name="fecha"
+        >
           {fechasOptions}
         </select>
       </div>
       <div className="mb-3">
         <label className="form-check-label">Seleccionar hora</label>
-        <select className="form-select" aria-label="seleccion hora">
+        <select className="form-select" aria-label="seleccion hora" name="hora">
           {horasOptions}
         </select>
       </div>
       <div className="mb-3">
         <label className="form-label">Ingresar número de tickets</label>
-        <input type="number" className="form-control" />
+        <input type="number" className="form-control" min={1} name="numero" />
       </div>
-      <div className="btn btn-primary" style={buttonStyle2}>
-        <Link
-          to={`/eventoUbicaciones/${params.theid}`}
-          style={{ textDecoration: "none", color: "white" }}
-        >
-          Comprar
-        </Link>
-      </div>
+      <button type="submit" className="btn btn-primary" style={buttonStyle2}>
+        Comprar
+      </button>
     </form>
   );
 };
