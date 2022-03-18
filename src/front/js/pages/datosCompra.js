@@ -19,8 +19,7 @@ export const DatosCompra = (props) => {
       return acc;
     }, "");
   const totalCompra = store.precio * store.numero;
-  console.log(totalCompra);
-  console.log();
+
   return (
     <div className="container-fluid">
       <div className="row row-cols-8 align-items-center">
