@@ -8,6 +8,7 @@ export const datos = [
     duracion: "1h30",
     locacion: "Teatro Municipal de Santiago",
     id: 0,
+    precio: 8000,
   },
   {
     titulo: "Evento 2",
@@ -18,6 +19,7 @@ export const datos = [
     duracion: "1h50",
     locacion: "Teatro Municipal de Las Condes",
     id: 1,
+    precio: 12000,
   },
   {
     titulo: "Evento 3",
@@ -28,6 +30,7 @@ export const datos = [
     duracion: "1h25",
     locacion: "Teatro Municipal de  Providencia",
     id: 2,
+    precio: 10000,
   },
   {
     titulo: "Evento 4",
@@ -38,6 +41,7 @@ export const datos = [
     duracion: "1h15",
     locacion: "Teatro Nescafe",
     id: 3,
+    precio: 15000,
   },
   {
     titulo: "Evento 5",
@@ -48,6 +52,7 @@ export const datos = [
     duracion: "1h35",
     locacion: "Teatro Matucana 100",
     id: 4,
+    precio: 7000,
   },
 ];
 export const rows = [
