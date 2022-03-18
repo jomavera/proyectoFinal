@@ -14,9 +14,11 @@ const getState = ({ getStore, getActions, setStore }) => {
           initial: "white",
         },
       ],
+      id: null,
       hora: null,
       fecha: null,
       numero: null,
+      precio: null,
       ubicaciones: [],
     },
     actions: {
@@ -48,8 +50,14 @@ const getState = ({ getStore, getActions, setStore }) => {
         //reset the global store
         setStore({ demo: demo });
       },
-      actualizarPedido: (fecha, hora, numero) => {
-        setStore({ fecha: fecha, hora: hora, numero: numero });
+      actualizarPedido: (id, fecha, hora, numero, precio) => {
+        setStore({
+          id: id,
+          fecha: fecha,
+          hora: hora,
+          numero: numero,
+          precio: precio,
+        });
       },
       anadirUbicacion: (row, number, id) => {
         const store = getStore();
