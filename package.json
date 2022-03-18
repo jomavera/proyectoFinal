@@ -77,6 +77,11 @@
 		"react": "^16.8.4",
 		"react-dom": "^16.8.4",
 		"react-polyfills": "0.0.1",
-		"react-router-dom": "^5.2.0"
+		"react-router-dom": "^5.2.0",
+		"react-seatmap": "^0.1.2",
+		"react-tooltip": "^4.2.21",
+		"sass": "^1.49.9",
+		"sass-loader": "^12.6.0",
+		"seatchart": "^0.1.0"
 	}
 }
