@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { datos, rows } from "../../../datosPrueba.js";
 import "../../styles/seatpicker.scss";
 import { SeatPicker } from "../component/SeatPicker";
+import { buttonStyle2 } from "../../styles/navbar";
 
 export const EventoUbicaciones = (props) => {
   const [numSelecc, SetNumSelecc] = useState(0);
@@ -83,7 +84,16 @@ export const EventoUbicaciones = (props) => {
             </div>
           </div>
         </div>
-        <div className="col"></div>
+        <div className="col align-items-end">
+          <div className="btn btn-primary" style={buttonStyle2}>
+            <Link
+              to={`/datosCompra`}
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              Continuar
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
