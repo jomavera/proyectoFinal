@@ -54,7 +54,10 @@ export const Evento = (props) => {
           </div>
         </div>
         <div className="col">
-          <CajaCompra onSubmit={(e) => actualizarStore(e)} />
+          <CajaCompra
+            onSubmit={(e) => actualizarStore(e)}
+            datos={datosEvento}
+          />
         </div>
         <div className="col"></div>
       </div>

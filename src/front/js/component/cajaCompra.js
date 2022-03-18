@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { buttonStyle2 } from "../../styles/navbar.js";
 import { cajaStyle } from "../../styles/cajaCompra.js";
+
 export const CajaCompra = (props) => {
+  const [NumSelec, SetNumero] = useState(0);
   const params = useParams();
   const history = useHistory();
   const fechas = ["03-05-2022", "13-06-2022", "12-03-2022"];
@@ -31,6 +33,9 @@ export const CajaCompra = (props) => {
       alert("Seleccionar el numero de tickets!");
     }
   };
+  const cambiarNumero = (e) => {
+    SetNumero(e.target.value);
+  };
   return (
     <form
       style={cajaStyle}
@@ -55,7 +60,21 @@ export const CajaCompra = (props) => {
       </div>
       <div className="mb-3">
         <label className="form-label">Ingresar número de tickets</label>
-        <input type="number" className="form-control" min={1} name="numero" />
+        <input
+          type="number"
+          className="form-control"
+          min={1}
+          name="numero"
+          onChange={(e) => cambiarNumero(e)}
+        />
+      </div>
+      <div className="mb-3">
+        <label className="form-label">Precio</label>${props.datos.precio}
+      </div>
+      <hr></hr>
+      <div className="mb-3">
+        <label className="form-label">Total compra</label>$
+        {props.datos.precio * NumSelec}
       </div>
       <button type="submit" className="btn btn-primary" style={buttonStyle2}>
         Comprar
