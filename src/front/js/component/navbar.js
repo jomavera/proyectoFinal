@@ -10,7 +10,7 @@ import {
 
 export const Navbar = () => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light navbar-fixed-bottom">
       <div className="container">
         <div style={logoStyle}>ticketGo</div>
         <div className="collapse navbar-collapse">
@@ -58,12 +58,12 @@ export const Navbar = () => {
           </ul>
         </div>
         <div className="ml-auto">
-          <Link to="/">
+          <Link to="/login">
             <button className="btn mx-1" style={buttonStyle1}>
               Iniciar Sesión
             </button>
           </Link>
-          <Link to="/">
+          <Link to="/registrarse">
             <button className="btn" style={buttonStyle2}>
               Registrarse
             </button>

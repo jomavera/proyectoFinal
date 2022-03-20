@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import "../../styles/footer.css";
 import { logoStyle, linksStyle } from "../../styles/navbar";
+
+
 
 export const Footer = () => (
   <div className="container-fluid" style={{ backgroundColor: "#f8f9fa" }}>
