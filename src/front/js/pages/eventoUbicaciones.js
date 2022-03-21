@@ -32,36 +32,35 @@ export const EventoUbicaciones = (props) => {
     console.log(store);
   };
   return (
-    <div className="container-fluid">
-      <div className="row row-cols-8 align-items-center">
-        <div className="col"></div>
-        <div className="col">
-          <img
-            src="https://via.placeholder.com/100x100"
-            className="card-img-top p-5 align-items-center"
-            alt="..."
-          ></img>
-        </div>
-        <div className="col-md-auto">
+    <div className="container">
+      <div className="row align-items-center">
+        <div className="col-3 offset-1">
           <div className="row">
-            <div className="fs-4 fw-bold">Teatro:</div>
-            <div className="fs-4">{datosEvento.locacion}</div>
+            <img
+              src="https://via.placeholder.com/200x100"
+              alt="..."
+              className="img-fluid p-1"
+            ></img>
           </div>
           <div className="row">
-            <div className="fs-4 fw-bold">Obra:</div>
-            <div className="fs-4">{datosEvento.titulo}</div>
+            <div className="fs-6 fw-bold">Teatro:</div>
+            <div className="fs-6">{datosEvento.locacion}</div>
           </div>
           <div className="row">
-            <div className="fs-5 fw-bold">Fecha:</div>
-            <div className="fs-5">{store.fecha}</div>
+            <div className="fs-6 fw-bold">Obra:</div>
+            <div className="fs-6">{datosEvento.titulo}</div>
           </div>
           <div className="row">
-            <div className="fs-5 fw-bold">Hora:</div>
-            <div className="fs-5">{store.hora}</div>
+            <div className="fs-7 fw-bold">Fecha:</div>
+            <div className="fs-7">{store.fecha}</div>
           </div>
           <div className="row">
-            <div className="fs-5 fw-bold">Duración:</div>
-            <div className="fs-5">{datosEvento.duracion}</div>
+            <div className="fs-7 fw-bold">Hora:</div>
+            <div className="fs-7">{store.hora}</div>
+          </div>
+          <div className="row">
+            <div className="fs-7 fw-bold">Duración:</div>
+            <div className="fs-7">{datosEvento.duracion}</div>
           </div>
         </div>
         <div className="col">

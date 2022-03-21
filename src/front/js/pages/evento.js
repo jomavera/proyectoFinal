@@ -23,10 +23,9 @@ export const Evento = (props) => {
     console.log(store);
   };
   return (
-    <div className="container-fluid">
-      <div className="row row-cols-8 align-items-center">
-        <div className="col"></div>
-        <div className="col">
+    <div className="container">
+      <div className="row align-items-center">
+        <div className="col-4 offset-1">
           <img
             src="https://via.placeholder.com/300x300"
             className="card-img-top p-1 align-items-center"
@@ -53,13 +52,12 @@ export const Evento = (props) => {
             <div className="fs-5">{datosEvento.duracion}</div>
           </div>
         </div>
-        <div className="col">
+        <div className="col-3">
           <CajaCompra
             onSubmit={(e) => actualizarStore(e)}
             datos={datosEvento}
           />
         </div>
-        <div className="col"></div>
       </div>
     </div>
   );
