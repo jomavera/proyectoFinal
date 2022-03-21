@@ -21,6 +21,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       numero: null,
       precio: null,
       ubicaciones: [],
+      estado: "",
     },
     actions: {
       // Use getActions to call a function within a fuction
@@ -28,56 +29,58 @@ const getState = ({ getStore, getActions, setStore }) => {
         getActions().changeColor(0, "green");
       },
 
-     
-
       login: async (email, password) => {
         const opciones = {
-          method: 'POST',
+          method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            "email": email,
-            "password": password
-          })
+            email: email,
+            password: password,
+          }),
         };
         try {
-          const resp = await fetch('https://3001-jomavera-proyectofinal-dbjxjyhhttw.ws-us38.gitpod.io/api/token', opciones)
+          const resp = await fetch(
+            "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/token",
+            opciones
+          );
           if (resp.status !== 200) {
-            console.log("ERROR en respuesta")
-            return false
+            throw new Error("ERROR en respuesta");
           }
           const data = await resp.json();
-          console.log('Informacion desde backend', data)
-          sessionStorage.setItem('token', data.access_token);
-          setStore({ token: data.access_token })
-          return true
-
+          console.log("Informacion desde backend", data);
+          sessionStorage.setItem("token", data.access_token);
+          setStore({ token: data.access_token });
+          return true;
         } catch (error) {
-          console.error('ERROR FECTH TOKEN')
+          console.error(`Login error: ${error}`);
         }
       },
 
       sincronizarTokenParaSessionStrore: () => {
         const token = sessionStorage.getItem("token");
-        console.log('aplicacion sincronizada desde session Storage token')
-        if (token && token != "" && token != undefined) setStore({ token: token })
+        console.log("aplicacion sincronizada desde session Storage token");
+        if (token && token != "" && token != undefined)
+          setStore({ token: token });
       },
 
       logout: () => {
         sessionStorage.removeItem("token");
-        console.log('Cerrar sesion')
-        setStore({ token: null })
+        console.log("Cerrar sesion");
+        setStore({ token: null });
       },
       getMessage: () => {
-        const store = getStore()
+        const store = getStore();
         const opciones = {
           headers: {
-            Authorization: "Bearer " + store.token
-          }
-
+            Authorization: "Bearer " + store.token,
+          },
         };
-        fetch('https://3001-jomavera-proyectofinal-dbjxjyhhttw.ws-us38.gitpod.io/api/hello', opciones)
+        fetch(
+          "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/hello",
+          opciones
+        )
           .then((resp) => resp.json())
           .then((data) => setStore({ message: data.message }))
           .catch((error) =>
@@ -87,30 +90,31 @@ const getState = ({ getStore, getActions, setStore }) => {
 
       registrarse: async (name, lastname, email, password) => {
         const opciones = {
-          method: 'POST',
+          method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            "name": name,
-            "lastname": lastname,
-            "email": email,
-            "password": password
-          })
+            name: name,
+            lastname: lastname,
+            email: email,
+            password: password,
+          }),
         };
         try {
-          const resp = await fetch('https://3001-jomavera-proyectofinal-dbjxjyhhttw.ws-us38.gitpod.io/api/new_user', opciones)
-          if (resp.status !== 200) {
-            console.log("ERROR en respuesta")
-            return false
+          const resp = await fetch(
+            "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/new_user",
+            opciones
+          );
+          if (resp.status != 200) {
+            throw new Error("ERROR en respuesta");
           }
           const data = await resp.json();
-          console.log('Informacion desde backend', data)
-          setStore({ data: data })
-          return data
-
+          console.log("Informacion desde backend", data);
+          setStore({ data: data });
+          return data;
         } catch (error) {
-          console.error('ERROR FECTH TOKEN')
+          console.error(`New user error: ${error}`);
         }
       },
       changeColor: (index, color) => {
@@ -146,6 +150,9 @@ const getState = ({ getStore, getActions, setStore }) => {
         const store = getStore();
         let newUbicaciones = store.ubicaciones.filter((e) => e.id != id);
         setStore({ ubicaciones: newUbicaciones });
+      },
+      actualizarEstado: (estado) => {
+        setStore({ estado: estado });
       },
     },
   };

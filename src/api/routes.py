@@ -58,7 +58,7 @@ def new_user():
         user = User(name=name, lastname=lastname, email=email, password=password, is_active=True)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for('handle_hello',name = user))
+
         return {
             'mensaje':'ok'
         }, 200
