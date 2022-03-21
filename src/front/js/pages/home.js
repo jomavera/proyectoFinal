@@ -12,10 +12,9 @@ export const Home = () => {
     <div className="container-fluid" style={{ backgroundColor: "#e9ecef" }}>
       <div className="row pt-5">
         <div className="col-2"></div>
-        <div className="col-4">
+        <div className="col-5">
           <h1 style={{ fontFamily: "Montserrat" }}>Que quieres hacer hoy?</h1>
         </div>
-        <div className="col-5"></div>
       </div>
       <div className="row justify-content-center">
         <div className="col"></div>
