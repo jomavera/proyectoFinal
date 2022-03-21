@@ -14,14 +14,18 @@ api = Blueprint('api', __name__)
 
 
 
-@api.route('/hello', methods=['POST', 'GET'])
+@api.route('/hello', methods=['GET'])
+@jwt_required()
 def handle_hello():
-
-    response_body = {
-        "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
+    try:
+       
+        email = get_jwt_identity()
+        response_body = {
+        "message": email
     }
-
-    return jsonify(response_body), 200
+        return jsonify(response_body), 200
+    except Exception as e:
+        print("ERROR! "f'{e}')
 
 
 @api.route('/user', methods=['GET'])
@@ -30,6 +34,7 @@ def get_user():
         response_body = ([{
             '_id': user.id,
             'name': user.name,
+            'lastname': user.lastname,
             'email': user.email,
             'is_active': user.is_active
         } for user in User.query.all()
@@ -42,24 +47,27 @@ def get_user():
 def new_user():
     try:
         name = request.json.get("name", None)
+        lastname = request.json.get("lastname", None)
         email = request.json.get("email", None)
         password = request.json.get("password", None)
         is_active = request.json.get("is_active", None)
-        if is_active.lower() == 'true':
-            is_active = True
-        else:
-            is_active = False
-        user = User(name=name, email=email, password=password, is_active=is_active)
+        # if is_active.lower() == 'true':
+        #     is_active = True
+        # if is_active.lower()== 'false': 
+        #     is_active = False
+        user = User(name=name, lastname=lastname, email=email, password=password, is_active=True)
         db.session.add(user)
         db.session.commit()
+        return redirect(url_for('handle_hello',name = user))
         return {
             'mensaje':'ok'
         }, 200
+        
     except Exception as e:
-        print(f'new_user: {e}')
+        print(f'new_user_ERROR: {e}')
         return 'ERROR', 500
 
-@api.route('/success/<name>')
+@api.route('/perfil/<name>')
 def success(name):
    return 'welcome %s' % name
 
@@ -68,7 +76,7 @@ def login():
     try:
         if request.method == 'POST':
             user = request.form['nm']
-            return redirect(url_for('success',name = user))
+            return redirect(url_for('perfil',name = user))
         else:
             user = request.args.get('nm')
         return redirect(url_for('success',name = user))
@@ -83,8 +91,10 @@ def create_token():
     try:
         email = request.json.get("email", None)
         password = request.json.get("password", None)
-        if email != email or password != password:
-            return jsonify({"msg": "Bad email or password"}), 401
+        user = User.query.filter_by(email=email, password=password).first()
+        if user is None:
+            return jsonify({"msg": "Bad username or password"}), 401
+           
 
         access_token = create_access_token(identity=email)
         return jsonify(access_token=access_token)
