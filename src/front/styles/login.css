@@ -1,0 +1,30 @@
+body{
+    background-color: #e9ecef;
+}
+
+h3{
+    font-family: "Montserrat";
+}
+.login-container{
+    margin-top: 5%;
+    margin-bottom: 5%;
+
+}
+.login-form-1{
+    padding: 5%;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.1), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 30px;
+    background-color: white;
+}
+.login-form-1 h3{
+    text-align: center;
+    color: #333;
+}
+
+.login-container form{
+    padding: 10%;
+}
+
+
+
+

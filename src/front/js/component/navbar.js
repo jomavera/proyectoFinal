@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useContext} from "react";
+import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
 import {
   logoStyle,
@@ -9,8 +10,10 @@ import {
 } from "../../styles/navbar.js";
 
 export const Navbar = () => {
+  const { store, actions } = useContext(Context);
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light navbar-fixed-bottom">
       <div className="container">
         <div style={logoStyle}>ticketGo</div>
         <div className="collapse navbar-collapse">
@@ -58,16 +61,28 @@ export const Navbar = () => {
           </ul>
         </div>
         <div className="ml-auto">
-          <Link to="/">
-            <button className="btn mx-1" style={buttonStyle1}>
-              Iniciar Sesión
-            </button>
-          </Link>
-          <Link to="/">
+          { !store.token ?
+            <Link to="/login">
+              <button className="btn mx-1" style={buttonStyle1}>
+                Iniciar Sesión
+              </button>
+            </Link>
+            :
+            <Link to="/">
+            <button onClick={()=> actions.logout()} className="btn mx-1" style={buttonStyle1}>Cerrar sesión</button>
+            </Link>
+
+            
+          }
+          {!store.token ?
+          <Link to="/registrarse">
             <button className="btn" style={buttonStyle2}>
               Registrarse
             </button>
           </Link>
+          :   <Link to="/perfil">
+          <button  className="btn mx-1" style={buttonStyle1}>Mi Perfil</button>
+          </Link> }
         </div>
       </div>
     </nav>

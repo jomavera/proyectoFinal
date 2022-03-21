@@ -1,6 +1,7 @@
 const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
+      token: null,
       message: null,
       demo: [
         {
@@ -27,14 +28,90 @@ const getState = ({ getStore, getActions, setStore }) => {
         getActions().changeColor(0, "green");
       },
 
+     
+
+      login: async (email, password) => {
+        const opciones = {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            "email": email,
+            "password": password
+          })
+        };
+        try {
+          const resp = await fetch('https://3001-jomavera-proyectofinal-dbjxjyhhttw.ws-us38.gitpod.io/api/token', opciones)
+          if (resp.status !== 200) {
+            console.log("ERROR en respuesta")
+            return false
+          }
+          const data = await resp.json();
+          console.log('Informacion desde backend', data)
+          sessionStorage.setItem('token', data.access_token);
+          setStore({ token: data.access_token })
+          return true
+
+        } catch (error) {
+          console.error('ERROR FECTH TOKEN')
+        }
+      },
+
+      sincronizarTokenParaSessionStrore: () => {
+        const token = sessionStorage.getItem("token");
+        console.log('aplicacion sincronizada desde session Storage token')
+        if (token && token != "" && token != undefined) setStore({ token: token })
+      },
+
+      logout: () => {
+        sessionStorage.removeItem("token");
+        console.log('Cerrar sesion')
+        setStore({ token: null })
+      },
       getMessage: () => {
-        // fetching data from the backend
-        fetch(process.env.BACKEND_URL + "/api/hello")
+        const store = getStore()
+        const opciones = {
+          headers: {
+            Authorization: "Bearer " + store.token
+          }
+
+        };
+        fetch('https://3001-jomavera-proyectofinal-dbjxjyhhttw.ws-us38.gitpod.io/api/hello', opciones)
           .then((resp) => resp.json())
           .then((data) => setStore({ message: data.message }))
           .catch((error) =>
             console.log("Error loading message from backend", error)
           );
+      },
+
+      registrarse: async (name, lastname, email, password) => {
+        const opciones = {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            "name": name,
+            "lastname": lastname,
+            "email": email,
+            "password": password
+          })
+        };
+        try {
+          const resp = await fetch('https://3001-jomavera-proyectofinal-dbjxjyhhttw.ws-us38.gitpod.io/api/new_user', opciones)
+          if (resp.status !== 200) {
+            console.log("ERROR en respuesta")
+            return false
+          }
+          const data = await resp.json();
+          console.log('Informacion desde backend', data)
+          setStore({ data: data })
+          return data
+
+        } catch (error) {
+          console.error('ERROR FECTH TOKEN')
+        }
       },
       changeColor: (index, color) => {
         //get the store
