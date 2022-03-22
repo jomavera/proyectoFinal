@@ -1,14 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { buttonStyle2 } from "../../styles/navbar.js";
 import { cajaStyle } from "../../styles/cajaCompra.js";
 
 export const CajaCompra = (props) => {
   const [NumSelec, SetNumero] = useState(0);
+  const [fechas, setFechas] = useState([]);
+  const [horas, setHoras] = useState([]);
   const params = useParams();
   const history = useHistory();
-  const fechas = ["03-05-2022", "13-06-2022", "12-03-2022"];
-  const horas = ["18h30", "22h00"];
+
+  async function obtenerDatosFunciones(evento_id) {
+    const response = await fetch(
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/funciones/${evento_id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    let data = await response.json();
+    let respFechas = data.map((e) => {
+      return e.fecha;
+    });
+    let respHoras = data.map((e) => {
+      return e.hora;
+    });
+    setFechas(respFechas);
+    setHoras(respHoras);
+  }
+  useEffect(() => {
+    obtenerDatosFunciones(props.datos.id);
+  }, [props.datos]);
   const fechasOptions = fechas.map((e, ix) => {
     return (
       <option value={e} key={ix}>
