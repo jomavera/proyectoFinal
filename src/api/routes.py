@@ -9,6 +9,7 @@ from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
+from datetime import datetime
 
 api = Blueprint('api', __name__)
 
@@ -120,7 +121,8 @@ def new_event():
         db.session.commit()
 
         return {
-            'mensaje':'ok'
+            'mensaje':'ok',
+            'id':evento.id
         }, 200
         
     except Exception as e:
@@ -171,15 +173,35 @@ def get_evento(theid):
         print(f'get events error: {e}')
         return 'ERROR', 500
 
+@api.route('/evento_name/<name>', methods=['GET'])
+def get_evento_name(name):
+    try:
+        response_body = ([{
+            'id': evento.id,
+            'titulo': evento.name,
+            'categoria_id': evento.categoria_id,
+            'locacion_id': evento.locacion_id,
+            'descripcion': evento.descripcion,
+            'sinopsis': evento.sinopsis,
+            'precio': evento.precio,
+            'imagen':evento.imagen,
+            'duracion':evento.duracion,
+            'is_active': evento.is_active
+        } for evento in Evento.query.filter_by(name=name)
+        ])
+        return jsonify(response_body), 200
+        
+    except Exception as e:
+        print(f'get event name error: {e}')
+        return 'ERROR', 500
+
 @api.route('/nueva_categoria', methods=['POST'])
 def new_category():
     try:
         name = request.json.get("name", None)
         query = Categoria.query.filter_by(name=name)
         results = list(map(lambda x: x.serialize(), query))
-        print(results)
         if results == []:
-            print("-#-#-#-#-#- ENTRO")
             categoria = Categoria(name)
             db.session.add(categoria)
             db.session.commit()
@@ -198,7 +220,6 @@ def new_location():
         name = request.json.get("name", None)
         query = Locacion.query.filter_by(name=name)
         results = list(map(lambda x: x.serialize(), query))
-        print(results)
         if results == []:
             locacion = Locacion(name)
             db.session.add(locacion)
@@ -262,8 +283,9 @@ def new_function():
     try:
         evento_id = request.json.get("evento_id", None)
         fecha = request.json.get("fecha", None)
+        hora = request.json.get("hora", None)
 
-        funcion = Funcion(evento_id, fecha)
+        funcion = Funcion(evento_id, datetime.strptime(fecha, "%a, %d %b %Y %H:%M:%S %Z"), hora)
         db.session.add(funcion)
         db.session.commit()
 
@@ -272,5 +294,22 @@ def new_function():
         }, 200
         
     except Exception as e:
-        print(f'Error nueva locacion : {e}')
+        print(f'Error nueva funcion : {e}')
+        return 'ERROR', 500
+
+@api.route('/funciones/<int:evento_id>', methods=['GET'])
+def get_functions(evento_id):
+    try:
+        response_body = ([{
+            'id': funcion.id,
+            'evento_id': funcion.evento_id,
+            'fecha':funcion.fecha,
+            'hora': funcion.hora,
+
+        } for funcion in Funcion.query.filter_by(evento_id=evento_id)
+        ])
+        return jsonify(response_body), 200
+        
+    except Exception as e:
+        print(f'get category error: {e}')
         return 'ERROR', 500
