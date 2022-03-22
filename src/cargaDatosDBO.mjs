@@ -10,9 +10,9 @@ const datos = [
     locacion: "Teatro Municipal de Santiago",
     precio: 8000,
     funciones: [
-      new Date(2022, 4, 30),
-      new Date(2022, 3, 20),
-      new Date(2022, 5, 15),
+      new Date(2022, 6, 30, 22, 15),
+      new Date(2022, 7, 20, 20),
+      new Date(2022, 5, 30, 21, 30),
     ],
     categoria: "Teatro",
     imagen: "https://via.placeholder.com/300x300",
@@ -27,9 +27,9 @@ const datos = [
     locacion: "Teatro Municipal de Las Condes",
     precio: 12000,
     funciones: [
-      new Date(2022, 4, 30),
-      new Date(2022, 3, 20),
-      new Date(2022, 5, 15),
+      new Date(2022, 6, 30, 22, 15),
+      new Date(2022, 7, 20, 20),
+      new Date(2022, 5, 30, 21, 30),
     ],
     categoria: "Teatro",
     imagen: "https://via.placeholder.com/300x300",
@@ -44,9 +44,9 @@ const datos = [
     locacion: "Teatro Municipal de  Providencia",
     precio: 10000,
     funciones: [
-      new Date(2022, 4, 30),
-      new Date(2022, 3, 20),
-      new Date(2022, 5, 15),
+      new Date(2022, 6, 30, 22, 15),
+      new Date(2022, 7, 20, 20),
+      new Date(2022, 5, 30, 21, 30),
     ],
     categoria: "Teatro",
     imagen: "https://via.placeholder.com/300x300",
@@ -61,9 +61,9 @@ const datos = [
     locacion: "Teatro Nescafe",
     precio: 15000,
     funciones: [
-      new Date(2022, 4, 30),
-      new Date(2022, 3, 20),
-      new Date(2022, 5, 15),
+      new Date(2022, 6, 30, 22, 15),
+      new Date(2022, 7, 20, 20),
+      new Date(2022, 5, 30, 21, 30),
     ],
     categoria: "Teatro",
     imagen: "https://via.placeholder.com/300x300",
@@ -78,9 +78,9 @@ const datos = [
     locacion: "Teatro Matucana 100",
     precio: 7000,
     funciones: [
-      new Date(2022, 4, 30),
-      new Date(2022, 3, 20),
-      new Date(2022, 5, 15),
+      new Date(2022, 6, 30, 22, 15),
+      new Date(2022, 7, 20, 20),
+      new Date(2022, 5, 30, 21, 30),
     ],
     categoria: "Teatro",
     imagen: "https://via.placeholder.com/300x300",
@@ -95,9 +95,9 @@ const datos = [
     locacion: "Teatro Nescafe",
     precio: 15300,
     funciones: [
-      new Date(2022, 4, 30),
-      new Date(2022, 3, 20),
-      new Date(2022, 5, 15),
+      new Date(2022, 6, 30, 22, 15),
+      new Date(2022, 7, 20, 20),
+      new Date(2022, 5, 30, 21, 30),
     ],
     categoria: "Teatro",
     imagen: "https://via.placeholder.com/300x300",
@@ -112,9 +112,9 @@ const datos = [
     locacion: "Cineplanet Costanera",
     precio: 5300,
     funciones: [
-      new Date(2022, 6, 30),
-      new Date(2022, 7, 20),
-      new Date(2022, 5, 30),
+      new Date(2022, 6, 30, 22, 15),
+      new Date(2022, 7, 20, 20),
+      new Date(2022, 5, 30, 21, 30),
     ],
     categoria: "Cine",
     imagen: "https://via.placeholder.com/300x300",
@@ -129,9 +129,9 @@ const datos = [
     locacion: "Cinemark",
     precio: 5300,
     funciones: [
-      new Date(2022, 6, 30),
-      new Date(2022, 7, 20),
-      new Date(2022, 5, 30),
+      new Date(2022, 6, 30, 22, 15),
+      new Date(2022, 7, 20, 20),
+      new Date(2022, 5, 30, 21, 30),
     ],
     categoria: "Cine",
     imagen: "https://via.placeholder.com/300x300",
@@ -157,7 +157,7 @@ async function insertarDato(url, nombre) {
       throw new Error("ERROR en respuesta");
     }
     const data = await resp.json();
-    console.log("Se inserto locacion correctamente");
+    console.log(`Se inserto ${url} correctamente`);
     return data;
   } catch (error) {
     console.error(`Error API ${url}: ${error}`);
@@ -180,7 +180,7 @@ async function getID(url, name) {
       throw new Error("ERROR en respuesta");
     }
     const data = await resp.json();
-    console.log("Se obtuvo locacion id correctamente");
+    console.log(`Se obtuvo ${url} id correctamente`);
     return data;
   } catch (error) {
     console.error(`Error API ${url}: ${error}`);
@@ -239,6 +239,78 @@ async function procesarEvento(evento) {
   );
 }
 
-datos.forEach((evento) => {
-  procesarEvento(evento);
-});
+for (const evento of datos) {
+  const resp = await procesarEvento(evento);
+}
+
+// datos.forEach((evento) => {
+//   await procesarEvento(evento);
+// });
+
+//-------------------- Iinsertar funciones por cada evento -----------
+
+async function getEventoID(name) {
+  const opciones = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  try {
+    const resp = await fetch(
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/evento_name/${name}`,
+      opciones
+    );
+    if (resp.status != 200) {
+      throw new Error("ERROR en respuesta");
+    }
+    const data = await resp.json();
+    console.log(`Se obtuvo evento por nombre correctamente`);
+    return data[0];
+  } catch (error) {
+    console.error(`Error API: ${error}`);
+  }
+}
+
+async function insertarFuncion(evento_id, funcion) {
+  const opciones = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      evento_id: evento_id,
+      fecha: funcion.toUTCString(),
+      hora: `${funcion.getHours()}h${funcion.getMinutes()}`,
+    }),
+  };
+  try {
+    const resp = await fetch(
+      "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/nueva_funcion",
+      opciones
+    );
+    if (resp.status != 200) {
+      throw new Error("ERROR en respuesta");
+    }
+    const data = await resp.json();
+    console.log("Se inserto funcion correctamente");
+    return data;
+  } catch (error) {
+    console.error(`Error API nueva funcion: ${error}`);
+  }
+}
+
+for (const evento of datos) {
+  let respEvento = await getEventoID(evento.titulo);
+  console.log(respEvento.id);
+  for (const funcion of evento.funciones) {
+    const resp = await insertarFuncion(respEvento.id, funcion);
+  }
+}
+
+// datos.forEach((evento) => {
+//   let respevento = getEventoID(evento.titulo);
+//   evento.funciones.forEach((funcion) => {
+//     procesarFunciones(respevento.id, funcion);
+//   });
+// });
