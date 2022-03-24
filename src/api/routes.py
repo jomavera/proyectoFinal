@@ -311,5 +311,19 @@ def get_functions(evento_id):
         return jsonify(response_body), 200
         
     except Exception as e:
-        print(f'get category error: {e}')
+        print(f'get functions error: {e}')
+        return 'ERROR', 500
+
+@api.route('/horas/<int:evento_id>/<fecha>', methods=['GET'])
+def get_function_hour(evento_id, fecha):
+    try:
+
+        response_body = ([{
+            'hora': funcion.hora,
+        } for funcion in Funcion.query.filter_by(evento_id=evento_id, fecha=fecha)
+        ])
+        return jsonify(response_body), 200
+
+    except Exception as e:
+        print(f'get function hour error: {e}')
         return 'ERROR', 500

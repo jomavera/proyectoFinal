@@ -5,6 +5,7 @@ import { cajaStyle } from "../../styles/cajaCompra.js";
 
 export const CajaCompra = (props) => {
   const [NumSelec, SetNumero] = useState(0);
+  const [fechaSelec, setFechaSelec] = useState(null);
   const [fechas, setFechas] = useState([]);
   const [horas, setHoras] = useState([]);
   const params = useParams();
@@ -22,17 +23,49 @@ export const CajaCompra = (props) => {
     );
     let data = await response.json();
     let respFechas = data.map((e) => {
-      return e.fecha;
+      // ----- para presentar en español
+      // const fechaDate = new Date(e.fecha);
+      // return fechaDate.toLocaleDateString("es-CL");
+      return e.fecha.slice(0,-12);
     });
+
+    setFechas(respFechas);
+  }
+
+  async function obtenerDatosHorasFuncion(evento_id, fecha) {
+    const response = await fetch(
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/horas/${evento_id}/${fecha}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    let data = await response.json();
+
     let respHoras = data.map((e) => {
       return e.hora;
     });
-    setFechas(respFechas);
     setHoras(respHoras);
   }
+
   useEffect(() => {
-    obtenerDatosFunciones(props.datos.id);
+    if (props.datos.id) {
+      obtenerDatosFunciones(props.datos.id);
+    }
   }, [props.datos]);
+
+  useEffect(() => {
+    if (fechaSelec !== null) {
+      obtenerDatosHorasFuncion(props.datos.id, fechaSelec);
+    }
+  }, [fechaSelec]);
+
+  const onSelectFecha = (e) => {
+    setFechaSelec(e.target.value);
+  };
+
   const fechasOptions = fechas.map((e, ix) => {
     return (
       <option value={e} key={ix}>
@@ -72,6 +105,7 @@ export const CajaCompra = (props) => {
           className="form-select"
           aria-label="seleccion fecha"
           name="fecha"
+          onChange={(e) => onSelectFecha(e)}
         >
           {fechasOptions}
         </select>
