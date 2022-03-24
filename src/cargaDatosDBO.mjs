@@ -243,11 +243,7 @@ for (const evento of datos) {
   const resp = await procesarEvento(evento);
 }
 
-// datos.forEach((evento) => {
-//   await procesarEvento(evento);
-// });
-
-//-------------------- Iinsertar funciones por cada evento -----------
+//-------------------- Insertar funciones por cada evento -----------
 
 async function getEventoID(name) {
   const opciones = {
@@ -273,6 +269,10 @@ async function getEventoID(name) {
 }
 
 async function insertarFuncion(evento_id, funcion) {
+  let minutos = funcion.getMinutes();
+  if (minutos < 10) {
+    minutos = `0${minutos}`;
+  }
   const opciones = {
     method: "POST",
     headers: {
@@ -281,7 +281,7 @@ async function insertarFuncion(evento_id, funcion) {
     body: JSON.stringify({
       evento_id: evento_id,
       fecha: funcion.toUTCString(),
-      hora: `${funcion.getHours()}h${funcion.getMinutes()}`,
+      hora: `${funcion.getHours()}h${minutos}`,
     }),
   };
   try {
@@ -302,15 +302,7 @@ async function insertarFuncion(evento_id, funcion) {
 
 for (const evento of datos) {
   let respEvento = await getEventoID(evento.titulo);
-  console.log(respEvento.id);
   for (const funcion of evento.funciones) {
     const resp = await insertarFuncion(respEvento.id, funcion);
   }
 }
-
-// datos.forEach((evento) => {
-//   let respevento = getEventoID(evento.titulo);
-//   evento.funciones.forEach((funcion) => {
-//     procesarFunciones(respevento.id, funcion);
-//   });
-// });
