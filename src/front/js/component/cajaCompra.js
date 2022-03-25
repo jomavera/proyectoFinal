@@ -3,6 +3,13 @@ import { useHistory, useParams } from "react-router-dom";
 import { buttonStyle2 } from "../../styles/navbar.js";
 import { cajaStyle } from "../../styles/cajaCompra.js";
 
+let options = {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+};
+
 export const CajaCompra = (props) => {
   const [NumSelec, SetNumero] = useState(0);
   const [fechaSelec, setFechaSelec] = useState(null);
@@ -23,10 +30,13 @@ export const CajaCompra = (props) => {
     );
     let data = await response.json();
     let respFechas = data.map((e) => {
-      // ----- para presentar en español
-      // const fechaDate = new Date(e.fecha);
-      // return fechaDate.toLocaleDateString("es-CL");
-      return e.fecha.slice(0,-12);
+      const fechaDate = new Date(e.fecha);
+      return {
+        label: fechaDate.toLocaleDateString("es-CL", options),
+        value: e.fecha,
+      };
+
+      // return e.fecha.slice(0,-12);
     });
 
     setFechas(respFechas);
@@ -68,8 +78,8 @@ export const CajaCompra = (props) => {
 
   const fechasOptions = fechas.map((e, ix) => {
     return (
-      <option value={e} key={ix}>
-        {e}
+      <option value={e.value} key={ix}>
+        {e.label}
       </option>
     );
   });

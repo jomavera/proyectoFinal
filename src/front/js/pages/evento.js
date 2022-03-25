@@ -2,17 +2,20 @@ import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import { Link, useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
-// import { datos } from "../../../datosPrueba.js";
 import { CajaCompra } from "../component/cajaCompra";
+
+var options = {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+};
 
 export const Evento = (props) => {
   const { store, actions } = useContext(Context);
   const [datosEvento, setDatos] = useState({});
   const [datosLocacion, setLoc] = useState({});
   const params = useParams();
-  // const datosEvento = datos.filter((e) => {
-  //   return e.id === parseInt(params.theid);
-  // })[0];
 
   async function obtenerDatosEventos(theid) {
     const response = await fetch(
@@ -44,9 +47,10 @@ export const Evento = (props) => {
   }, []);
 
   const actualizarStore = (e) => {
+    const fechaDate = new Date(e.target.elements.fecha.value);
     actions.actualizarPedido(
       params.theid,
-      e.target.elements.fecha.value,
+      fechaDate.toLocaleDateString("es-CL", options),
       e.target.elements.hora.value,
       parseInt(e.target.elements.numero.value),
       datosEvento.precio
