@@ -8,7 +8,7 @@ export const Cards = (props) => {
         descripcion={e.descripcion}
         titulo={e.titulo}
         key={ix}
-        idEvento={ix}
+        idEvento={e.id}
       />
     );
   });

@@ -1,12 +1,30 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
 import "../../styles/home.css";
 import { Box } from "../component/box.js";
 import { Cards } from "../component/cards.js";
-import { datos } from "../../../datosPrueba.js";
+// import { datos } from "../../../datosPrueba.js";
 
 export const Home = () => {
   const { store, actions } = useContext(Context);
+  const [datos, setDatos] = useState([]);
+
+  async function obtenerDatosEventos() {
+    const response = await fetch(
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/eventos`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    let data = await response.json();
+    setDatos(data);
+  }
+  useEffect(() => {
+    obtenerDatosEventos();
+  }, []);
 
   return (
     <div className="container-fluid" style={{ backgroundColor: "#e9ecef" }}>
