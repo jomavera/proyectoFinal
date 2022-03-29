@@ -9,6 +9,7 @@ from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
+from flask_jwt_extended import current_user
 
 api = Blueprint('api', __name__)
 
@@ -19,14 +20,33 @@ api = Blueprint('api', __name__)
 def handle_hello():
     try:
        
-        email = get_jwt_identity()
+        user_id = get_jwt_identity()
+        user = User.query.filter_by(id=user_id).first()
+        #data = User.query.get(user_id)
+        print(user.name,"data")
         response_body = {
-        "message": email
-    }
+        "email": user.email,
+        "name": user.name,
+        "lastname": user.lastname
+         }
         return jsonify(response_body), 200
     except Exception as e:
         print("ERROR! "f'{e}')
+     
 
+@api.route("/aaa", methods=["GET"])
+@jwt_required()
+def protected():
+     try:
+        print(current_user_id)
+    # Accede a la identidad del usuario actual con get_jwt_identity
+
+        current_user_id = get_jwt_identity()
+        user = User.query.filter_by(email=current_user_id).first() 
+        user = User.query.all(current_user_id)
+        return jsonify({"id": user.id, "name": user.name }), 200
+     except Exception as e:
+        print("ERROR! "f'{e}')
 
 @api.route('/user', methods=['GET'])
 def get_user():
@@ -46,11 +66,18 @@ def get_user():
 @api.route('/new_user', methods=['POST'])
 def new_user():
     try:
+        #body = request.get_json()
+        # if not 'name' in body or not 'email' in body:
+        #     return jsonify({'error':'Bad Request', 'mensaje':'Nombre no ingresado'}),400
         name = request.json.get("name", None)
         lastname = request.json.get("lastname", None)
         email = request.json.get("email", None)
         password = request.json.get("password", None)
         is_active = request.json.get("is_active", None)
+
+        user = User.query.filter_by(email=email).first() is not None
+        if user:
+            return jsonify({"error": "el correo ya existe"}), 401
         # if is_active.lower() == 'true':
         #     is_active = True
         # if is_active.lower()== 'false': 
@@ -71,33 +98,29 @@ def new_user():
 def success(name):
    return 'welcome %s' % name
 
-@api.route('/login',methods = ['POST', 'GET'])
-def login():
-    try:
-        if request.method == 'POST':
-            user = request.form['nm']
-            return redirect(url_for('perfil',name = user))
-        else:
-            user = request.args.get('nm')
-        return redirect(url_for('success',name = user))
-    except Exception as e:
-        print(f'login: {e}')
-        return 'ERROR', 500
 
 # Create a route to authenticate your users and return JWTs. The
 # create_access_token() function is used to actually generate the JWT.
 @api.route("/token", methods=["POST"])
 def create_token():
     try:
+        name = request.json.get('name', None)
         email = request.json.get("email", None)
         password = request.json.get("password", None)
-        user = User.query.filter_by(email=email, password=password).first()
+        user = User.query.filter_by(email=email, password=password).first() 
         if user is None:
             return jsonify({"msg": "Bad username or password"}), 401
            
-
-        access_token = create_access_token(identity=email)
-        return jsonify(access_token=access_token)
+        access_token = create_access_token(identity=user.id)
+        return jsonify({ "access_token": access_token, "user_id": user.id })
     except Exception as e:
         print(f'ERROR CREATE_TOKEN: {e}')
         return 'ERROR', 500
+
+
+
+@api.route("/hitorial", methods=["GET"])
+def handle_historial():
+    return  {
+        "mess":"mensaje"
+    }

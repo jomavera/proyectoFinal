@@ -2,7 +2,7 @@ const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
       token: null,
-      message: null,
+      message: '',
       demo: [
         {
           title: "FIRST",
@@ -40,13 +40,16 @@ const getState = ({ getStore, getActions, setStore }) => {
             password: password,
           }),
         };
+        console.log(typeof email,typeof password, "EMAIL; PASSWORD")
         try {
+
           const resp = await fetch(
             "https://3001-jomavera-proyectofinal-dbjxjyhhttw.ws-us38.gitpod.io/api/token",
             opciones
           );
           if (resp.status !== 200) {
-            throw new Error("ERROR en respuesta");
+            setStore({errorR:Error})
+            throw new Error("ERROR en respuesta",Error);
           }
           const data = await resp.json();
           console.log("Informacion desde backend", data);
@@ -54,6 +57,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           setStore({ token: data.access_token });
           return data;
         } catch (error) {
+
           console.error(`Login error: ${error}`);
         }
       },
@@ -70,6 +74,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         console.log("Cerrar sesion");
         setStore({ token: null});
       },
+      
       getMessage: () => {
         const store = getStore();
         const opciones = {
@@ -82,7 +87,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           opciones
         )
           .then((resp) => resp.json())
-          .then((data) => setStore({ message: data.message }))
+          .then((data) => setStore({ message: data }))
           .catch((error) =>
             console.log("Error loading message from backend", error)
           );
@@ -107,7 +112,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             opciones
           );
           if (resp.status != 200) {
-            throw new Error("ERROR en respuesta");
+            throw new Error("ERROR en respuesta", Error);
           }
           const data = await resp.json();
           console.log("Informacion desde backend", data);
