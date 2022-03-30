@@ -14,17 +14,13 @@ export const Login = () => {
     const token = sessionStorage.getItem('token')
     const [error, setError] = useState(false)
 
-
-    // function validarEmail(valor) {
-    //     if (/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(valor)){
-    //      //alert("La dirección de email " + valor + " es correcta!.");
-    //     } else {
-    //      alert("La dirección de email es incorrecta!.");
-    //     }
-    //   }
     const handleClick = () => {
         
-        if (email.length !="" && password.length > 3) {
+        if (email ==""){
+            alert("Ingrese Correo electrónico")
+        }
+           
+        if (password.length > 3) {
             
             actions.login(email, password).then((data)=>{
                    if(data==undefined){
@@ -33,24 +29,12 @@ export const Login = () => {
             })
         } else {
           
-         //  alert("mensaje validacion")
+           alert("Contraseña incorrecta")
         }
 
     }
 
     if (store.token && store.token != "" && store.token != undefined) history.push('/perfil')
-
-
-    // if (error) {
-    //     return (
-    //         <>
-
-    //             <p>Problema con las credenciales</p>
-    //         </>
-    //     )
-    // }
-
-
 
 
     return (
@@ -64,20 +48,18 @@ export const Login = () => {
 
                             <div className="form-group">
                                 <label htmlFor="inputEmail" className="control-label">Email</label>
-                                <input type="email" className="form-control" id="inputEmail" placeholder="Email" data-error="Bruh, that email address is invalid" required value={email} onChange={(e) => setEmail(e.target.value)} />
+                                <input type="email" className="form-control" id="inputEmail" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)} />
                                 <div className="help-block with-errors"></div>
                             </div>
 
-
-
-                            {/* 
-                        <label>Correo Electronico</label>
-
-                        <input type="text" placeholder="" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)}       onclick="ValidateEmail(document.form1.text1)"/> */}
                             <div className="form-group">
                                 <label htmlFor="inputPassword" className="control-label" required>Ingrese Contraseña</label>
-                                <input type="password" className="form-control" id="inputPassword" placeholder="Contraseña" data-error="Bruh, that email address is invalid" required value={password} onChange={(e) => setPassword(e.target.value)} />
-                                <button className="btn btn-primary" onClick={handleClick}>Entrar</button>
+                                <input type="password" className="form-control" id="inputPassword" placeholder="Contraseña" required value={password} onChange={(e) => setPassword(e.target.value)} />
+
+                              
+                            </div>
+                            <div className="btnEntrar">
+                            <button className="btn btn-primary" onClick={handleClick}>Entrar</button>
                             </div>
                         </div>
 

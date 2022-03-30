@@ -48,7 +48,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             opciones
           );
           if (resp.status !== 200) {
-            setStore({errorR:Error})
+            
             throw new Error("ERROR en respuesta",Error);
           }
           const data = await resp.json();

@@ -63,36 +63,34 @@ def get_user():
     except Exception as e:
         print("ERROR! "f'{e}')
 
+
 @api.route('/new_user', methods=['POST'])
 def new_user():
     try:
-        #body = request.get_json()
-        # if not 'name' in body or not 'email' in body:
-        #     return jsonify({'error':'Bad Request', 'mensaje':'Nombre no ingresado'}),400
         name = request.json.get("name", None)
         lastname = request.json.get("lastname", None)
         email = request.json.get("email", None)
         password = request.json.get("password", None)
         is_active = request.json.get("is_active", None)
-
-        user = User.query.filter_by(email=email).first() is not None
-        if user:
-            return jsonify({"error": "el correo ya existe"}), 401
         # if is_active.lower() == 'true':
         #     is_active = True
         # if is_active.lower()== 'false': 
         #     is_active = False
+        userR = User.query.filter_by(email=email).first()
+        if userR: 
+            return {
+            'Error':'Correo ya registrado'
+            } 
         user = User(name=name, lastname=lastname, email=email, password=password, is_active=True)
         db.session.add(user)
         db.session.commit()
-
         return {
             'mensaje':'ok'
-        }, 200
-        
+        }, 200   
     except Exception as e:
         print(f'new_user_ERROR: {e}')
-        return 'ERROR', 500
+        return (f'new_user_ERROR: {e}'), 500
+
 
 @api.route('/perfil/<name>')
 def success(name):
