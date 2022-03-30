@@ -2,7 +2,7 @@ const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
       token: null,
-      message: null,
+      message: '',
       demo: [
         {
           title: "FIRST",
@@ -40,20 +40,24 @@ const getState = ({ getStore, getActions, setStore }) => {
             password: password,
           }),
         };
+        console.log(typeof email,typeof password, "EMAIL; PASSWORD")
         try {
+
           const resp = await fetch(
-            "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/token",
+            "https://3001-jomavera-proyectofinal-dbjxjyhhttw.ws-us38.gitpod.io/api/token",
             opciones
           );
           if (resp.status !== 200) {
-            throw new Error("ERROR en respuesta");
+            
+            throw new Error("ERROR en respuesta",Error);
           }
           const data = await resp.json();
           console.log("Informacion desde backend", data);
           sessionStorage.setItem("token", data.access_token);
           setStore({ token: data.access_token });
-          return true;
+          return data;
         } catch (error) {
+
           console.error(`Login error: ${error}`);
         }
       },
@@ -68,8 +72,9 @@ const getState = ({ getStore, getActions, setStore }) => {
       logout: () => {
         sessionStorage.removeItem("token");
         console.log("Cerrar sesion");
-        setStore({ token: null });
+        setStore({ token: null});
       },
+      
       getMessage: () => {
         const store = getStore();
         const opciones = {
@@ -78,11 +83,11 @@ const getState = ({ getStore, getActions, setStore }) => {
           },
         };
         fetch(
-          "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/hello",
+          "https://3001-jomavera-proyectofinal-dbjxjyhhttw.ws-us38.gitpod.io/api/hello",
           opciones
         )
           .then((resp) => resp.json())
-          .then((data) => setStore({ message: data.message }))
+          .then((data) => setStore({ message: data }))
           .catch((error) =>
             console.log("Error loading message from backend", error)
           );
@@ -103,11 +108,11 @@ const getState = ({ getStore, getActions, setStore }) => {
         };
         try {
           const resp = await fetch(
-            "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/new_user",
+            "https://3001-jomavera-proyectofinal-dbjxjyhhttw.ws-us38.gitpod.io/api/new_user",
             opciones
           );
           if (resp.status != 200) {
-            throw new Error("ERROR en respuesta");
+            throw new Error("ERROR en respuesta", Error);
           }
           const data = await resp.json();
           console.log("Informacion desde backend", data);
