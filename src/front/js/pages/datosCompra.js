@@ -1,8 +1,17 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Context } from "../store/appContext";
 import { datos, rows } from "../../../datosPrueba.js";
 import { cajaStyle } from "../../styles/cajaCompra.js";
+import { buttonStyle2 } from "../../styles/navbar";
+
+var options = {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+};
 
 export const DatosCompra = (props) => {
   const { store, actions } = useContext(Context);
@@ -35,7 +44,9 @@ export const DatosCompra = (props) => {
           </div>
           <div className="row">
             <div className="fs-5 fw-bold">Fecha:</div>
-            <div className="fs-5">{store.fecha}</div>
+            <div className="fs-5">
+              {store.fecha.toLocaleDateString("es-CL", options)}
+            </div>
           </div>
           <div className="row">
             <div className="fs-5 fw-bold">Hora:</div>
@@ -57,6 +68,18 @@ export const DatosCompra = (props) => {
           </div>
         </div>
         <div className="col"></div>
+      </div>
+      <div className="row justify-content-center">
+        <div className="col-12">
+          <div className="btn btn-primary" style={buttonStyle2}>
+            <Link
+              to={`/pago`}
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              Continuar
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
