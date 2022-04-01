@@ -19,7 +19,7 @@ export const Evento = (props) => {
 
   async function obtenerDatosEventos(theid) {
     const response = await fetch(
-      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/evento/${theid}`,
+      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/evento/${theid}`,
       {
         method: "GET",
         headers: {
@@ -30,7 +30,7 @@ export const Evento = (props) => {
     let dataEvento = await response.json();
     setDatos(dataEvento[0]);
     const responseLoc = await fetch(
-      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/locacion_id/${dataEvento[0].locacion_id}`,
+      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/locacion_id/${dataEvento[0].locacion_id}`,
       {
         method: "GET",
         headers: {

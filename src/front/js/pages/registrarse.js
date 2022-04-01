@@ -82,7 +82,7 @@ export const Registrarse = () => {
                     id="inputNombre"
                     placeholder="Nombre"
                     required value={name} onChange={(e) => setName(e.target.value)}
-                    minlength={2} pattern="[A-Za-z]*" />
+                    minLength={2} pattern="[A-Za-z]*" />
                   <div className="help-block with-errors"></div>
                 </div>
 
@@ -95,7 +95,7 @@ export const Registrarse = () => {
                     id="inputApellido"
                     required value={lastname}
                     onChange={(e) => setLastname(e.target.value)}
-                    minlength={3} pattern="[A-Za-z]*"
+                    minLength={3}
                   />
                 </div>
               </div>

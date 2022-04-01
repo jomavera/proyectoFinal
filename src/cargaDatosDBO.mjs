@@ -150,7 +150,7 @@ async function insertarDato(url, nombre) {
   };
   try {
     const resp = await fetch(
-      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/${url}`,
+      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/${url}`,
       opciones
     );
     if (resp.status != 200) {
@@ -173,7 +173,7 @@ async function getID(url, name) {
   };
   try {
     const resp = await fetch(
-      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/${url}/${name}`,
+      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/${url}/${name}`,
       opciones
     );
     if (resp.status != 200) {
@@ -206,7 +206,7 @@ async function insertarEvento(evento, locacion_id, categoria_id) {
   };
   try {
     const resp = await fetch(
-      "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/nuevo_evento",
+      "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/nuevo_evento",
       opciones
     );
     if (resp.status != 200) {
@@ -254,7 +254,7 @@ async function getEventoID(name) {
   };
   try {
     const resp = await fetch(
-      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/evento_name/${name}`,
+      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/evento_name/${name}`,
       opciones
     );
     if (resp.status != 200) {
@@ -286,7 +286,7 @@ async function insertarFuncion(evento_id, funcion) {
   };
   try {
     const resp = await fetch(
-      "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/nueva_funcion",
+      "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/nueva_funcion",
       opciones
     );
     if (resp.status != 200) {
