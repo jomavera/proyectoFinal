@@ -300,9 +300,76 @@ async function insertarFuncion(evento_id, funcion) {
   }
 }
 
+async function insertarTickets(evento_id, funcion, funcion_id) {
+  let minutos = funcion.getMinutes();
+  if (minutos < 10) {
+    minutos = `0${minutos}`;
+  }
+  const opciones = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      evento_id: evento_id,
+      funcion_id: funcion_id,
+      fecha: funcion.toUTCString(),
+      hora: `${funcion.getHours()}h${minutos}`,
+    }),
+  };
+  try {
+    const resp = await fetch(
+      "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/tickets",
+      opciones
+    );
+    if (resp.status != 200) {
+      throw new Error("ERROR en respuesta");
+    }
+    const data = await resp.json();
+    console.log("Se inserto Ubicacion en funcion correctamente");
+    return data;
+  } catch (error) {
+    console.error(`Error API ubicacion ${error}`);
+  }
+}
+
 for (const evento of datos) {
   let respEvento = await getEventoID(evento.titulo);
   for (const funcion of evento.funciones) {
     const resp = await insertarFuncion(respEvento.id, funcion);
+    const resp2 = await insertarTickets(respEvento.id, funcion, resp["id"]); //insertar tickets/ubicaciones para cada funcion
   }
+}
+
+const name = "jose";
+const lastname = "vera";
+const email = "jose@prueba.com";
+const password = "12345";
+const is_active = true;
+
+const opciones = {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    name: name,
+    lastname: lastname,
+    email: email,
+    password: password,
+    is_active: is_active,
+  }),
+};
+try {
+  const resp = await fetch(
+    "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/new_user",
+    opciones
+  );
+  if (resp.status != 200) {
+    throw new Error("ERROR en respuesta");
+  }
+  const data = await resp.json();
+  console.log("Se inserto usuario correctamente");
+} catch (error) {
+  console.error(`Error API nuevo usuario: ${error}`);
 }

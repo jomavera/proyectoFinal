@@ -7,6 +7,13 @@ import "../../styles/seatpicker.scss";
 import { SeatPicker } from "../component/SeatPicker";
 import { buttonStyle2 } from "../../styles/navbar";
 
+var options = {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+};
+
 export const EventoUbicaciones = (props) => {
   const [numSelecc, SetNumSelecc] = useState(0);
   const { store, actions } = useContext(Context);
@@ -52,7 +59,9 @@ export const EventoUbicaciones = (props) => {
           </div>
           <div className="row">
             <div className="fs-7 fw-bold">Fecha:</div>
-            <div className="fs-7">{store.fecha}</div>
+            <div className="fs-7">
+              {store.fecha.toLocaleDateString("es-CL", options)}
+            </div>
           </div>
           <div className="row">
             <div className="fs-7 fw-bold">Hora:</div>

@@ -92,12 +92,15 @@ export const CajaCompra = (props) => {
   });
 
   const manejarSubmit = (e) => {
-    const error = e.target.elements.numero.value ? false : true;
+    const error =
+      e.target.elements.numero.value && e.target.elements.hora.value
+        ? false
+        : true;
     if (!error) {
       props.onSubmit(e);
       history.push(`/eventoUbicaciones/${params.theid}`);
     } else {
-      alert("Seleccionar el numero de tickets!");
+      alert("Seleccionar el numero de tickets u hora!");
     }
   };
   const cambiarNumero = (e) => {
