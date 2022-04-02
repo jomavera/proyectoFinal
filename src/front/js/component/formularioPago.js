@@ -95,6 +95,7 @@ export const FormularioPago = (props) => {
       installments,
       identificationNumber,
       identificationType,
+      cardholderName: cardholder_name
     } = cardFormState.getCardFormData();
 
     if (token) {
@@ -127,6 +128,10 @@ export const FormularioPago = (props) => {
       );
       let data = await response.json();
       console.log(data);
+    }
+
+    if (token === ''){
+      alert('Complete todos los campos!')
     }
   }
 
