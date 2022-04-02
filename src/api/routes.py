@@ -495,3 +495,56 @@ def procesar_pago():
     except Exception as e:
         print(f"Error pago: {e}")
         return "ERROR", 500
+
+
+@api.route('/historialCompra', methods=['GET'])
+# @jwt_required()
+def get_user_orden():
+    try:
+        user_id = 1  # get_jwt_identity()
+        print(user_id, "JWT USERid")
+        join_query = db.session.query(Compra, Ticket, User, Funcion, Evento, Locacion, Categoria)\
+            .join(Ticket, Ticket.id == Compra.ticket_id)\
+            .join(Funcion, Funcion.id == Ticket.funcion_id)\
+            .join(Evento, Evento.id == Funcion.evento_id)\
+            .join(Categoria, Categoria.id == Evento.categoria_id)\
+            .join(Locacion, Locacion.id == Evento.locacion_id)\
+            .join(User, Compra.user_id == User.id)\
+            .filter_by(id=user_id)
+
+        response_body = []
+
+        print (tuple(join_query))
+        for elemento in tuple(join_query):
+            ticket_id = elemento['Compra'].ticket_id
+            name = f'{elemento["User"].name} {elemento["User"].lastname}'
+            name_event = elemento['Evento'].name
+            precio = elemento['Evento'].precio
+            hora = elemento['Funcion'].hora
+            duracion = elemento['Evento'].duracion
+            fecha = elemento['Funcion'].fecha
+            locacion = elemento['Locacion'].name
+            categoria = elemento['Categoria'].name
+
+
+            objeto = ({
+                "ticket_id": ticket_id,
+                "name": name,
+                "name_event": name_event,
+                "precio": precio,
+                "hora": hora,
+                "duracion": duracion,
+                "fecha": fecha,
+                "locacion":locacion,
+                "categoria": categoria
+
+            })
+            response_body.append(objeto)
+        if not response_body:
+                return jsonify({
+            'mensaje': 'No hay compras'
+        }), 204
+        return jsonify(response_body), 200
+    except Exception as e:
+        print(f'ERROR/historialCompra {e}')
+        return (f'ERROR/historialCompra {e}')

@@ -319,7 +319,7 @@ async function insertarTickets(evento_id, funcion, funcion_id) {
   };
   try {
     const resp = await fetch(
-      "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/tickets",
+      "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/tickets",
       opciones
     );
     if (resp.status != 200) {
@@ -362,7 +362,7 @@ const opciones = {
 };
 try {
   const resp = await fetch(
-    "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/new_user",
+    "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/new_user",
     opciones
   );
   if (resp.status != 200) {

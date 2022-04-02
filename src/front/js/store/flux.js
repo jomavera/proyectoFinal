@@ -3,6 +3,7 @@ const getState = ({ getStore, getActions, setStore }) => {
     store: {
       token: null,
       message: '',
+      historialCompra: '',
       demo: [
         {
           title: "FIRST",
@@ -159,6 +160,24 @@ const getState = ({ getStore, getActions, setStore }) => {
       },
       actualizarEstado: (estado) => {
         setStore({ estado: estado });
+      },
+
+      getHistorialCompra: () => {
+        const store = getStore();
+        const opciones = {
+          headers: {
+            Authorization: "Bearer " + store.token,
+          },
+        };
+        fetch(
+          `${process.env.BACKEND_URL}/api/historialCompra`,
+          opciones
+        )
+          .then((resp) => resp.json())
+          .then((data) => setStore( {historialCompra : data} ))
+          .catch((error) =>
+            console.log("Error loading message from backend", error)
+          );
       },
     },
   };

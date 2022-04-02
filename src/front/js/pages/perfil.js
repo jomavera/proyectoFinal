@@ -14,8 +14,6 @@ export const Perfil = () => {
 
 		if (store.token && store.token != "" && store.token != undefined) actions.getMessage()
 
-
-
 	}, [store.token])
 
 	const datosPerfil = store.message
@@ -58,10 +56,15 @@ export const Perfil = () => {
 				</div>
 
 			</div>
+
 			<div className="row row2">
+
 				<div className="btn">
-					<a href="#" className="btn btn-primary btn-lg active" role="button" aria-pressed="true">Primary link</a></div>
+					<Link to="/historial-compra">
+						<span href="#" className="btn btn-primary btn-lg active" role="button" aria-pressed="true">Primary link</span>
+					</Link>
+				</div>
 			</div>
-		</>
-	);
+			</>
+			);
 };
