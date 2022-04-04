@@ -31,7 +31,7 @@ export const DatosCompra = (props) => {
   }
   useEffect(() => {
     obtenerDatosEventoLocacion();
-  }, []);git src
+  }, []);
 
   const ubicaciones = store.ubicaciones
     .map((e) => {
