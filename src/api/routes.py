@@ -492,3 +492,28 @@ def procesar_pago():
     except Exception as e:
         print(f"Error pago: {e}")
         return "ERROR", 500
+
+
+@api.route("/datos_locacion", methods=["GET"])
+def get_datos_locacion():
+    try:
+        evento_id = request.args.get("evento_id")
+        resultado = (
+            db.session.query(Evento, Locacion)
+            .filter(
+                Evento.id == evento_id,
+            )
+            .filter(
+                Locacion.id == Evento.locacion_id,
+            )
+            .first()
+        )
+
+        response_body = {
+            "titulo": resultado.Evento.name,
+            "locacion": resultado.Locacion.name,
+        }
+        return jsonify(response_body), 200
+    except Exception as e:
+        print(f"Error insert ticket: {e}")
+        return "ERROR", 500

@@ -1,8 +1,7 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Context } from "../store/appContext";
-import { datos, rows } from "../../../datosPrueba.js";
 import { cajaStyle } from "../../styles/cajaCompra.js";
 import { buttonStyle2 } from "../../styles/navbar";
 
@@ -15,9 +14,24 @@ var options = {
 
 export const DatosCompra = (props) => {
   const { store, actions } = useContext(Context);
-  const datosEvento = datos.filter((e) => {
-    return e.id === parseInt(store.id);
-  })[0];
+  const [datosEvento, setdatosEvento] = useState({});
+
+  async function obtenerDatosEventoLocacion() {
+    const response = await fetch(
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/datos_locacion?evento_id=${store.id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    let data = await response.json();
+    setdatosEvento(data);
+  }
+  useEffect(() => {
+    obtenerDatosEventoLocacion();
+  }, []);git src
 
   const ubicaciones = store.ubicaciones
     .map((e) => {
