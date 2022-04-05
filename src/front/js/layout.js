@@ -11,6 +11,8 @@ import { Evento } from "./pages/evento";
 import { EventoUbicaciones } from "./pages/eventoUbicaciones";
 import { DatosCompra } from "./pages/datosCompra";
 import { Pago } from "./pages/pago";
+import { PagoNoExitoso } from "./pages/pagoNoExitoso";
+import { PagoExitoso } from "./pages/pagoExitoso";
 import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
@@ -58,6 +60,12 @@ const Layout = () => {
             </Route>
             <Route exact path="/pago">
               <Pago />
+            </Route>
+            <Route exact path="/pagoexitoso">
+              <PagoExitoso />
+            </Route>
+            <Route exact path="/pagonoexitoso">
+              <PagoNoExitoso />
             </Route>
             <Route>
               <h1>Not found!</h1>

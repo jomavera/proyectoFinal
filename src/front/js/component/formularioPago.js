@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import "react-credit-cards/es/styles-compiled.css";
 import Card from "react-credit-cards";
 
@@ -15,6 +16,7 @@ const INITIAL_STATE = {
 export const FormularioPago = (props) => {
   const [state, setState] = useState(INITIAL_STATE);
   const [cardFormState, setCardForm] = useState(null);
+  const history = useHistory();
 
   useEffect(() => {
     const mp = new MercadoPago("TEST-3dc70a75-1bf6-46aa-834d-a589926d8996");
@@ -95,7 +97,7 @@ export const FormularioPago = (props) => {
       installments,
       identificationNumber,
       identificationType,
-      cardholderName: cardholder_name
+      cardholderName: cardholder_name,
     } = cardFormState.getCardFormData();
 
     if (token) {
@@ -128,11 +130,16 @@ export const FormularioPago = (props) => {
       );
       let data = await response.json();
       console.log(data);
+      if (data.status === "approved") {
+        history.push(`/pagoexitoso`);
+      } else {
+        history.push(`/pagonoexitoso`);
+      }
     }
 
-    if (token === ''){
-      alert('Complete todos los campos!')
-    }
+    // if (token === "") {
+    //   alert("Complete todos los campos!");
+    // }
   }
 
   const handleInputChange = (e) => {
