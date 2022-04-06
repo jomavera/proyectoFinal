@@ -300,9 +300,93 @@ async function insertarFuncion(evento_id, funcion) {
   }
 }
 
+async function insertarTickets(evento_id, funcion, funcion_id) {
+  let minutos = funcion.getMinutes();
+  if (minutos < 10) {
+    minutos = `0${minutos}`;
+  }
+  const opciones = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      evento_id: evento_id,
+      funcion_id: funcion_id,
+      fecha: funcion.toUTCString(),
+      hora: `${funcion.getHours()}h${minutos}`,
+    }),
+  };
+  try {
+    const resp = await fetch(
+      "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/tickets",
+      opciones
+    );
+    if (resp.status != 200) {
+      throw new Error("ERROR en respuesta");
+    }
+    const data = await resp.json();
+    console.log("Se inserto Ubicacion en funcion correctamente");
+    return data;
+  } catch (error) {
+    console.error(`Error API ubicacion ${error}`);
+  }
+}
+
 for (const evento of datos) {
   let respEvento = await getEventoID(evento.titulo);
   for (const funcion of evento.funciones) {
     const resp = await insertarFuncion(respEvento.id, funcion);
+    const resp2 = await insertarTickets(respEvento.id, funcion, resp["id"]); //insertar tickets/ubicaciones para cada funcion
   }
+}
+
+const usuarios = [
+  {
+    name: "jose",
+    lastname: "vera",
+    email: "jose@prueba.com",
+    password: "12345",
+    is_active: true,
+  },
+  {
+    name: "prueba",
+    lastname: "prueba",
+    email: "test_user_86167117@testuser.com",
+    password: "12345",
+    is_active: true,
+  },
+];
+
+async function insertarUsario(usuario) {
+  const opciones = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: usuario.name,
+      lastname: usuario.lastname,
+      email: usuario.email,
+      password: usuario.password,
+      is_active: usuario.is_active,
+    }),
+  };
+  try {
+    const resp = await fetch(
+      "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/new_user",
+      opciones
+    );
+    if (resp.status != 200) {
+      throw new Error("ERROR en respuesta crear nuevo usuario");
+    }
+    const data = await resp.json();
+    console.log("Se inserto usuario correctamente");
+  } catch (error) {
+    console.error(`Error API nuevo usuario: ${error}`);
+  }
+}
+
+for (const usuario of usuarios) {
+  const resp = await insertarUsario(usuario);
 }

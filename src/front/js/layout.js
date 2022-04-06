@@ -5,11 +5,14 @@ import ScrollToTop from "./component/scrollToTop";
 import { Home } from "./pages/home";
 import { Demo } from "./pages/demo";
 import { Registrarse } from "./pages/registrarse";
-import { Login } from "./pages/login"
+import { Login } from "./pages/login";
 import { Perfil } from "./pages/perfil";
 import { Evento } from "./pages/evento";
 import { EventoUbicaciones } from "./pages/eventoUbicaciones";
 import { DatosCompra } from "./pages/datosCompra";
+import { Pago } from "./pages/pago";
+import { PagoNoExitoso } from "./pages/pagoNoExitoso";
+import { PagoExitoso } from "./pages/pagoExitoso";
 import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
@@ -54,6 +57,15 @@ const Layout = () => {
             </Route>
             <Route exact path="/datosCompra">
               <DatosCompra />
+            </Route>
+            <Route exact path="/pago">
+              <Pago />
+            </Route>
+            <Route exact path="/pagoexitoso">
+              <PagoExitoso />
+            </Route>
+            <Route exact path="/pagonoexitoso">
+              <PagoNoExitoso />
             </Route>
             <Route>
               <h1>Not found!</h1>

@@ -1,10 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Context } from "../store/appContext";
-import { cajaStyle } from "../../styles/cajaCompra.js";
 import { buttonStyle2 } from "../../styles/navbar";
+import { cajaStyle } from "../../styles/cajaCompra.js";
 
 var options = {
   weekday: "long",
@@ -13,15 +11,9 @@ var options = {
   day: "numeric",
 };
 
-export const DatosCompra = (props) => {
+export const PagoExitoso = (props) => {
   const { store, actions } = useContext(Context);
   const [datosEvento, setdatosEvento] = useState({});
-  const history = useHistory();
-
-  if (store.token === null) {
-    history.push("/login");
-    return <div>Iniciar sesion</div>;
-  }
 
   async function obtenerDatosEventoLocacion() {
     const response = await fetch(
@@ -48,12 +40,41 @@ export const DatosCompra = (props) => {
       acc = acc === "" ? acc + curr : acc + ", " + curr;
       return acc;
     }, "");
-  const totalCompra = store.precio * store.numero;
+  async function manejarSubmit(e) {
+    e.preventDefault();
 
+    const response = await fetch(
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/enviar_correo`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nombre_evento: datosEvento.titulo,
+          ubicaciones: store.ubicaciones,
+          locacion: datosEvento.locacion,
+          fecha: store.fecha.toLocaleDateString("es-CL", options),
+          hora: store.hora,
+          total: store.precio * parseInt(store.numero),
+          correo: e.target.elements.correo.value,
+        }),
+      }
+    );
+    let data = await response.json();
+    console.log(data);
+  }
   return (
     <div className="container-fluid">
-      <div className="row row-cols-8 align-items-center">
-        <div className="col"></div>
+      <div className="row text-center p-3">
+        <div className="col">
+          <div style={{ fontFamily: "Montserrat", fontSize: "24px" }}>
+            Pago realizado con exito
+          </div>
+        </div>
+      </div>
+      <div className="row align-items-center">
+        <div className="col-3"></div>
         <div className="col-md-auto" style={cajaStyle}>
           <div className="row">
             <div className="fs-4 fw-bold">Teatro:</div>
@@ -82,30 +103,41 @@ export const DatosCompra = (props) => {
             <div className="fs-5">{ubicaciones}</div>
           </div>
           <div className="row">
-            <div className="fs-3 fw-bold text-center">Total a cobrar:</div>
+            <div className="fs-3 fw-bold text-center">Total pagado:</div>
             <div className="fs-4 text-center">
               ${store.precio * parseInt(store.numero)}
             </div>
           </div>
         </div>
-        <div className="col"></div>
       </div>
-      <div className="row justify-content-center">
-        <div className="col-12">
-          <div className="btn btn-primary" style={buttonStyle2}>
-            <Link
-              to={`/pago`}
-              style={{ textDecoration: "none", color: "white" }}
+      <div className="row justify-content-center p-3">
+        <div className="col-5">
+          <form onSubmit={(e) => manejarSubmit(e)}>
+            <div className="mb-3">
+              <label for="formFile" className="form-label">
+                Enviar confirmación por E-mail
+              </label>
+              <input
+                className="form-control"
+                type="email"
+                placeholder="name@example.com"
+                name="correo"
+              />
+            </div>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              style={buttonStyle2}
             >
-              Continuar
-            </Link>
-          </div>
+              Enviar
+            </button>
+          </form>
         </div>
       </div>
     </div>
   );
 };
 
-DatosCompra.propTypes = {
+PagoExitoso.propTypes = {
   match: PropTypes.object,
 };

@@ -23,6 +23,7 @@ export const Home = () => {
     setDatos(data);
   }
   useEffect(() => {
+    actions.limpiarSeleccion();
     obtenerDatosEventos();
   }, []);
 
