@@ -341,35 +341,52 @@ for (const evento of datos) {
   }
 }
 
-const name = "jose";
-const lastname = "vera";
-const email = "jose@prueba.com";
-const password = "12345";
-const is_active = true;
-
-const opciones = {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
+const usuarios = [
+  {
+    name: "jose",
+    lastname: "vera",
+    email: "jose@prueba.com",
+    password: "12345",
+    is_active: true,
   },
-  body: JSON.stringify({
-    name: name,
-    lastname: lastname,
-    email: email,
-    password: password,
-    is_active: is_active,
-  }),
-};
-try {
-  const resp = await fetch(
-    "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/new_user",
-    opciones
-  );
-  if (resp.status != 200) {
-    throw new Error("ERROR en respuesta");
+  {
+    name: "prueba",
+    lastname: "prueba",
+    email: "test_user_86167117@testuser.com",
+    password: "12345",
+    is_active: true,
+  },
+];
+
+async function insertarUsario(usuario) {
+  const opciones = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: usuario.name,
+      lastname: usuario.lastname,
+      email: usuario.email,
+      password: usuario.password,
+      is_active: usuario.is_active,
+    }),
+  };
+  try {
+    const resp = await fetch(
+      "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/new_user",
+      opciones
+    );
+    if (resp.status != 200) {
+      throw new Error("ERROR en respuesta crear nuevo usuario");
+    }
+    const data = await resp.json();
+    console.log("Se inserto usuario correctamente");
+  } catch (error) {
+    console.error(`Error API nuevo usuario: ${error}`);
   }
-  const data = await resp.json();
-  console.log("Se inserto usuario correctamente");
-} catch (error) {
-  console.error(`Error API nuevo usuario: ${error}`);
+}
+
+for (const usuario of usuarios) {
+  const resp = await insertarUsario(usuario);
 }
