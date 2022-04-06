@@ -19,6 +19,8 @@ cloudinary = "*"
 flask-admin = "*"
 flask-jwt-extended = "*"
 mercadopago = "*"
+yagmail = "*"
+sendgrid = "*"
 
 [requires]
 python_version = "3.8"
