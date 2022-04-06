@@ -2,6 +2,8 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 from flask import Flask, request, jsonify, url_for, Blueprint, redirect
 from api.models import db, User, Evento, Categoria, Locacion, Funcion, Compra, Ticket
 from api.utils import generate_sitemap, APIException
@@ -19,7 +21,7 @@ import mercadopago
 sdk = mercadopago.SDK(
     "TEST-7001770905886777-033114-c013ded5a4474fb975d52204f2288764-1098699850"
 )
-
+API_KEY = "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"
 
 api = Blueprint("api", __name__)
 
@@ -550,4 +552,45 @@ def get_datos_locacion():
         return jsonify(response_body), 200
     except Exception as e:
         print(f"Error insert ticket: {e}")
+        return "ERROR", 500
+
+
+@api.route("/enviar_correo", methods=["POST"])
+def enviar_correo():
+    try:
+        nombre_evento = request.json.get("nombre_evento")
+        ubicaciones = request.json.get("ubicaciones")
+        locacion = request.json.get("locacion")
+        fecha = request.json.get("fecha")
+        hora = request.json.get("hora")
+        total = request.json.get("total")
+        correo = request.json.get("correo")
+        ubicacion_name = ""
+        for ubicacion in ubicaciones:
+            ubicacion_name += ubicacion["row"] + str(ubicacion["number"]) + " "
+
+        template = """
+            <strong>Confirmacion de compra</strong>
+            <strong>Evento:</strong>%s
+            <strong>Locacion:</strong>%s
+            <strong>Fecha:</strong>%s
+            <strong>Hora:</strong>%s
+            <strong>Ubicaciones:</strong>%s
+            <strong>Total: $</strong>%d
+        """
+        message = Mail(
+            from_email="jv.espol@gmail.com",
+            to_emails=correo,
+            subject="ticketgo - Confirmación de compra",
+            html_content=template
+            % (nombre_evento, locacion, fecha, hora, ubicacion_name, total),
+        )
+        sg = SendGridAPIClient(API_KEY)
+        response = sg.send(message)
+        response_body = {
+            "msg": "correo enviado",
+        }
+        return jsonify(response_body), 200
+    except Exception as e:
+        print(f"Error enviar correo: {e}")
         return "ERROR", 500

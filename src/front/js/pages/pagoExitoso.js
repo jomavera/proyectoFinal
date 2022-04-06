@@ -40,7 +40,30 @@ export const PagoExitoso = (props) => {
       acc = acc === "" ? acc + curr : acc + ", " + curr;
       return acc;
     }, "");
+  async function manejarSubmit(e) {
+    e.preventDefault();
 
+    const response = await fetch(
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/enviar_correo`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nombre_evento: datosEvento.titulo,
+          ubicaciones: store.ubicaciones,
+          locacion: datosEvento.locacion,
+          fecha: store.fecha.toLocaleDateString("es-CL", options),
+          hora: store.hora,
+          total: store.precio * parseInt(store.numero),
+          correo: e.target.elements.correo.value,
+        }),
+      }
+    );
+    let data = await response.json();
+    console.log(data);
+  }
   return (
     <div className="container-fluid">
       <div className="row text-center p-3">
@@ -89,7 +112,7 @@ export const PagoExitoso = (props) => {
       </div>
       <div className="row justify-content-center p-3">
         <div className="col-5">
-          <form>
+          <form onSubmit={(e) => manejarSubmit(e)}>
             <div className="mb-3">
               <label for="formFile" className="form-label">
                 Enviar confirmación por E-mail
@@ -98,6 +121,7 @@ export const PagoExitoso = (props) => {
                 className="form-control"
                 type="email"
                 placeholder="name@example.com"
+                name="correo"
               />
             </div>
             <button
