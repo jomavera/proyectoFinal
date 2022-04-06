@@ -18,7 +18,7 @@ var options = {
 export const EventoUbicaciones = (props) => {
   const [numSelecc, SetNumSelecc] = useState(0);
   const [datosEvento, setdatosEvento] = useState({});
-  const [rows, setDatosRows] = useState([]);
+  const [rows, setDatosRows] = useState(null);
   const { store, actions } = useContext(Context);
   const params = useParams();
   const history = useHistory();
@@ -63,7 +63,7 @@ export const EventoUbicaciones = (props) => {
 
   useEffect(() => {
     obtenerEstadosTickets();
-  },[]);
+  }, []);
 
   const anadirUbicacion = ({ row, number, id }, addCb) => {
     addCb(row, number, id);
@@ -117,7 +117,7 @@ export const EventoUbicaciones = (props) => {
         </div>
         <div className="col">
           <div className="row">
-            {rows != [] && (
+            {rows != null && (
               <SeatPicker
                 rows={rows}
                 maxReservableSeats={store.numero}
