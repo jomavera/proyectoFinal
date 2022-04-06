@@ -207,8 +207,8 @@ export const FormularioPago = (props) => {
               type="email"
               name="cardholderEmail"
               id="form-checkout__cardholderEmail"
-              placeholder="E-mail"
               className="form-control m-1"
+              value={props.email}
             />
             <input
               type="text"
