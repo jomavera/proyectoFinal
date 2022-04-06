@@ -120,6 +120,16 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.error(`New user error: ${error}`);
         }
       },
+      limpiarSeleccion: () => {
+        setStore({
+          id: null,
+          hora: null,
+          fecha: null,
+          numero: null,
+          precio: null,
+          ubicaciones: [],
+        });
+      },
       changeColor: (index, color) => {
         //get the store
         const store = getStore();
