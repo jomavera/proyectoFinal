@@ -3,7 +3,7 @@ const getState = ({ getStore, getActions, setStore }) => {
     store: {
       token: null,
       message: '',
-      historialCompra: '',
+      historialCompra:[""],
       demo: [
         {
           title: "FIRST",
@@ -73,8 +73,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 
       logout: () => {
         sessionStorage.removeItem("token");
+        sessionStorage.clear();
+     
         console.log("Cerrar sesion");
         setStore({ token: null});
+        setStore({ historialCompra: []});
+        setStore({ message: ''})
+   
       },
       
       getMessage: () => {
@@ -90,6 +95,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         )
           .then((resp) => resp.json())
           .then((data) => setStore({ message: data }))
+        
           .catch((error) =>
             console.log("Error loading message from backend", error)
           );

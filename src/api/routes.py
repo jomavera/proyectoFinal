@@ -498,10 +498,10 @@ def procesar_pago():
 
 
 @api.route('/historialCompra', methods=['GET'])
-# @jwt_required()
+@jwt_required()
 def get_user_orden():
     try:
-        user_id = 1  # get_jwt_identity()
+        user_id = get_jwt_identity()
         print(user_id, "JWT USERid")
         join_query = db.session.query(Compra, Ticket, User, Funcion, Evento, Locacion, Categoria)\
             .join(Ticket, Ticket.id == Compra.ticket_id)\
@@ -525,6 +525,7 @@ def get_user_orden():
             fecha = elemento['Funcion'].fecha
             locacion = elemento['Locacion'].name
             categoria = elemento['Categoria'].name
+            ubicacion = elemento['Ticket'].ubicacion
 
 
             objeto = ({
@@ -536,7 +537,8 @@ def get_user_orden():
                 "duracion": duracion,
                 "fecha": fecha,
                 "locacion":locacion,
-                "categoria": categoria
+                "categoria": categoria,
+                "ubicacion": ubicacion
 
             })
             response_body.append(objeto)

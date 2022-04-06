@@ -18,13 +18,13 @@ export const Registrarse = () => {
   const [error, setError] = useState(false)
 
 
-  const handleClick = () => {
-
+  const handleClick = (e) => {
+    
     if (name != "" && lastname != "" && email != "" && password != "" && name != undefined && lastname != undefined && password != undefined) {
       if(password.length>4){
         
         actions.registrarse(name, lastname, email, password).then((data) => {
-          console.log(data,"dataaa")
+          console.log(data,"data")
          
           
           if (data && data.mensaje && data.mensaje.toLowerCase() === "ok") {
@@ -37,6 +37,7 @@ export const Registrarse = () => {
           }
   
         });
+      e.preventDefault()
       }else{
         alert("Contraseña debe tener mas de 4 caracteres")
       }
@@ -120,7 +121,7 @@ export const Registrarse = () => {
               />
 
               <div className="btnRegistrarse">
-              <button onClick={handleClick} className="btn btn-primary btn-block">
+              <button onClick={(e)=>handleClick(e)} className="btn btn-primary btn-block">
                 Registrarse
               </button>
               </div>
