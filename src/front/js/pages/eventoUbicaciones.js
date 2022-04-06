@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Link, useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
-import { datos, rows } from "../../../datosPrueba.js";
+// import { datos, rows } from "../../../datosPrueba.js";
 import "../../styles/seatpicker.scss";
 import { SeatPicker } from "../component/SeatPicker";
 import { buttonStyle2 } from "../../styles/navbar";
@@ -17,6 +17,8 @@ var options = {
 
 export const EventoUbicaciones = (props) => {
   const [numSelecc, SetNumSelecc] = useState(0);
+  const [datosEvento, setdatosEvento] = useState({});
+  const [rows, setDatosRows] = useState([]);
   const { store, actions } = useContext(Context);
   const params = useParams();
   const history = useHistory();
@@ -24,9 +26,44 @@ export const EventoUbicaciones = (props) => {
   if (store.token === null) {
     history.push("/login");
   }
-  const datosEvento = datos.filter((e) => {
-    return e.id === parseInt(params.theid);
-  })[0];
+  async function obtenerDatosEventoLocacion() {
+    const response = await fetch(
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/datos_locacion?evento_id=${store.id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    let data = await response.json();
+    setdatosEvento(data);
+  }
+
+  async function obtenerEstadosTickets() {
+    const response = await fetch(
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/tickets/${
+        store.id
+      }/${store.fecha.toUTCString()}/${store.hora}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    let data = await response.json();
+    console.log(data);
+    setDatosRows(data);
+  }
+
+  useEffect(() => {
+    obtenerDatosEventoLocacion();
+  }, []);
+
+  useEffect(() => {
+    obtenerEstadosTickets();
+  },[]);
 
   const anadirUbicacion = ({ row, number, id }, addCb) => {
     addCb(row, number, id);
@@ -80,21 +117,23 @@ export const EventoUbicaciones = (props) => {
         </div>
         <div className="col">
           <div className="row">
-            <SeatPicker
-              rows={rows}
-              maxReservableSeats={store.numero}
-              alpha
-              visible
-              selectedByDefault
-              loading={false}
-              continuous
-              addSeatCallback={anadirUbicacion}
-              removeSeatCallback={quitarUbicacion}
-            />
+            {rows != [] && (
+              <SeatPicker
+                rows={rows}
+                maxReservableSeats={store.numero}
+                alpha
+                visible
+                selectedByDefault
+                loading={false}
+                continuous
+                addSeatCallback={anadirUbicacion}
+                removeSeatCallback={quitarUbicacion}
+              />
+            )}
           </div>
           <div className="row">
             <div className="fs-5">
-              {numSelecc} de {store.numero} seleccinados
+              {numSelecc} de {store.numero} seleccionados
             </div>
           </div>
         </div>

@@ -23,6 +23,8 @@ sdk = mercadopago.SDK(
 
 api = Blueprint("api", __name__)
 
+dict_rows = {"A": 0, "B": 1, "C": 2, "D": 3, "E": 4, "F": 5}
+
 
 @api.route("/hello", methods=["GET"])
 @jwt_required()
@@ -415,6 +417,38 @@ def get_tickets(funcion_id):
             for ticket in Ticket.query.filter_by(funcion_id=funcion_id)
         ]
         return jsonify(response_body), 200
+    except Exception as e:
+        print(f"Error insert ticket: {e}")
+        return "ERROR", 500
+
+
+@api.route("/tickets/<int:evento_id>/<fecha>/<hora>", methods=["GET"])
+def get_tickets2(evento_id, fecha, hora):
+    try:
+        resultados = [[{} for _ in range(6)] for _ in range(5)]
+
+        query = (
+            db.session.query(Funcion, Ticket)
+            .filter(
+                Funcion.evento_id == evento_id,
+                Funcion.fecha == datetime.strptime(fecha, "%a, %d %b %Y %H:%M:%S %Z"),
+                Funcion.hora == hora,
+            )
+            .filter(
+                Funcion.id == Ticket.funcion_id,
+            )
+            .all()
+        )
+        for resultado in query:
+            resultados[dict_rows[resultado.Ticket.ubicacion[0]]][
+                int(resultado.Ticket.ubicacion[1]) - 1
+            ] = {
+                "id": resultado.Ticket.id,
+                "number": int(resultado.Ticket.ubicacion[1]),
+                "isReserved": resultado.Ticket.sold,
+            }
+
+        return jsonify(resultados), 200
     except Exception as e:
         print(f"Error insert ticket: {e}")
         return "ERROR", 500
