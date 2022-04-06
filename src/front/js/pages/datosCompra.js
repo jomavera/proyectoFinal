@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Context } from "../store/appContext";
@@ -15,6 +16,12 @@ var options = {
 export const DatosCompra = (props) => {
   const { store, actions } = useContext(Context);
   const [datosEvento, setdatosEvento] = useState({});
+  const history = useHistory();
+
+  if (store.token === null) {
+    history.push("/login");
+    return <div>Iniciar sesion</div>;
+  }
 
   async function obtenerDatosEventoLocacion() {
     const response = await fetch(

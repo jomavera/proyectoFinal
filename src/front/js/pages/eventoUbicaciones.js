@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Link, useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
@@ -18,6 +19,11 @@ export const EventoUbicaciones = (props) => {
   const [numSelecc, SetNumSelecc] = useState(0);
   const { store, actions } = useContext(Context);
   const params = useParams();
+  const history = useHistory();
+
+  if (store.token === null) {
+    history.push("/login");
+  }
   const datosEvento = datos.filter((e) => {
     return e.id === parseInt(params.theid);
   })[0];
