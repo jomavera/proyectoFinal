@@ -56,7 +56,7 @@ export const DatosCompra = (props) => {
         <div className="col"></div>
         <div className="col-md-auto" style={cajaStyle}>
           <div className="row">
-            <div className="fs-4 fw-bold">Teatro:</div>
+            <div className="fs-4 fw-bold">Locación:</div>
             <div className="fs-4">{datosEvento.locacion}</div>
           </div>
           <div className="row">
@@ -78,7 +78,7 @@ export const DatosCompra = (props) => {
             <div className="fs-5">{store.numero} unidades</div>
           </div>
           <div className="row">
-            <div className="fs-5 fw-bold">Locaciones:</div>
+            <div className="fs-5 fw-bold">Ubicaciones:</div>
             <div className="fs-5">{ubicaciones}</div>
           </div>
           <div className="row">
@@ -91,8 +91,8 @@ export const DatosCompra = (props) => {
         <div className="col"></div>
       </div>
       <div className="row justify-content-center">
-        <div className="col-12">
-          <div className="btn btn-primary" style={buttonStyle2}>
+        <div className="col-1">
+          <div className="btn btn-primary m-2" style={buttonStyle2}>
             <Link
               to={`/pago`}
               style={{ textDecoration: "none", color: "white" }}

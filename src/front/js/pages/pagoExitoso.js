@@ -77,7 +77,7 @@ export const PagoExitoso = (props) => {
         <div className="col-3"></div>
         <div className="col-md-auto" style={cajaStyle}>
           <div className="row">
-            <div className="fs-4 fw-bold">Teatro:</div>
+            <div className="fs-4 fw-bold">Locación:</div>
             <div className="fs-4">{datosEvento.locacion}</div>
           </div>
           <div className="row">
@@ -99,7 +99,7 @@ export const PagoExitoso = (props) => {
             <div className="fs-5">{store.numero} unidades</div>
           </div>
           <div className="row">
-            <div className="fs-5 fw-bold">Locaciones:</div>
+            <div className="fs-5 fw-bold">Ubicaciones:</div>
             <div className="fs-5">{ubicaciones}</div>
           </div>
           <div className="row">

@@ -93,11 +93,11 @@ export const EventoUbicaciones = (props) => {
             ></img>
           </div>
           <div className="row">
-            <div className="fs-6 fw-bold">Teatro:</div>
+            <div className="fs-6 fw-bold">Locación:</div>
             <div className="fs-6">{datosEvento.locacion}</div>
           </div>
           <div className="row">
-            <div className="fs-6 fw-bold">Obra:</div>
+            <div className="fs-6 fw-bold">Evento:</div>
             <div className="fs-6">{datosEvento.titulo}</div>
           </div>
           <div className="row">
