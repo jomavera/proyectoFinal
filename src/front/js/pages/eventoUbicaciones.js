@@ -17,7 +17,8 @@ var options = {
 
 export const EventoUbicaciones = (props) => {
   const [numSelecc, SetNumSelecc] = useState(0);
-  const [datosEvento, setdatosEvento] = useState({});
+  const [datosEvento, setDatos] = useState({});
+  const [datosLocacion, setLoc] = useState({});
   const [rows, setDatosRows] = useState(null);
   const { store, actions } = useContext(Context);
   const params = useParams();
@@ -26,9 +27,9 @@ export const EventoUbicaciones = (props) => {
   if (store.token === null) {
     history.push("/login");
   }
-  async function obtenerDatosEventoLocacion() {
-    const response = await fetch(
-      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/datos_locacion?evento_id=${store.id}`,
+  async function obtenerDatosEventoLocacion(theid) {
+ const response = await fetch(
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/evento/${theid}`,
       {
         method: "GET",
         headers: {
@@ -36,8 +37,19 @@ export const EventoUbicaciones = (props) => {
         },
       }
     );
-    let data = await response.json();
-    setdatosEvento(data);
+    let dataEvento = await response.json();
+    setDatos(dataEvento[0]);
+    const responseLoc = await fetch(
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/locacion_id/${dataEvento[0].locacion_id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    let dataLoc = await responseLoc.json();
+    setLoc(dataLoc[0]);
   }
 
   async function obtenerEstadosTickets() {
@@ -58,7 +70,7 @@ export const EventoUbicaciones = (props) => {
   }
 
   useEffect(() => {
-    obtenerDatosEventoLocacion();
+    obtenerDatosEventoLocacion(params.theid);
   }, []);
 
   useEffect(() => {
@@ -94,7 +106,7 @@ export const EventoUbicaciones = (props) => {
           </div>
           <div className="row">
             <div className="fs-6 fw-bold">Locación:</div>
-            <div className="fs-6">{datosEvento.locacion}</div>
+            <div className="fs-6">{datosLocacion.name}</div>
           </div>
           <div className="row">
             <div className="fs-6 fw-bold">Evento:</div>
