@@ -55,7 +55,7 @@ export const Evento = (props) => {
       <div className="row align-items-center">
         <div className="col-4 offset-1">
           <img
-            src="https://via.placeholder.com/300x300"
+            src={datosEvento.imagen}
             className="card-img-top p-1 align-items-center"
             alt="..."
           ></img>
