@@ -114,7 +114,7 @@ export const PagoExitoso = (props) => {
         <div className="col-5">
           <form onSubmit={(e) => manejarSubmit(e)}>
             <div className="mb-3">
-              <label for="formFile" className="form-label">
+              <label htmlFor="formFile" className="form-label">
                 Enviar confirmación por E-mail
               </label>
               <input

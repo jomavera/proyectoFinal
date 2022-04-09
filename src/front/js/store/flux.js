@@ -2,7 +2,7 @@ const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
       token: null,
-      email: null,
+      email: "",
       message: "",
       demo: [
         {
