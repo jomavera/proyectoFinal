@@ -6,17 +6,20 @@ import "../../styles/historialCompra.css";
 
 export const HistorialCompra = () => {
 	const { store, actions } = useContext(Context);
-	//const [ historial, setHistorial] = useState([])
+
 	const history = useHistory();
+
 	useEffect(() => {
+
 		if (store.token && store.token != "" && store.token != undefined) actions.getHistorialCompra()
 
 		if (store.token == "") actions.logout()
+
 	}, [store.token])
 
-	const historial = store.historialCompra
+	if (store.token == null) return <>No tienes acceso para ver la pagina</>
 
-	console.log(historial, "historial")
+	const historial = store.historialCompra
 
 	const data = []
 	historial.map((item) => {
@@ -25,13 +28,12 @@ export const HistorialCompra = () => {
 		let mes = fecha.getMonth();
 		let anio = fecha.getFullYear();
 		const fechacompleta = `${dia + 1}/${mes + 1}/${anio}`
-
-		console.log(fechacompleta)
 		data.push({ "fecha": fechacompleta, "hora": item.hora, "duracion": item.duracion, "ticket_id": item.ticket_id, "categoria": item.categoria, "precio": item.precio, "locacion": item.locacion, "name_event": item.name_event, "ubicacion": item.ubicacion })
 	})
-	console.log(data)
-	
-	if (historial == 0 || historial == null) {
+
+	//if(data == '') return <>Cargando</>
+
+	if (historial == 0 || historial == null || historial == "") {
 
 		return (
 			<>
@@ -45,12 +47,16 @@ export const HistorialCompra = () => {
 
 		)
 	}
+
+	console.log(data, "data")
+
+
 	return (
 
 		<>
 			<div className="container-fluid col-8">
 				<div className="titulo">
-				<h2 className="">Historial de compras</h2>
+					<h2 className="">Historial de compras</h2>
 				</div>
 				<table className="table tabla">
 					<thead>

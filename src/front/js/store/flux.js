@@ -1,9 +1,11 @@
 const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
+      eventos: [],
+      eventosFiltrados:[],
       token: null,
       message: '',
-      historialCompra:[""],
+      historialCompra: [""],
       demo: [
         {
           title: "FIRST",
@@ -41,17 +43,17 @@ const getState = ({ getStore, getActions, setStore }) => {
             password: password,
           }),
         };
-        console.log(typeof email,typeof password, "EMAIL; PASSWORD")
+        console.log(typeof email, typeof password, "EMAIL; PASSWORD")
         try {
 
           const resp = await fetch(
-            
+
             "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/token",
             opciones
           );
           if (resp.status !== 200) {
-            
-            throw new Error("ERROR en respuesta",Error);
+
+            throw new Error("ERROR en respuesta", Error);
           }
           const data = await resp.json();
           console.log("Informacion desde backend", data);
@@ -74,14 +76,14 @@ const getState = ({ getStore, getActions, setStore }) => {
       logout: () => {
         sessionStorage.removeItem("token");
         sessionStorage.clear();
-     
+
         console.log("Cerrar sesion");
-        setStore({ token: null});
-        setStore({ historialCompra: []});
-        setStore({ message: ''})
-   
+        setStore({ token: null });
+        setStore({ historialCompra: [] });
+        setStore({ message: '' })
+
       },
-      
+
       getMessage: () => {
         const store = getStore();
         const opciones = {
@@ -95,7 +97,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         )
           .then((resp) => resp.json())
           .then((data) => setStore({ message: data }))
-        
+
           .catch((error) =>
             console.log("Error loading message from backend", error)
           );
@@ -180,10 +182,43 @@ const getState = ({ getStore, getActions, setStore }) => {
           opciones
         )
           .then((resp) => resp.json())
-          .then((data) => setStore( {historialCompra : data} ))
+          .then((data) => setStore({ historialCompra: data }))
           .catch((error) =>
             console.log("Error loading message from backend", error)
           );
+      },
+      
+      obtenerDatosEventos: async (dat) => {
+        console.log( dat,"desde flux")
+       
+        const opciones = {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        
+        };
+        if (dat == undefined){
+          dat = 4
+          try{
+            const resp = await fetch(
+              `${process.env.BACKEND_URL}/api/eventos/${dat}`,opciones);
+            const data = await resp.json();
+            setStore({ eventos: data });
+            }catch (error){
+                console.log(error)
+            }
+        }
+
+
+        try{
+        const resp = await fetch(
+          `${process.env.BACKEND_URL}/api/eventos/${dat}`,opciones);
+        const data = await resp.json();
+        setStore({ eventos: data });
+        }catch (error){
+            console.log(error)
+        }
       },
     },
   };

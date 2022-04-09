@@ -22,7 +22,7 @@ export const Registrarse = () => {
     
     if (name != "" && lastname != "" && email != "" && password != "" && name != undefined && lastname != undefined && password != undefined) {
       if(password.length>4){
-        
+        e.preventDefault()
         actions.registrarse(name, lastname, email, password).then((data) => {
           console.log(data,"data")
          
@@ -37,21 +37,14 @@ export const Registrarse = () => {
           }
   
         });
-      e.preventDefault()
+     
       }else{
-        alert("Contraseña debe tener mas de 4 caracteres")
+        alert("La contraseña debe tener más de 5 caracteres")
       }
       
     };
 
   }
-
-
-
-  console.log(name, "nombre")
-  console.log(lastname, "Apellido")
-  console.log(email, "email")
-
 
   if (store.estado != "") {
     setTimeout('history.back()', 3000);

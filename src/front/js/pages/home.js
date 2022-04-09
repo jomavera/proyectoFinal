@@ -1,30 +1,47 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, } from "react";
 import { Context } from "../store/appContext";
 import "../../styles/home.css";
 import { Box } from "../component/box.js";
 import { Cards } from "../component/cards.js";
 // import { datos } from "../../../datosPrueba.js";
+import Select from 'react-select'
 
 export const Home = () => {
   const { store, actions } = useContext(Context);
   const [datos, setDatos] = useState([]);
+  const [categorias, setCategorias] = useState("")
+  const [selectedOption, setSelectedOption] = useState("");
 
-  async function obtenerDatosEventos() {
-    const response = await fetch(
-      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/eventos`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    let data = await response.json();
-    setDatos(data);
+  const options = [
+    { value: '1', label: 'Teatro' },
+    { value: '2', label: 'Cine' },
+    { value: '3', label: 'Concierto' },
+    { value: '4', label: 'Todos los eventos' },
+  ];
+
+  const dat = selectedOption.value
+  
+  const handleClick = (e) => {
+    actions.obtenerDatosEventos(dat)
+
   }
+
+
+  console.log(selectedOption)
+
+
   useEffect(() => {
-    obtenerDatosEventos();
+
+    actions.obtenerDatosEventos();
+    // obtenerDatosEventos();
   }, []);
+
+  store.eventos.map((value, index) => { console.log(value.imagen) })
+
+  console.log(store.eventos, "eventos")
+  if (store.eventos == []) {
+    return <p>No hay eventos</p>
+  }
 
   return (
     <div className="container-fluid" style={{ backgroundColor: "#e9ecef" }}>
@@ -60,15 +77,38 @@ export const Home = () => {
         <div className="col-4">
           <h1 style={{ fontFamily: "Montserrat" }}>Oferta eventos</h1>
         </div>
+
+
         <div className="col-5"></div>
       </div>
       <div className="row">
-        <div className="col"></div>
-        <div className="col-8">
-          <Cards cartas={datos} />
+
+        <div className="col-6">
+
         </div>
-        <div className="col"></div>
+        <div className="col-3">
+        
+        <label htmlFor="Categoria">Busqueda por título:</label>
+          <input type="text" name="titulo" />
+          <input type="submit" value="Buscar"/>
+        </div>
+        <div className="col-3">
+
+          <label htmlFor="Categoria">Selecciona la categoría:</label>
+          <Select
+            defaultValue={selectedOption}
+            onChange={setSelectedOption}
+            options={options}
+            placeholder= "Filtar"
+          />
+          <input type="submit" value="Buscar" onClick={(e) => handleClick(e)} />
+
+
+        </div>
+        <Cards cartas={store.eventos} />
       </div>
+      <div className="col"></div>
     </div>
+
   );
 };

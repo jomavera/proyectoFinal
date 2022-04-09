@@ -159,10 +159,14 @@ def new_event():
         return "ERROR", 500
 
 
-@api.route("/eventos", methods=["GET"])
-def get_events():
+@api.route("/eventos/<dat>", methods=["GET"])
+def get_events(dat):
     try:
-        response_body = [
+        #event = request.args.get['evet']
+       
+        print(dat,"desde backend")
+        if dat == "4":
+            response_body = [
             {
                 "id": evento.id,
                 "titulo": evento.name,
@@ -177,6 +181,46 @@ def get_events():
             }
             for evento in Evento.query.filter_by(is_active=True)
         ]
+            return jsonify(response_body), 200
+           
+           
+        print("no entro al if")
+        join_query = db.session.query(Evento, Categoria, Evento.is_active)\
+            .join(Evento, Evento.categoria_id == Categoria.id)\
+        .filter_by(categoria_id=dat).filter_by(is_active=True)
+
+        print(join_query)
+        response_body = []
+        for elemento in tuple(join_query):
+            categoria_id = elemento['Categoria'].id
+            name = elemento['Evento'].name
+            descripcion = elemento['Evento'].descripcion
+            id = elemento['Evento'].id
+            descripcion = elemento['Evento'].sinopsis
+            locacion_id = elemento['Evento'].locacion_id
+            precio = elemento['Evento'].precio
+            imagen = elemento['Evento'].imagen
+            duracion = elemento['Evento'].duracion
+            sinopsis = elemento['Evento'].sinopsis
+            is_active = elemento['Evento'].is_active
+            print(elemento)
+            
+
+            objeto = ({
+                "id": id,
+                "titulo": name,
+                "descripcion": descripcion,
+                "categoria_id": categoria_id,
+                "locacion_id": locacion_id,
+                "descripcion": descripcion,
+                "sinopsis": sinopsis,
+                "precio": precio,
+                "imagen": imagen,
+                "duracion": duracion,
+                "is_active": is_active
+            
+            })
+            response_body.append(objeto)
         return jsonify(response_body), 200
 
     except Exception as e:

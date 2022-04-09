@@ -2,11 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { buttonStyle2 } from "../../styles/navbar.js";
 export const Card = (props) => {
+
   return (
     <div className="col">
       <div className="card m-3">
         <img
-          src="https://via.placeholder.com/300x300"
+          src={props.imagen}
           className="card-img-top p-1"
           alt="..."
         ></img>
