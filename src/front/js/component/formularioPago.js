@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "dotenv/config";
 import { useHistory } from "react-router-dom";
 import "react-credit-cards/es/styles-compiled.css";
 import Card from "react-credit-cards";
@@ -19,7 +20,9 @@ export const FormularioPago = (props) => {
   const history = useHistory();
 
   useEffect(() => {
-    const mp = new MercadoPago("TEST-3dc70a75-1bf6-46aa-834d-a589926d8996");
+    const mp = new MercadoPago(process.env.MERCADO_PAGO_ACCESS_TOKEN, {
+      advancedFraudPrevention: false,
+    });
     const cardForm = mp.cardForm({
       amount: props.monto,
       autoMount: true,
@@ -82,6 +85,9 @@ export const FormularioPago = (props) => {
       },
     });
     setCardForm(cardForm);
+    return function cleanup() {
+      cardForm.unmount();
+    };
   }, []);
 
   async function onSubmit(event) {
@@ -208,7 +214,7 @@ export const FormularioPago = (props) => {
               name="cardholderEmail"
               id="form-checkout__cardholderEmail"
               className="form-control m-1"
-              value={props.email}
+              defaultValue={props.email}
             />
             <input
               type="text"
