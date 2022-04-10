@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import "dotenv/config";
 import { useHistory } from "react-router-dom";
 import "react-credit-cards/es/styles-compiled.css";
 import Card from "react-credit-cards";
+
+const config = require("../../../mercadopago_config.json");
 
 const INITIAL_STATE = {
   cvc: "",
@@ -20,7 +21,7 @@ export const FormularioPago = (props) => {
   const history = useHistory();
 
   useEffect(() => {
-    const mp = new MercadoPago(process.env.MERCADO_PAGO_ACCESS_TOKEN, {
+    const mp = new MercadoPago(config.PUBLIC_KEY, {
       advancedFraudPrevention: false,
     });
     const cardForm = mp.cardForm({
@@ -108,7 +109,7 @@ export const FormularioPago = (props) => {
 
     if (token) {
       const response = await fetch(
-        "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/procesarpago",
+        "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39.gitpod.io/api/procesarpago",
         {
           method: "POST",
           headers: {
