@@ -17,7 +17,7 @@ export const PagoExitoso = (props) => {
 
   async function obtenerDatosEventoLocacion() {
     const response = await fetch(
-      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/datos_locacion?evento_id=${store.id}`,
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39.gitpod.io/api/datos_locacion?evento_id=${store.id}`,
       {
         method: "GET",
         headers: {
@@ -44,7 +44,7 @@ export const PagoExitoso = (props) => {
     e.preventDefault();
 
     const response = await fetch(
-      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/enviar_correo`,
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39.gitpod.io/api/enviar_correo`,
       {
         method: "POST",
         headers: {
@@ -77,7 +77,7 @@ export const PagoExitoso = (props) => {
         <div className="col-3"></div>
         <div className="col-md-auto" style={cajaStyle}>
           <div className="row">
-            <div className="fs-4 fw-bold">Teatro:</div>
+            <div className="fs-4 fw-bold">Locación:</div>
             <div className="fs-4">{datosEvento.locacion}</div>
           </div>
           <div className="row">
@@ -99,7 +99,7 @@ export const PagoExitoso = (props) => {
             <div className="fs-5">{store.numero} unidades</div>
           </div>
           <div className="row">
-            <div className="fs-5 fw-bold">Locaciones:</div>
+            <div className="fs-5 fw-bold">Ubicaciones:</div>
             <div className="fs-5">{ubicaciones}</div>
           </div>
           <div className="row">
@@ -114,7 +114,7 @@ export const PagoExitoso = (props) => {
         <div className="col-5">
           <form onSubmit={(e) => manejarSubmit(e)}>
             <div className="mb-3">
-              <label for="formFile" className="form-label">
+              <label htmlFor="formFile" className="form-label">
                 Enviar confirmación por E-mail
               </label>
               <input

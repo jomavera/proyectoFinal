@@ -5,11 +5,7 @@ export const Card = (props) => {
   return (
     <div className="col">
       <div className="card m-3">
-        <img
-          src="https://via.placeholder.com/300x300"
-          className="card-img-top p-1"
-          alt="..."
-        ></img>
+        <img src={props.imagen} className="card-img-top p-1" alt="..."></img>
         <div className="card-body">
           <h5 className="card-title">{props.titulo}</h5>
           <p className="card-text">{props.descripcion}</p>

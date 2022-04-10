@@ -18,10 +18,8 @@ from flask_jwt_extended import current_user
 import itertools
 import mercadopago
 
-sdk = mercadopago.SDK(
-    "TEST-7001770905886777-033114-c013ded5a4474fb975d52204f2288764-1098699850"
-)
-API_KEY = "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"
+sdk = mercadopago.SDK(os.environ.get("MERCADO_PAGO_ACCESS_TOKEN"))
+API_KEY = os.environ.get("SENDGRID_API_KEY")
 
 api = Blueprint("api", __name__)
 
@@ -570,13 +568,13 @@ def enviar_correo():
             ubicacion_name += ubicacion["row"] + str(ubicacion["number"]) + " "
 
         template = """
-            <strong>Confirmacion de compra</strong>
-            <strong>Evento:</strong>%s
-            <strong>Locacion:</strong>%s
-            <strong>Fecha:</strong>%s
-            <strong>Hora:</strong>%s
-            <strong>Ubicaciones:</strong>%s
-            <strong>Total: $</strong>%d
+            <strong>Confirmacion de compra</strong><br/>
+            <strong>Evento:</strong>%s<br/>
+            <strong>Locacion:</strong>%s<br/>
+            <strong>Fecha:</strong>%s<br/>
+            <strong>Hora:</strong>%s<br/>
+            <strong>Ubicaciones:</strong>%s<br/>
+            <strong>Total: $</strong>%d<br/>
         """
         message = Mail(
             from_email="jv.espol@gmail.com",

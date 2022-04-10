@@ -3,6 +3,8 @@ import { useHistory } from "react-router-dom";
 import "react-credit-cards/es/styles-compiled.css";
 import Card from "react-credit-cards";
 
+const config = require("../../../mercadopago_config.json");
+
 const INITIAL_STATE = {
   cvc: "",
   cardExpirationMonth: "",
@@ -19,7 +21,9 @@ export const FormularioPago = (props) => {
   const history = useHistory();
 
   useEffect(() => {
-    const mp = new MercadoPago("TEST-3dc70a75-1bf6-46aa-834d-a589926d8996");
+    const mp = new MercadoPago(config.PUBLIC_KEY, {
+      advancedFraudPrevention: false,
+    });
     const cardForm = mp.cardForm({
       amount: props.monto,
       autoMount: true,
@@ -82,6 +86,9 @@ export const FormularioPago = (props) => {
       },
     });
     setCardForm(cardForm);
+    return function cleanup() {
+      cardForm.unmount();
+    };
   }, []);
 
   async function onSubmit(event) {
@@ -102,7 +109,7 @@ export const FormularioPago = (props) => {
 
     if (token) {
       const response = await fetch(
-        "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/procesarpago",
+        "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39.gitpod.io/api/procesarpago",
         {
           method: "POST",
           headers: {
@@ -208,7 +215,7 @@ export const FormularioPago = (props) => {
               name="cardholderEmail"
               id="form-checkout__cardholderEmail"
               className="form-control m-1"
-              value={props.email}
+              defaultValue={props.email}
             />
             <input
               type="text"
