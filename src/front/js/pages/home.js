@@ -11,7 +11,7 @@ export const Home = () => {
 
   async function obtenerDatosEventos() {
     const response = await fetch(
-      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/eventos`,
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39.gitpod.io/api/eventos`,
       {
         method: "GET",
         headers: {
