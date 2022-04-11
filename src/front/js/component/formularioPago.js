@@ -19,6 +19,7 @@ export const FormularioPago = (props) => {
   const [state, setState] = useState(INITIAL_STATE);
   const [cardFormState, setCardForm] = useState(null);
   const history = useHistory();
+  const email = sessionStorage.getItem('email');
 
   useEffect(() => {
     const mp = new MercadoPago(config.PUBLIC_KEY, {
@@ -215,7 +216,7 @@ export const FormularioPago = (props) => {
               name="cardholderEmail"
               id="form-checkout__cardholderEmail"
               className="form-control m-1"
-              defaultValue={props.email}
+              defaultValue={email}
             />
             <input
               type="text"
