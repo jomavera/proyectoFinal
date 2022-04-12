@@ -510,17 +510,17 @@ def procesar_pago():
 
         payment_response = sdk.payment().create(payment_data)
         payment = payment_response["response"]
-        if payment["status"] == "approved":
-            funcion = Funcion.query.filter_by(evento_id=evento_id, fecha=fecha).first()
-            for ubicacion in ubicaciones:
-                ubicacion_name = ubicacion["row"] + str(ubicacion["number"])
-                ticket = Ticket.query.filter_by(
-                    funcion_id=funcion.id, ubicacion=ubicacion_name
-                ).first()
-                ticket.sold = True
-                compra = Compra(ticket_id=ticket.id, user_id=1)
-                db.session.add(compra)
-                db.session.commit()
+        # if payment["status"] == "approved":
+        funcion = Funcion.query.filter_by(evento_id=evento_id, fecha=fecha).first()
+        for ubicacion in ubicaciones:
+            ubicacion_name = ubicacion["row"] + str(ubicacion["number"])
+            ticket = Ticket.query.filter_by(
+                funcion_id=funcion.id, ubicacion=ubicacion_name
+            ).first()
+            ticket.sold = True
+            compra = Compra(ticket_id=ticket.id, user_id=1)
+            db.session.add(compra)
+            db.session.commit()
 
         return jsonify(payment), 200
     except Exception as e:
@@ -591,4 +591,62 @@ def enviar_correo():
         return jsonify(response_body), 200
     except Exception as e:
         print(f"Error enviar correo: {e}")
+        return "ERROR", 500
+
+
+@api.route("/ingresar_evento", methods=["POST"])
+def ingresar_evento():
+    try:
+        name = request.json.get("name", None)
+        categoria_id = request.json.get("categoria_id", None)
+        locacion = request.json.get("locacion", None)
+        descripcion = request.json.get("descripcion", None)
+        sinopsis = request.json.get("sinopsis", None)
+        precio = request.json.get("precio", None)
+        duracion = request.json.get("duracion", None)
+        imagen = request.json.get("imagen", None)
+        is_active = request.json.get("is_active", None)
+        fechas = request.json.get("fechas", None)
+        horas = request.json.get("horas", None)
+
+        query = Locacion.query.filter_by(name=locacion)
+        results = list(map(lambda x: x.serialize(), query))
+        if results == []:
+            locacion_obj = Locacion(locacion)
+            db.session.add(locacion_obj)
+            db.session.commit()
+            locacion_id = locacion_obj.id
+        else:
+            locacion_id = results[0]['id']
+        evento = Evento(
+            name,
+            categoria_id,
+            locacion_id,
+            descripcion,
+            sinopsis,
+            precio,
+            str(duracion) + "h00",
+            imagen,
+        )
+        db.session.add(evento)
+        db.session.commit()
+        for ix, fecha in enumerate(fechas):
+
+            funcion = Funcion(
+                evento.id, datetime.strptime(fecha, "%d/%m/%Y %H:%M:%S"), horas[ix]
+            )
+            db.session.add(funcion)
+            db.session.commit()
+
+            for element in itertools.product(
+                ["A", "B", "C", "D", "E"], [str(x) for x in range(1, 7)]
+            ):
+                ubicacion = element[0] + element[1]
+                ticket = Ticket(funcion_id=funcion.id, ubicacion=ubicacion)
+                db.session.add(ticket)
+        # db.session.commit()
+        return {"mensaje": "ok", "id": evento.id}, 200
+
+    except Exception as e:
+        print(f"Error ingresar funcion por formulario: {e}")
         return "ERROR", 500

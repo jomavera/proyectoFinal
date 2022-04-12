@@ -19,7 +19,7 @@ export const FormularioPago = (props) => {
   const [state, setState] = useState(INITIAL_STATE);
   const [cardFormState, setCardForm] = useState(null);
   const history = useHistory();
-  const email = sessionStorage.getItem('email');
+  const email = sessionStorage.getItem("email");
 
   useEffect(() => {
     const mp = new MercadoPago(config.PUBLIC_KEY, {
@@ -110,7 +110,7 @@ export const FormularioPago = (props) => {
 
     if (token) {
       const response = await fetch(
-        "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39.gitpod.io/api/procesarpago",
+        "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/procesarpago",
         {
           method: "POST",
           headers: {
@@ -138,11 +138,12 @@ export const FormularioPago = (props) => {
       );
       let data = await response.json();
       console.log(data);
-      if (data.status === "approved") {
-        history.push(`/pagoexitoso`);
-      } else {
-        history.push(`/pagonoexitoso`);
-      }
+      history.push(`/pagoexitoso`);
+      // if (data.status === "approved") {
+      //   history.push(`/pagoexitoso`);
+      // } else {
+      //   history.push(`/pagonoexitoso`);
+      // }
     }
 
     // if (token === "") {
