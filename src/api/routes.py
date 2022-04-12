@@ -633,7 +633,7 @@ def ingresar_evento():
         for ix, fecha in enumerate(fechas):
 
             funcion = Funcion(
-                evento.id, datetime.strptime(fecha, "%d/%m/%Y %H:%M:%S"), horas[ix]
+                evento.id, datetime.strptime(fecha, "%a, %d %b %Y %H:%M:%S %Z"), horas[ix]
             )
             db.session.add(funcion)
             db.session.commit()
@@ -644,7 +644,7 @@ def ingresar_evento():
                 ubicacion = element[0] + element[1]
                 ticket = Ticket(funcion_id=funcion.id, ubicacion=ubicacion)
                 db.session.add(ticket)
-        # db.session.commit()
+        db.session.commit()
         return {"mensaje": "ok", "id": evento.id}, 200
 
     except Exception as e:

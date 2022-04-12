@@ -30,12 +30,33 @@ export const FormularioNuevoEvento = () => {
     );
     let respuesta = await response.json();
     console.log(respuesta);
+    return respuesta;
   }
-  const manejarSubmit = (e) => {
+  async function manejarSubmit(e) {
     e.preventDefault();
-    // console.log(fechas[0].hour);
-
-    ingresarEventoBase({
+    const fechas_utc = Array.isArray(fechas)
+      ? fechas.map((fecha) => {
+          return new Date(fecha).toUTCString();
+        })
+      : [fechas.toUTCString()];
+    const horas_utc = Array.isArray(fechas)
+      ? fechas.map((fecha) => {
+          let fecha_date = new Date(fecha);
+          let minutos = fecha_date.getMinutes();
+          if (minutos < 10) {
+            minutos = `0${minutos}`;
+          }
+          return `${fecha_date.getHours()}h${minutos}`;
+        })
+      : [fechas].map((fecha) => {
+          let fecha_date = new Date(fecha);
+          let minutos = fecha_date.getMinutes();
+          if (minutos < 10) {
+            minutos = `0${minutos}`;
+          }
+          return `${fecha_date.getHours()}h${minutos}`;
+        });
+    const response = await ingresarEventoBase({
       nombre: e.target.elements.nombre.value,
       categoria_id: e.target.elements.categoria_id.value,
       locacion: e.target.elements.locacion.value,
@@ -44,18 +65,12 @@ export const FormularioNuevoEvento = () => {
       precio: e.target.elements.precio.value,
       duracion: e.target.elements.duracion.value,
       imagen: e.target.elements.imagen.value,
-      fechas: fechas.map((fecha) => {
-        return fecha.toUTC().toString();
-      }),
-      horas: fechas.map((e) => {
-        let minutos = e.minute;
-        if (minutos < 10) {
-          minutos = `0${minutos}`;
-        }
-        return `${e.hour}h${minutos}`;
-      }),
+      fechas: fechas_utc,
+      horas: horas_utc,
     });
-  };
+
+    alert("Evento ingresado exitosamente");
+  }
   return (
     <div className="container">
       <div className="row justify-content-center m-2">
