@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import DatePicker from "react-multi-date-picker";
 import TimePicker from "react-multi-date-picker/plugins/time_picker";
 import { buttonStyle2 } from "../../styles/navbar.js";
 
 export const FormularioNuevoEvento = () => {
   const [fechas, setFechas] = useState(new Date());
-
+  const history = useHistory();
   async function ingresarEventoBase(datos) {
     const response = await fetch(
       "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/ingresar_evento",
@@ -70,6 +71,7 @@ export const FormularioNuevoEvento = () => {
     });
 
     alert("Evento ingresado exitosamente");
+    history.push("/perfil");
   }
   return (
     <div className="container">
