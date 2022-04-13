@@ -5,6 +5,7 @@ import Card from "react-credit-cards";
 
 const config = require("../../../mercadopago_config.json");
 
+
 const INITIAL_STATE = {
   cvc: "",
   cardExpirationMonth: "",
@@ -25,6 +26,7 @@ export const FormularioPago = (props) => {
     const mp = new MercadoPago(config.PUBLIC_KEY, {
       advancedFraudPrevention: false,
     });
+
     const cardForm = mp.cardForm({
       amount: props.monto,
       autoMount: true,
@@ -87,9 +89,11 @@ export const FormularioPago = (props) => {
       },
     });
     setCardForm(cardForm);
+
     return function cleanup() {
       cardForm.unmount();
     };
+
   }, []);
 
   async function onSubmit(event) {

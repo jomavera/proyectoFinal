@@ -18,8 +18,10 @@ from flask_jwt_extended import current_user
 import itertools
 import mercadopago
 
+
 sdk = mercadopago.SDK(os.environ.get("MERCADO_PAGO_ACCESS_TOKEN"))
 API_KEY = os.environ.get("SENDGRID_API_KEY")
+
 
 api = Blueprint("api", __name__)
 
@@ -41,21 +43,6 @@ def handle_hello():
             "lastname": user.lastname,
         }
         return jsonify(response_body), 200
-    except Exception as e:
-        print("ERROR! " f"{e}")
-
-
-@api.route("/aaa", methods=["GET"])
-@jwt_required()
-def protected():
-    try:
-        print(current_user_id)
-        # Accede a la identidad del usuario actual con get_jwt_identity
-
-        current_user_id = get_jwt_identity()
-        user = User.query.filter_by(email=current_user_id).first()
-        user = User.query.all(current_user_id)
-        return jsonify({"id": user.id, "name": user.name}), 200
     except Exception as e:
         print("ERROR! " f"{e}")
 
@@ -160,31 +147,101 @@ def new_event():
         print(f"Error nuevo evento : {e}")
         return "ERROR", 500
 
-
 @api.route("/eventos", methods=["GET"])
 def get_events():
     try:
-        response_body = [
-            {
-                "id": evento.id,
-                "titulo": evento.name,
-                "categoria_id": evento.categoria_id,
-                "locacion_id": evento.locacion_id,
-                "descripcion": evento.descripcion,
-                "sinopsis": evento.sinopsis,
-                "precio": evento.precio,
-                "imagen": evento.imagen,
-                "duracion": evento.duracion,
-                "is_active": evento.is_active,
-            }
-            for evento in Evento.query.filter_by(is_active=True)
-        ]
+        #event = request.args.get['evet']
+        categoria= request.args.get('categoria', None)
+        filtro= request.args.get('filtro', None)
+        print(categoria,"Categoria")
+        print(filtro,"filtro")
+        if categoria == '0':
+            print("entro al if")
+            join_query = db.session.query(Evento, Categoria, Evento.is_active, Locacion)\
+            .join(Evento, Evento.categoria_id == Categoria.id)\
+            .join(Locacion, Locacion.id == Evento.locacion_id)
+            print(join_query, "del if 0")
+            response_body = []
+            for elemento in tuple(join_query):
+                print(elemento)
+                categoria_id = elemento['Categoria'].id
+                nombre_categoria = elemento['Categoria'].name             
+                name = elemento['Evento'].name
+                descripcion = elemento['Evento'].descripcion
+                id = elemento['Evento'].id
+                sinopsis = elemento['Evento'].sinopsis
+                locacion_id = elemento['Evento'].locacion_id
+                precio = elemento['Evento'].precio
+                imagen = elemento['Evento'].imagen
+                duracion = elemento['Evento'].duracion
+                nombre_locacion = elemento['Locacion'].name
+                is_active = elemento['Evento'].is_active
+              
+                objeto = ({
+                "id": id,
+                "titulo": name,
+                "nombre_categoria": nombre_categoria,
+                "descripcion": descripcion,
+                "categoria_id": categoria_id,
+                "locacion_id": locacion_id,
+                "sinopsis": sinopsis,
+                "precio": precio,
+                "imagen": imagen,
+                "duracion": duracion,
+                "is_active": is_active,
+                "nombre_locacion": nombre_locacion,
+        
+                 })
+                
+                response_body.append(objeto)
+            return jsonify(response_body), 200
+        
+
+ 
+        print(categoria,"no entro al if")
+        join_query = db.session.query(Evento, Categoria, Evento.is_active)\
+            .join(Evento, Evento.categoria_id == Categoria.id)\
+        .filter_by(categoria_id=filro).filter_by(is_active=True)
+
+    
+        response_body = []
+        for elemento in tuple(join_query):
+            categoria_id = elemento['Categoria'].id
+            nombre_categoria = elemento['Categoria'].name             
+            name = elemento['Evento'].name
+            descripcion = elemento['Evento'].descripcion
+            id = elemento['Evento'].id
+            sinopsis = elemento['Evento'].sinopsis
+            locacion_id = elemento['Evento'].locacion_id
+            precio = elemento['Evento'].precio
+            imagen = elemento['Evento'].imagen
+            duracion = elemento['Evento'].duracion
+            nombre_locacion = elemento['Locacion'].name
+            is_active = elemento['Evento'].is_active
+            print(elemento)
+            
+
+            objeto = ({
+                "id": id,
+                "titulo": name,
+                "descripcion": descripcion,
+                "categoria_id": categoria_id,
+                "locacion_id": locacion_id,
+                "descripcion": descripcion,
+                "sinopsis": sinopsis,
+                "precio": precio,
+                "imagen": imagen,
+                "duracion": duracion,
+                "is_active": is_active
+            
+            })
+            response_body.append(objeto)
+
         return jsonify(response_body), 200
 
     except Exception as e:
         print(f"get events error: {e}")
         return "ERROR", 500
-
 
 @api.route("/evento/<int:theid>", methods=["GET"])
 def get_evento(theid):
@@ -271,7 +328,6 @@ def new_location():
         print(f"Error nueva locacion : {e}")
         return "ERROR", 500
 
-
 @api.route("/locacion/<name>", methods=["GET"])
 def get_location(name):
     try:
@@ -304,7 +360,6 @@ def get_location_id(theid):
     except Exception as e:
         print(f"get locacion error: {e}")
         return "ERROR", 500
-
 
 @api.route("/categoria/<name>", methods=["GET"])
 def get_categoria(name):
@@ -341,7 +396,6 @@ def new_function():
     except Exception as e:
         print(f"Error nueva funcion : {e}")
         return "ERROR", 500
-
 
 @api.route("/funciones/<int:evento_id>", methods=["GET"])
 def get_functions(evento_id):
@@ -527,6 +581,61 @@ def procesar_pago():
         print(f"Error pago: {e}")
         return "ERROR", 500
 
+
+
+@api.route('/historialCompra', methods=['GET'])
+@jwt_required()
+def get_user_orden():
+    try:
+        user_id = get_jwt_identity()
+        print(user_id, "JWT USERid")
+        join_query = db.session.query(Compra, Ticket, User, Funcion, Evento, Locacion, Categoria)\
+            .join(Ticket, Ticket.id == Compra.ticket_id)\
+            .join(Funcion, Funcion.id == Ticket.funcion_id)\
+            .join(Evento, Evento.id == Funcion.evento_id)\
+            .join(Categoria, Categoria.id == Evento.categoria_id)\
+            .join(Locacion, Locacion.id == Evento.locacion_id)\
+            .join(User, Compra.user_id == User.id)\
+            .filter_by(id=user_id)
+
+        response_body = []
+
+        print (tuple(join_query))
+        for elemento in tuple(join_query):
+            ticket_id = elemento['Compra'].ticket_id
+            name = f'{elemento["User"].name} {elemento["User"].lastname}'
+            name_event = elemento['Evento'].name
+            precio = elemento['Evento'].precio
+            hora = elemento['Funcion'].hora
+            duracion = elemento['Evento'].duracion
+            fecha = elemento['Funcion'].fecha
+            locacion = elemento['Locacion'].name
+            categoria = elemento['Categoria'].name
+            ubicacion = elemento['Ticket'].ubicacion
+
+
+            objeto = ({
+                "ticket_id": ticket_id,
+                "name": name,
+                "name_event": name_event,
+                "precio": precio,
+                "hora": hora,
+                "duracion": duracion,
+                "fecha": fecha,
+                "locacion":locacion,
+                "categoria": categoria,
+                "ubicacion": ubicacion
+
+            })
+            response_body.append(objeto)
+        if not response_body:
+                return jsonify({
+            'mensaje': 'No hay compras'
+        }), 204
+        return jsonify(response_body), 200
+    except Exception as e:
+        print(f'ERROR/historialCompra {e}')
+        return (f'ERROR/historialCompra {e}')
 
 @api.route("/datos_locacion", methods=["GET"])
 def get_datos_locacion():

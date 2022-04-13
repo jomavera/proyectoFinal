@@ -8,38 +8,30 @@ import { Context } from "../store/appContext";
 
 export const Perfil = () => {
 	const { store, actions } = useContext(Context);
-
+	
 	const history = useHistory();
+	
 	useEffect(() => {
-
-		if (store.token && store.token != "" && store.token != undefined) actions.getMessage()
-
-
-
+		setTimeout(()=>{
+		if (store.token && store.token != "" && store.token != undefined)
+		 actions.getMessage()	 
+		},1000)	
 	}, [store.token])
 
+	
 	const datosPerfil = store.message
 
-	// console.log(data)
-	//console.log(store.message[params.theid].name)
+	if(datosPerfil == 0 || datosPerfil == "") {
+return <>
+(<div className="row justify-content-center registro noCompra">
+					<div className="col-6">
+						<div className="login-form-1">Cargando Información...</div>
+					</div>
+				</div></>
+	}
 	return (
 		<>
-			{/* // <div className="container">
-		// 	<div className="row justify-content-center">
-				
-		// 		<h3 className="row justify-content-center">Mi datos de perfil</h3>
-		// 		<div className="col-5 login-form-1">
-
-		// 		<h2>Nombre</h2>
-		// 			<h3>{datosPerfil.name} {datosPerfil.lastname}  </h3>
-		// 			<h2>Correo</h2>
-		// 			<h3>{datosPerfil.email}</h3>
-
-
-		// 		</div>
-		// 	</div>
-
-		// </div> */}
+	
 			<div className="row rowPadding justify-content-center">
 				<div className="col-6">
 					<h3 className="row ">Mi datos de perfil</h3>
@@ -58,10 +50,15 @@ export const Perfil = () => {
 				</div>
 
 			</div>
+
 			<div className="row row2">
+
 				<div className="btn">
-					<a href="#" className="btn btn-primary btn-lg active" role="button" aria-pressed="true">Primary link</a></div>
+					<Link to="/historial-compra">
+						<span href="#" className="btn btn-primary btn-lg active" role="button" aria-pressed="true">Ver compras</span>
+					</Link>
+				</div>
 			</div>
-		</>
-	);
+			</>
+			);
 };

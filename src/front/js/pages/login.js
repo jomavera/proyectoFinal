@@ -14,8 +14,8 @@ export const Login = () => {
     const token = sessionStorage.getItem('token')
     const [error, setError] = useState(false)
 
-    const handleClick = () => {
-        
+    const handleClick = (e) => {
+        e.preventDefault()
         if (email ==""){
             alert("Ingrese Correo electrónico")
         }
@@ -59,7 +59,7 @@ export const Login = () => {
                               
                             </div>
                             <div className="btnEntrar">
-                            <button className="btn btn-primary" onClick={handleClick}>Entrar</button>
+                            <button className="btn btn-primary" onClick={(e)=>handleClick(e)}>Entrar</button>
                             </div>
                         </div>
 

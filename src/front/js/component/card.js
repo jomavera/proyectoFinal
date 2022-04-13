@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { buttonStyle2 } from "../../styles/navbar.js";
 export const Card = (props) => {
+
   return (
     <div className="col">
       <div className="card m-3">
