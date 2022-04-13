@@ -2,7 +2,7 @@ const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
       eventos: [],
-      eventosFiltrados:[],
+      eventosFiltrados: [],
       token: null,
       message: '',
       historialCompra: [""],
@@ -48,7 +48,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
           const resp = await fetch(
 
-            "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/token",
+            `${process.env.BACKEND_URL}/api/token`,
             opciones
           );
           if (resp.status !== 200) {
@@ -92,7 +92,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           },
         };
         fetch(
-          "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/hello",
+          `${process.env.BACKEND_URL}/api/hello`,
           opciones
         )
           .then((resp) => resp.json())
@@ -118,7 +118,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         };
         try {
           const resp = await fetch(
-            "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/new_user",
+            `${process.env.BACKEND_URL}/api/new_user`,
             opciones
           );
           if (resp.status != 200) {
@@ -187,37 +187,27 @@ const getState = ({ getStore, getActions, setStore }) => {
             console.log("Error loading message from backend", error)
           );
       },
-      
-      obtenerDatosEventos: async (dat) => {
-        console.log( dat,"desde flux")
+
+      obtenerDatosEventos: async (texto,dat) => {
        
         const opciones = {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
-        
+
         };
-        if (dat == undefined){
-          dat = 4
-          try{
-            const resp = await fetch(
-              `${process.env.BACKEND_URL}/api/eventos/${dat}`,opciones);
-            const data = await resp.json();
-            setStore({ eventos: data });
-            }catch (error){
-                console.log(error)
-            }
-        }
-
-
-        try{
-        const resp = await fetch(
-          `${process.env.BACKEND_URL}/api/eventos/${dat}`,opciones);
-        const data = await resp.json();
-        setStore({ eventos: data });
-        }catch (error){
-            console.log(error)
+        try {
+          if (texto == undefined){
+            texto = 0
+          }
+          const resp = await fetch(
+            `${process.env.BACKEND_URL}/api/eventos?categoria=${texto}&filtro=${dat}`, opciones);
+          const data = await resp.json();
+          setStore({ eventos: data });
+          return data
+        } catch (error) {
+          console.log(error)
         }
       },
     },

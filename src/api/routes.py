@@ -43,21 +43,6 @@ def handle_hello():
         print("ERROR! " f"{e}")
 
 
-@api.route("/aaa", methods=["GET"])
-@jwt_required()
-def protected():
-    try:
-        print(current_user_id)
-        # Accede a la identidad del usuario actual con get_jwt_identity
-
-        current_user_id = get_jwt_identity()
-        user = User.query.filter_by(email=current_user_id).first()
-        user = User.query.all(current_user_id)
-        return jsonify({"id": user.id, "name": user.name}), 200
-    except Exception as e:
-        print("ERROR! " f"{e}")
-
-
 @api.route("/user", methods=["GET"])
 def get_user():
     try:
@@ -159,49 +144,76 @@ def new_event():
         return "ERROR", 500
 
 
-@api.route("/eventos/<dat>", methods=["GET"])
-def get_events(dat):
+@api.route("/eventos", methods=["GET"])
+def get_events():
     try:
         #event = request.args.get['evet']
-       
-        print(dat,"desde backend")
-        if dat == "4":
-            response_body = [
-            {
-                "id": evento.id,
-                "titulo": evento.name,
-                "categoria_id": evento.categoria_id,
-                "locacion_id": evento.locacion_id,
-                "descripcion": evento.descripcion,
-                "sinopsis": evento.sinopsis,
-                "precio": evento.precio,
-                "imagen": evento.imagen,
-                "duracion": evento.duracion,
-                "is_active": evento.is_active,
-            }
-            for evento in Evento.query.filter_by(is_active=True)
-        ]
+        categoria= request.args.get('categoria', None)
+        filtro= request.args.get('filtro', None)
+        print(categoria,"Categoria")
+        print(filtro,"filtro")
+        if categoria == '0':
+            print("entro al if")
+            join_query = db.session.query(Evento, Categoria, Evento.is_active, Locacion)\
+            .join(Evento, Evento.categoria_id == Categoria.id)\
+            .join(Locacion, Locacion.id == Evento.locacion_id)
+            print(join_query, "del if 0")
+            response_body = []
+            for elemento in tuple(join_query):
+                print(elemento)
+                categoria_id = elemento['Categoria'].id
+                nombre_categoria = elemento['Categoria'].name             
+                name = elemento['Evento'].name
+                descripcion = elemento['Evento'].descripcion
+                id = elemento['Evento'].id
+                sinopsis = elemento['Evento'].sinopsis
+                locacion_id = elemento['Evento'].locacion_id
+                precio = elemento['Evento'].precio
+                imagen = elemento['Evento'].imagen
+                duracion = elemento['Evento'].duracion
+                nombre_locacion = elemento['Locacion'].name
+                is_active = elemento['Evento'].is_active
+              
+                objeto = ({
+                "id": id,
+                "titulo": name,
+                "nombre_categoria": nombre_categoria,
+                "descripcion": descripcion,
+                "categoria_id": categoria_id,
+                "locacion_id": locacion_id,
+                "sinopsis": sinopsis,
+                "precio": precio,
+                "imagen": imagen,
+                "duracion": duracion,
+                "is_active": is_active,
+                "nombre_locacion": nombre_locacion,
+        
+                 })
+                
+                response_body.append(objeto)
             return jsonify(response_body), 200
-           
-           
-        print("no entro al if")
+        
+
+ 
+        print(categoria,"no entro al if")
         join_query = db.session.query(Evento, Categoria, Evento.is_active)\
             .join(Evento, Evento.categoria_id == Categoria.id)\
-        .filter_by(categoria_id=dat).filter_by(is_active=True)
+        .filter_by(categoria_id=filro).filter_by(is_active=True)
 
-        print(join_query)
+    
         response_body = []
         for elemento in tuple(join_query):
             categoria_id = elemento['Categoria'].id
+            nombre_categoria = elemento['Categoria'].name             
             name = elemento['Evento'].name
             descripcion = elemento['Evento'].descripcion
             id = elemento['Evento'].id
-            descripcion = elemento['Evento'].sinopsis
+            sinopsis = elemento['Evento'].sinopsis
             locacion_id = elemento['Evento'].locacion_id
             precio = elemento['Evento'].precio
             imagen = elemento['Evento'].imagen
             duracion = elemento['Evento'].duracion
-            sinopsis = elemento['Evento'].sinopsis
+            nombre_locacion = elemento['Locacion'].name
             is_active = elemento['Evento'].is_active
             print(elemento)
             

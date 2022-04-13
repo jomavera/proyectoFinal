@@ -99,7 +99,7 @@ export const FormularioPago = (props) => {
 
     if (token) {
       const response = await fetch(
-        "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us38.gitpod.io/api/procesarpago",
+        `${process.env.BACKEND_URL}/api/procesarpago`,
         {
           method: "POST",
           headers: {

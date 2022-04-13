@@ -11,36 +11,64 @@ export const Home = () => {
   const [datos, setDatos] = useState([]);
   const [categorias, setCategorias] = useState("")
   const [selectedOption, setSelectedOption] = useState("");
+  const [datosEventos, setDatosEventos] = useState([])
+  const [busqueda, setBusqueda] = useState("");
+  const [texto, setTexto] = useState("");
+  const [filtrando, setFiltrando] = useState("");
+
 
   const options = [
-    { value: '1', label: 'Teatro' },
-    { value: '2', label: 'Cine' },
-    { value: '3', label: 'Concierto' },
+    { value: '1', label: 'Categoria' },
+    { value: '2', label: 'Locación' },
+    { value: '3', label: 'Nombre evento' },
     { value: '4', label: 'Todos los eventos' },
   ];
 
-  const dat = selectedOption.value
-  
-  const handleClick = (e) => {
-    actions.obtenerDatosEventos(dat)
-
-  }
-
-
-  console.log(selectedOption)
 
 
   useEffect(() => {
+    actions.obtenerDatosEventos().then(() => {
+      setDatosEventos(store.eventos)
+      setFiltrando(store.eventos)
 
-    actions.obtenerDatosEventos();
-    // obtenerDatosEventos();
+    })
   }, []);
 
-  store.eventos.map((value, index) => { console.log(value.imagen) })
 
-  console.log(store.eventos, "eventos")
-  if (store.eventos == []) {
-    return <p>No hay eventos</p>
+  const handleClick = (e) => {
+    e.preventDefault
+    filtrar(texto)
+  }
+
+  const filtrar = (texto) => {
+
+    const filtrado = filtrando.filter((elemento) => {
+
+      if (elemento.nombre_categoria.toLocaleLowerCase() == texto.toLowerCase() && selectedOption.value == 1) {
+        return elemento
+      }
+     
+      if (elemento.titulo.toString().toLowerCase() == texto.toLocaleLowerCase() && selectedOption.value == 3) {
+        //  setDatosEventos(filtrado)
+        console.log(elemento.titulo, "filtrando")
+        console.log("filtro titulo")
+
+        return elemento
+      }
+      if (selectedOption.value == 4) {
+        return elemento
+      }
+      if(elemento.nombre_locacion.toString().toLowerCase() == texto.toLocaleLowerCase() && selectedOption.value ==2){
+
+      }
+
+    })
+    console.log(filtrado, "elemento filtradow")
+    if (filtrado == "" && selectedOption.value != 4) {
+      return alert("No existen datos con los filtros ingresados")
+
+    }
+    setDatosEventos(filtrado)
   }
 
   return (
@@ -83,31 +111,40 @@ export const Home = () => {
       </div>
       <div className="row">
 
-        <div className="col-6">
+        <div className="col-9">
 
         </div>
         <div className="col-3">
-        
-        <label htmlFor="Categoria">Busqueda por título:</label>
-          <input type="text" name="titulo" />
-          <input type="submit" value="Buscar"/>
-        </div>
-        <div className="col-3">
+          {/* <form>
+            <label htmlFor="Categoria">Busqueda por título:</label>
+            <input onChange={capturarTexto} type="text" name="titulo" />
+            <input type="submit" value="Buscar" onClick={(e) => handleClick(e)}  />
+          </form> */}
 
-          <label htmlFor="Categoria">Selecciona la categoría:</label>
+          <label htmlFor="">Filtro de búsqueda:</label>
+          <input
+            className="form-control inputBuscar"
+            value={texto}
+            placeholder="Ingrese texto"
+            onChange={(e) => setTexto(e.target.value)}
+          />
+          <label htmlFor="Categoria">Selecciona el filtro de búsqueda:</label>
           <Select
             defaultValue={selectedOption}
             onChange={setSelectedOption}
             options={options}
-            placeholder= "Filtar"
+            placeholder="Filtar"
           />
-          <input type="submit" value="Buscar" onClick={(e) => handleClick(e)} />
-
+          <button className="btn btn-primary"
+            type="" value="Buscar"
+            onClick={(e) => handleClick(e)}>Buscar</button>
 
         </div>
-        <Cards cartas={store.eventos} />
+
+        <Cards cartas={datosEventos} />
       </div>
       <div className="col"></div>
+
     </div>
 
   );
