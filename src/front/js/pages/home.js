@@ -27,10 +27,10 @@ export const Home = () => {
 
 
   useEffect(() => {
+    actions.limpiarSeleccion();
     actions.obtenerDatosEventos().then(() => {
       setDatosEventos(store.eventos)
       setFiltrando(store.eventos)
-
     })
   }, []);
 

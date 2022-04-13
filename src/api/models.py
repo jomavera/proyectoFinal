@@ -48,8 +48,6 @@ class Evento(db.Model):
     duracion = db.Column(db.String(10), unique=False, nullable=False)
     imagen = db.Column(db.String(120), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
-  
-
 
     def __init__(
         self,

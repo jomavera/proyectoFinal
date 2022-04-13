@@ -6,6 +6,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       token: null,
       message: '',
       historialCompra: [""],
+      email: "",
       demo: [
         {
           title: "FIRST",
@@ -45,23 +46,20 @@ const getState = ({ getStore, getActions, setStore }) => {
         };
         console.log(typeof email, typeof password, "EMAIL; PASSWORD")
         try {
-
           const resp = await fetch(
-
-            `${process.env.BACKEND_URL}/api/token`,
+            "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39.gitpod.io/api/token",
             opciones
           );
           if (resp.status !== 200) {
-
             throw new Error("ERROR en respuesta", Error);
           }
           const data = await resp.json();
           console.log("Informacion desde backend", data);
           sessionStorage.setItem("token", data.access_token);
-          setStore({ token: data.access_token });
+          sessionStorage.setItem("email", email);
+          setStore({ token: data.access_token, email: email });
           return data;
         } catch (error) {
-
           console.error(`Login error: ${error}`);
         }
       },
@@ -81,7 +79,6 @@ const getState = ({ getStore, getActions, setStore }) => {
         setStore({ token: null });
         setStore({ historialCompra: [] });
         setStore({ message: '' })
-
       },
 
       getMessage: () => {
@@ -92,7 +89,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           },
         };
         fetch(
-          `${process.env.BACKEND_URL}/api/hello`,
+          "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39.gitpod.io/api/hello",
           opciones
         )
           .then((resp) => resp.json())
@@ -118,7 +115,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         };
         try {
           const resp = await fetch(
-            `${process.env.BACKEND_URL}/api/new_user`,
+            "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39.gitpod.io/api/new_user",
             opciones
           );
           if (resp.status != 200) {
@@ -131,6 +128,16 @@ const getState = ({ getStore, getActions, setStore }) => {
         } catch (error) {
           console.error(`New user error: ${error}`);
         }
+      },
+      limpiarSeleccion: () => {
+        setStore({
+          id: null,
+          hora: null,
+          fecha: null,
+          numero: null,
+          precio: null,
+          ubicaciones: [],
+        });
       },
       changeColor: (index, color) => {
         //get the store

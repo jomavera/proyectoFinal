@@ -73,12 +73,14 @@
 		]
 	},
 	"dependencies": {
+		"dotenv": "^16.0.0",
 		"mercadopago": "^1.5.12",
 		"node-fetch": "^3.2.3",
 		"prop-types": "^15.6.1",
 		"react": "^16.8.4",
 		"react-credit-cards": "^0.8.3",
 		"react-dom": "^16.8.4",
+		"react-multi-date-picker": "^3.3.0",
 		"react-polyfills": "0.0.1",
 		"react-router-dom": "^5.2.0",
 		"react-seatmap": "^0.1.2",

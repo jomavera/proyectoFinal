@@ -12,6 +12,7 @@ export const Pago = (props) => {
       eventoId={store.id}
       fecha={store.fecha}
       ubicaciones={store.ubicaciones}
+      email={store.email}
     />
   );
 };
