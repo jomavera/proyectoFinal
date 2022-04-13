@@ -156,7 +156,7 @@ def get_events():
             print("entro al if")
             join_query = db.session.query(Evento, Categoria, Evento.is_active, Locacion)\
             .join(Evento, Evento.categoria_id == Categoria.id)\
-            .join(Locacion, Locacion.id == Evento.locacion_id)
+            .join(Locacion, Locacion.id == Evento.locacion_id).limit(100).all()
             print(join_query, "del if 0")
             response_body = []
             for elemento in tuple(join_query):
@@ -572,6 +572,7 @@ def get_user_orden():
 
         print (tuple(join_query))
         for elemento in tuple(join_query):
+            compra_id = elemento['Compra'].id
             ticket_id = elemento['Compra'].ticket_id
             name = f'{elemento["User"].name} {elemento["User"].lastname}'
             name_event = elemento['Evento'].name
@@ -585,6 +586,7 @@ def get_user_orden():
 
 
             objeto = ({
+                "id": compra_id,
                 "ticket_id": ticket_id,
                 "name": name,
                 "name_event": name_event,
