@@ -1,3 +1,5 @@
+
+   
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import "../../styles/login.css";
@@ -16,13 +18,13 @@ export const Registrarse = () => {
   const [error, setError] = useState(false)
 
 
-  const handleClick = () => {
-
+  const handleClick = (e) => {
+    
     if (name != "" && lastname != "" && email != "" && password != "" && name != undefined && lastname != undefined && password != undefined) {
       if(password.length>4){
-        
+        e.preventDefault()
         actions.registrarse(name, lastname, email, password).then((data) => {
-          console.log(data,"dataaa")
+          console.log(data,"data")
          
           
           if (data && data.mensaje && data.mensaje.toLowerCase() === "ok") {
@@ -35,20 +37,14 @@ export const Registrarse = () => {
           }
   
         });
+     
       }else{
-        alert("Contraseña debe tener mas de 4 caracteres")
+        alert("La contraseña debe tener más de 5 caracteres")
       }
       
     };
 
   }
-
-
-
-  console.log(name, "nombre")
-  console.log(lastname, "Apellido")
-  console.log(email, "email")
-
 
   if (store.estado != "") {
     setTimeout('history.back()', 3000);
@@ -82,7 +78,7 @@ export const Registrarse = () => {
                     id="inputNombre"
                     placeholder="Nombre"
                     required value={name} onChange={(e) => setName(e.target.value)}
-                    minlength={2} pattern="[A-Za-z]*" />
+                    minLength={2} pattern="[A-Za-z]*" />
                   <div className="help-block with-errors"></div>
                 </div>
 
@@ -95,7 +91,7 @@ export const Registrarse = () => {
                     id="inputApellido"
                     required value={lastname}
                     onChange={(e) => setLastname(e.target.value)}
-                    minlength={3} pattern="[A-Za-z]*"
+                    minLength={3}
                   />
                 </div>
               </div>
@@ -118,7 +114,7 @@ export const Registrarse = () => {
               />
 
               <div className="btnRegistrarse">
-              <button onClick={handleClick} className="btn btn-primary btn-block">
+              <button onClick={(e)=>handleClick(e)} className="btn btn-primary btn-block">
                 Registrarse
               </button>
               </div>

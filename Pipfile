@@ -22,6 +22,7 @@ mercadopago = "*"
 yagmail = "*"
 sendgrid = "*"
 
+
 [requires]
 python_version = "3.8"
 

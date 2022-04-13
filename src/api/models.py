@@ -58,7 +58,7 @@ class Evento(db.Model):
         sinopsis,
         precio,
         duracion,
-        imagen,
+        imagen
     ):
         self.name = name
         self.categoria_id = categoria_id
@@ -180,3 +180,4 @@ class Locacion(db.Model):
             "id": self.id,
             "name": self.name,
         }
+

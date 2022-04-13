@@ -402,6 +402,10 @@ async function insertarUsario(usuario) {
   } catch (error) {
     console.error(`Error API nuevo usuario: ${error}`);
   }
+  const data = await resp.json();
+  console.log("Se inserto usuario correctamente");
+} catch (error) {
+  console.error(`Error API nuevo usuario: ${error}`);
 }
 
 for (const usuario of usuarios) {
