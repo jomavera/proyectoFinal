@@ -29,7 +29,7 @@ export const EventoUbicaciones = (props) => {
   }
   async function obtenerDatosEventoLocacion(theid) {
     const response = await fetch(
-      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39.gitpod.io/api/evento/${theid}`,
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/evento/${theid}`,
       {
         method: "GET",
         headers: {
@@ -40,7 +40,7 @@ export const EventoUbicaciones = (props) => {
     let dataEvento = await response.json();
     setDatos(dataEvento[0]);
     const responseLoc = await fetch(
-      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39.gitpod.io/api/locacion_id/${dataEvento[0].locacion_id}`,
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/locacion_id/${dataEvento[0].locacion_id}`,
       {
         method: "GET",
         headers: {
@@ -54,7 +54,7 @@ export const EventoUbicaciones = (props) => {
 
   async function obtenerEstadosTickets() {
     const response = await fetch(
-      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39.gitpod.io/api/tickets/${
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/tickets/${
         store.id
       }/${store.fecha.toUTCString()}/${store.hora}`,
       {
@@ -150,16 +150,16 @@ export const EventoUbicaciones = (props) => {
           </div>
         </div>
         <div className="col align-items-end">
-        {numSelecc === store.numero &&
-          <div className="btn btn-primary" style={buttonStyle2}>
-            <Link
-              to={`/datosCompra`}
-              style={{ textDecoration: "none", color: "white" }}
-            >
-              Continuar
-            </Link>
-          </div>
-        }
+          {numSelecc === store.numero && (
+            <div className="btn btn-primary" style={buttonStyle2}>
+              <Link
+                to={`/datosCompra`}
+                style={{ textDecoration: "none", color: "white" }}
+              >
+                Continuar
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>

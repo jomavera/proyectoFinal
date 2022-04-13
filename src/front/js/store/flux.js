@@ -4,7 +4,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       eventos: [],
       eventosFiltrados: [],
       token: null,
-      message: '',
+      message: "",
       historialCompra: [""],
       email: "",
       demo: [
@@ -44,10 +44,10 @@ const getState = ({ getStore, getActions, setStore }) => {
             password: password,
           }),
         };
-        console.log(typeof email, typeof password, "EMAIL; PASSWORD")
+        console.log(typeof email, typeof password, "EMAIL; PASSWORD");
         try {
           const resp = await fetch(
-            "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39.gitpod.io/api/token",
+            "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/token",
             opciones
           );
           if (resp.status !== 200) {
@@ -78,7 +78,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         console.log("Cerrar sesion");
         setStore({ token: null });
         setStore({ historialCompra: [] });
-        setStore({ message: '' })
+        setStore({ message: "" });
       },
 
       getMessage: () => {
@@ -89,7 +89,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           },
         };
         fetch(
-          "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39.gitpod.io/api/hello",
+          "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/hello",
           opciones
         )
           .then((resp) => resp.json())
@@ -115,7 +115,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         };
         try {
           const resp = await fetch(
-            "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39.gitpod.io/api/new_user",
+            "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/new_user",
             opciones
           );
           if (resp.status != 200) {
@@ -184,10 +184,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             Authorization: "Bearer " + store.token,
           },
         };
-        fetch(
-          `${process.env.BACKEND_URL}/api/historialCompra`,
-          opciones
-        )
+        fetch(`${process.env.BACKEND_URL}/api/historialCompra`, opciones)
           .then((resp) => resp.json())
           .then((data) => setStore({ historialCompra: data }))
           .catch((error) =>
@@ -195,26 +192,26 @@ const getState = ({ getStore, getActions, setStore }) => {
           );
       },
 
-      obtenerDatosEventos: async (texto,dat) => {
-       
+      obtenerDatosEventos: async (texto, dat) => {
         const opciones = {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
-
         };
         try {
-          if (texto == undefined){
-            texto = 0
+          if (texto == undefined) {
+            texto = 0;
           }
           const resp = await fetch(
-            `${process.env.BACKEND_URL}/api/eventos?categoria=${texto}&filtro=${dat}`, opciones);
+            `${process.env.BACKEND_URL}/api/eventos?categoria=${texto}&filtro=${dat}`,
+            opciones
+          );
           const data = await resp.json();
           setStore({ eventos: data });
-          return data
+          return data;
         } catch (error) {
-          console.log(error)
+          console.log(error);
         }
       },
     },

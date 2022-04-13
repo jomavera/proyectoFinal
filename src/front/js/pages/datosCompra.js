@@ -25,7 +25,7 @@ export const DatosCompra = (props) => {
 
   async function obtenerDatosEventoLocacion() {
     const response = await fetch(
-      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39.gitpod.io/api/datos_locacion?evento_id=${store.id}`,
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/datos_locacion?evento_id=${store.id}`,
       {
         method: "GET",
         headers: {
