@@ -35,11 +35,10 @@ export const CajaCompra = (props) => {
         label: fechaDate.toLocaleDateString("es-CL", options),
         value: e.fecha,
       };
-
-      // return e.fecha.slice(0,-12);
     });
 
     setFechas(respFechas);
+    obtenerDatosHorasFuncion(evento_id, data[0].fecha);
   }
 
   async function obtenerDatosHorasFuncion(evento_id, fecha) {
