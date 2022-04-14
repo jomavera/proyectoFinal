@@ -47,7 +47,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         console.log(typeof email, typeof password, "EMAIL; PASSWORD");
         try {
           const resp = await fetch(
-            "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/token",
+            `${process.env.BASE_URL}api/token`,
             opciones
           );
           if (resp.status !== 200) {
@@ -88,10 +88,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             Authorization: "Bearer " + store.token,
           },
         };
-        fetch(
-          "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/hello",
-          opciones
-        )
+        fetch(`${process.env.BASE_URL}api/hello`, opciones)
           .then((resp) => resp.json())
           .then((data) => setStore({ message: data }))
 
@@ -115,7 +112,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         };
         try {
           const resp = await fetch(
-            "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/new_user",
+            `${process.env.BASE_URL}api/new_user`,
             opciones
           );
           if (resp.status != 200) {

@@ -8,27 +8,24 @@ export const FormularioNuevoEvento = () => {
   const [fechas, setFechas] = useState(new Date());
   const history = useHistory();
   async function ingresarEventoBase(datos) {
-    const response = await fetch(
-      "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/ingresar_evento",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: datos.nombre,
-          categoria_id: datos.categoria_id,
-          locacion: datos.locacion,
-          descripcion: datos.descripcion,
-          sinopsis: datos.sinopsis,
-          precio: datos.precio,
-          duracion: datos.duracion,
-          imagen: datos.imagen,
-          fechas: datos.fechas,
-          horas: datos.horas,
-        }),
-      }
-    );
+    const response = await fetch(`${process.env.BASE_URL}api/ingresar_evento`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: datos.nombre,
+        categoria_id: datos.categoria_id,
+        locacion: datos.locacion,
+        descripcion: datos.descripcion,
+        sinopsis: datos.sinopsis,
+        precio: datos.precio,
+        duracion: datos.duracion,
+        imagen: datos.imagen,
+        fechas: datos.fechas,
+        horas: datos.horas,
+      }),
+    });
     let respuesta = await response.json();
     console.log(respuesta);
     return respuesta;

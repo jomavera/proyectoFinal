@@ -11,19 +11,16 @@ export const Evento = (props) => {
   const params = useParams();
 
   async function obtenerDatosEventos(theid) {
-    const response = await fetch(
-      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/evento/${theid}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${process.env.BASE_URL}api/evento/${theid}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     let dataEvento = await response.json();
     setDatos(dataEvento[0]);
     const responseLoc = await fetch(
-      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/locacion_id/${dataEvento[0].locacion_id}`,
+      `${process.env.BASE_URL}api/locacion_id/${dataEvento[0].locacion_id}`,
       {
         method: "GET",
         headers: {

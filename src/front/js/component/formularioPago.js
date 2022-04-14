@@ -3,9 +3,6 @@ import { useHistory } from "react-router-dom";
 import "react-credit-cards/es/styles-compiled.css";
 import Card from "react-credit-cards";
 
-const config = require("../../../mercadopago_config.json");
-
-
 const INITIAL_STATE = {
   cvc: "",
   cardExpirationMonth: "",
@@ -23,7 +20,7 @@ export const FormularioPago = (props) => {
   const email = sessionStorage.getItem("email");
 
   useEffect(() => {
-    const mp = new MercadoPago(config.PUBLIC_KEY, {
+    const mp = new MercadoPago(process.env.MERCADO_PUBLIC_KEY, {
       advancedFraudPrevention: false,
     });
 
@@ -93,7 +90,6 @@ export const FormularioPago = (props) => {
     return function cleanup() {
       cardForm.unmount();
     };
-
   }, []);
 
   async function onSubmit(event) {
@@ -113,33 +109,30 @@ export const FormularioPago = (props) => {
     } = cardFormState.getCardFormData();
 
     if (token) {
-      const response = await fetch(
-        "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/procesarpago",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            token,
-            issuer_id,
-            payment_method_id,
-            transaction_amount: Number(amount),
-            installments: Number(installments),
-            description: "Descripción del producto",
-            payer: {
-              email,
-              identification: {
-                type: identificationType,
-                number: identificationNumber,
-              },
+      const response = await fetch(`${process.env.BASE_URL}api/procesarpago`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          token,
+          issuer_id,
+          payment_method_id,
+          transaction_amount: Number(amount),
+          installments: Number(installments),
+          description: "Descripción del producto",
+          payer: {
+            email,
+            identification: {
+              type: identificationType,
+              number: identificationNumber,
             },
-            evento_id: props.eventoId,
-            ubicaciones: props.ubicaciones,
-            fecha: props.fecha,
-          }),
-        }
-      );
+          },
+          evento_id: props.eventoId,
+          ubicaciones: props.ubicaciones,
+          fecha: props.fecha,
+        }),
+      });
       let data = await response.json();
       console.log(data);
       history.push(`/pagoexitoso`);
