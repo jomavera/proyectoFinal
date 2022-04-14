@@ -44,7 +44,7 @@ export const PagoExitoso = (props) => {
     e.preventDefault();
 
     const response = await fetch(
-      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.ioapi/enviar_correo`,
+      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/enviar_correo`,
       {
         method: "POST",
         headers: {

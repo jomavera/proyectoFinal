@@ -15,5 +15,5 @@ export const Cards = (props) => {
     );
   });
 
-  return <div className="row row-cols-3">{cartas}</div>;
+  return <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3">{cartas}</div>;
 };

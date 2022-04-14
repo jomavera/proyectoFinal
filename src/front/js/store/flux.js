@@ -196,7 +196,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           );
       },
 
-      obtenerDatosEventos: async (texto,dat) => {
+      obtenerDatosEventos: async () => {
        
         const opciones = {
           method: "GET",
@@ -206,11 +206,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 
         };
         try {
-          if (texto == undefined){
-            texto = 0
-          }
+      
           const resp = await fetch(
-            `${process.env.BACKEND_URL}/api/eventos?categoria=${texto}&filtro=${dat}`, opciones);
+            `${process.env.BACKEND_URL}/api/eventos`, opciones);
           const data = await resp.json();
           setStore({ eventos: data });
           return data

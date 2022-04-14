@@ -1,6 +1,7 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
+import base64
 import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
@@ -65,6 +66,13 @@ def get_user():
         print("ERROR! " f"{e}")
 
 
+us = "usuario"
+adm = "administrador"
+hello_encoded = base64.b64encode(us.encode("utf8")).decode("utf8")
+hello_encoded2 = base64.b64encode(adm.encode("utf8")).decode("utf8")
+print(hello_encoded, hello_encoded2)
+
+
 @api.route("/new_user", methods=["POST"])
 def new_user():
     try:
@@ -73,6 +81,9 @@ def new_user():
         email = request.json.get("email", None)
         password = request.json.get("password", None)
         is_active = request.json.get("is_active", None)
+
+        if rol == a:
+            id_rol = isvalo
         # if is_active.lower() == 'true':
         #     is_active = True
         # if is_active.lower()== 'false':
@@ -114,12 +125,6 @@ def create_token():
         print(f"ERROR CREATE_TOKEN: {e}")
         return "ERROR", 500
 
-import base64
-us = "usuario"
-adm = "administrador"
-hello_encoded = base64.b64encode(us.encode("utf8")).decode("utf8")
-hello_encoded2 = base64.b64encode(adm.encode("utf8")).decode("utf8")
-print(hello_encoded, hello_encoded2)
 
 @api.route("/nuevo_evento", methods=["POST"])
 def new_event():
@@ -156,38 +161,32 @@ def new_event():
         return "ERROR", 500
 
 @api.route("/eventos", methods=["GET"])
-def get_events():
+def get_eventss():
     try:
         #event = request.args.get['evet']
-        categoria= request.args.get('categoria', None)
-        filtro= request.args.get('filtro', None)
-        print(categoria,"Categoria")
-        print(filtro,"filtro")
-        if categoria == '0':
-            print("entro al if")
-            join_query = db.session.query(Evento, Categoria, Evento.is_active, Locacion, Comuna)\
+        join_query = db.session.query(Evento, Categoria, Evento.is_active, Locacion, Comuna)\
             .join(Evento, Evento.categoria_id == Categoria.id)\
             .join(Comuna, Evento.comuna_id == Comuna.id)\
             .join(Locacion, Locacion.id == Evento.locacion_id).limit(100).all()
-            print(join_query, "del if 0")
-            response_body = []
-            for elemento in tuple(join_query):
-                print(elemento)
-                categoria_id = elemento['Categoria'].id
-                nombre_categoria = elemento['Categoria'].name             
-                name = elemento['Evento'].name
-                descripcion = elemento['Evento'].descripcion
-                id = elemento['Evento'].id
-                sinopsis = elemento['Evento'].sinopsis
-                locacion_id = elemento['Evento'].locacion_id
-                precio = elemento['Evento'].precio
-                imagen = elemento['Evento'].imagen
-                duracion = elemento['Evento'].duracion
-                nombre_locacion = elemento['Locacion'].name
-                is_active = elemento['Evento'].is_active
-                comuna = elemento['Comuna'].name
-              
-                objeto = ({
+
+        response_body = []
+        for elemento in tuple(join_query):
+            print(elemento)
+            categoria_id = elemento['Categoria'].id
+            nombre_categoria = elemento['Categoria'].name
+            name = elemento['Evento'].name
+            descripcion = elemento['Evento'].descripcion
+            id = elemento['Evento'].id
+            sinopsis = elemento['Evento'].sinopsis
+            locacion_id = elemento['Evento'].locacion_id
+            precio = elemento['Evento'].precio
+            imagen = elemento['Evento'].imagen
+            duracion = elemento['Evento'].duracion
+            nombre_locacion = elemento['Locacion'].name
+            is_active = elemento['Evento'].is_active
+            comuna = elemento['Comuna'].name
+
+            objeto = ({
                 "id": id,
                 "titulo": name,
                 "nombre_categoria": nombre_categoria,
@@ -201,58 +200,16 @@ def get_events():
                 "is_active": is_active,
                 "nombre_locacion": nombre_locacion,
                 "comuna": comuna
-        
-                 })
-                
-                response_body.append(objeto)
-            return jsonify(response_body), 200
-        
 
- 
-        print(categoria,"no entro al if")
-        join_query = db.session.query(Evento, Categoria, Evento.is_active)\
-            .join(Evento, Evento.categoria_id == Categoria.id)\
-        .filter_by(categoria_id=filro).filter_by(is_active=True)
-
-    
-        response_body = []
-        for elemento in tuple(join_query):
-            categoria_id = elemento['Categoria'].id
-            nombre_categoria = elemento['Categoria'].name             
-            name = elemento['Evento'].name
-            descripcion = elemento['Evento'].descripcion
-            id = elemento['Evento'].id
-            sinopsis = elemento['Evento'].sinopsis
-            locacion_id = elemento['Evento'].locacion_id
-            precio = elemento['Evento'].precio
-            imagen = elemento['Evento'].imagen
-            duracion = elemento['Evento'].duracion
-            nombre_locacion = elemento['Locacion'].name
-            is_active = elemento['Evento'].is_active
-            print(elemento)
-            
-
-            objeto = ({
-                "id": id,
-                "titulo": name,
-                "descripcion": descripcion,
-                "categoria_id": categoria_id,
-                "locacion_id": locacion_id,
-                "descripcion": descripcion,
-                "sinopsis": sinopsis,
-                "precio": precio,
-                "imagen": imagen,
-                "duracion": duracion,
-                "is_active": is_active
-            
             })
-            response_body.append(objeto)
 
+            response_body.append(objeto)
         return jsonify(response_body), 200
 
     except Exception as e:
         print(f"get events error: {e}")
         return "ERROR", 500
+
 
 @api.route("/evento/<int:theid>", methods=["GET"])
 def get_evento(theid):
@@ -339,6 +296,7 @@ def new_location():
         print(f"Error nueva locacion : {e}")
         return "ERROR", 500
 
+
 @api.route("/locacion/<name>", methods=["GET"])
 def get_location(name):
     try:
@@ -372,6 +330,7 @@ def get_location_id(theid):
         print(f"get locacion error: {e}")
         return "ERROR", 500
 
+
 @api.route("/categoria/<name>", methods=["GET"])
 def get_categoria(name):
     try:
@@ -397,7 +356,8 @@ def new_function():
         hora = request.json.get("hora", None)
 
         funcion = Funcion(
-            evento_id, datetime.strptime(fecha, "%a, %d %b %Y %H:%M:%S %Z"), hora
+            evento_id, datetime.strptime(
+                fecha, "%a, %d %b %Y %H:%M:%S %Z"), hora
         )
         db.session.add(funcion)
         db.session.commit()
@@ -407,6 +367,7 @@ def new_function():
     except Exception as e:
         print(f"Error nueva funcion : {e}")
         return "ERROR", 500
+
 
 @api.route("/funciones/<int:evento_id>", methods=["GET"])
 def get_functions(evento_id):
@@ -444,17 +405,13 @@ def get_function_hour(evento_id, fecha):
         return "ERROR", 500
 
 
-@api.route("/hitorial", methods=["GET"])
-def handle_historial():
-    return {"mess": "mensaje"}
-
-
 @api.route("/tickets", methods=["POST"])
 def insert_tickets():
     try:
         evento_id = request.json.get("evento_id")
         funcion_id = request.json.get("funcion_id")
-        fecha = datetime.strptime(request.json.get("fecha"), "%a, %d %b %Y %H:%M:%S %Z")
+        fecha = datetime.strptime(request.json.get(
+            "fecha"), "%a, %d %b %Y %H:%M:%S %Z")
         hora = request.json.get("hora")
 
         for element in itertools.product(
@@ -496,7 +453,8 @@ def get_tickets2(evento_id, fecha, hora):
             db.session.query(Funcion, Ticket)
             .filter(
                 Funcion.evento_id == evento_id,
-                Funcion.fecha == datetime.strptime(fecha, "%a, %d %b %Y %H:%M:%S %Z"),
+                Funcion.fecha == datetime.strptime(
+                    fecha, "%a, %d %b %Y %H:%M:%S %Z"),
                 Funcion.hora == hora,
             )
             .filter(
@@ -576,7 +534,8 @@ def procesar_pago():
         payment_response = sdk.payment().create(payment_data)
         payment = payment_response["response"]
         # if payment["status"] == "approved":
-        funcion = Funcion.query.filter_by(evento_id=evento_id, fecha=fecha).first()
+        funcion = Funcion.query.filter_by(
+            evento_id=evento_id, fecha=fecha).first()
         for ubicacion in ubicaciones:
             ubicacion_name = ubicacion["row"] + str(ubicacion["number"])
             ticket = Ticket.query.filter_by(
@@ -593,12 +552,12 @@ def procesar_pago():
         return "ERROR", 500
 
 
-
 @api.route('/historialCompra', methods=['GET'])
-@jwt_required()
+#@jwt_required()
 def get_user_orden():
     try:
-        user_id = get_jwt_identity()
+        #user_id = get_jwt_identity()
+        user_id = 1
         print(user_id, "JWT USERid")
         join_query = db.session.query(Compra, Ticket, User, Funcion, Evento, Locacion, Categoria)\
             .join(Ticket, Ticket.id == Compra.ticket_id)\
@@ -611,7 +570,7 @@ def get_user_orden():
 
         response_body = []
 
-        print (tuple(join_query))
+        print(tuple(join_query))
         for elemento in tuple(join_query):
             compra_id = elemento['Compra'].id
             ticket_id = elemento['Compra'].ticket_id
@@ -625,7 +584,6 @@ def get_user_orden():
             categoria = elemento['Categoria'].name
             ubicacion = elemento['Ticket'].ubicacion
 
-
             objeto = ({
                 "id": compra_id,
                 "ticket_id": ticket_id,
@@ -635,20 +593,21 @@ def get_user_orden():
                 "hora": hora,
                 "duracion": duracion,
                 "fecha": fecha,
-                "locacion":locacion,
+                "locacion": locacion,
                 "categoria": categoria,
                 "ubicacion": ubicacion
 
             })
             response_body.append(objeto)
         if not response_body:
-                return jsonify({
-            'mensaje': 'No hay compras'
-        }), 204
+            return jsonify({
+                'mensaje': 'No hay compras'
+            }), 204
         return jsonify(response_body), 200
     except Exception as e:
         print(f'ERROR/historialCompra {e}')
         return (f'ERROR/historialCompra {e}')
+
 
 @api.route("/datos_locacion", methods=["GET"])
 def get_datos_locacion():
@@ -757,7 +716,8 @@ def ingresar_evento():
         for ix, fecha in enumerate(fechas):
 
             funcion = Funcion(
-                evento.id, datetime.strptime(fecha, "%a, %d %b %Y %H:%M:%S %Z"), horas[ix]
+                evento.id, datetime.strptime(
+                    fecha, "%a, %d %b %Y %H:%M:%S %Z"), horas[ix]
             )
             db.session.add(funcion)
             db.session.commit()
@@ -774,3 +734,6 @@ def ingresar_evento():
     except Exception as e:
         print(f"Error ingresar funcion por formulario: {e}")
         return "ERROR", 500
+
+
+
