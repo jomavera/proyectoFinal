@@ -4,7 +4,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       eventos: [],
       eventosFiltrados: [],
       token: null,
-      message: '',
+      perfil: '',
       historialCompra: [""],
       email: "",
       demo: [
@@ -79,10 +79,10 @@ const getState = ({ getStore, getActions, setStore }) => {
         console.log("Cerrar sesion");
         setStore({ token: null });
         setStore({ historialCompra: [] });
-        setStore({ message: '' })
+        setStore({ perfil: '' })
       },
 
-      getMessage: () => {
+      getPerfil: () => {
         const store = getStore();
         const opciones = {
           headers: {
@@ -90,11 +90,11 @@ const getState = ({ getStore, getActions, setStore }) => {
           },
         };
         fetch(
-          `${process.env.BACKEND_URL}/api/hello`,
+          `${process.env.BACKEND_URL}/api/perfil`,
           opciones
         )
           .then((resp) => resp.json())
-          .then((data) => setStore({ message: data }))
+          .then((data) => setStore({ perfil: data }))
 
           .catch((error) =>
             console.log("Error loading message from backend", error)

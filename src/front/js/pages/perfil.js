@@ -14,7 +14,7 @@ export const Perfil = () => {
 	useEffect(() => {
 		setTimeout(() => {
 			if (store.token && store.token != "" && store.token != undefined)
-				actions.getMessage()
+				actions.getPerfil()
 		}, 1000)
 	}, [store.token])
 
@@ -23,7 +23,7 @@ export const Perfil = () => {
 	}
 
 
-	const datosPerfil = store.message
+	const datosPerfil = store.perfil
 
 	if (datosPerfil == 0 || datosPerfil == "") {
 		return <>

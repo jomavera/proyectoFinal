@@ -29,7 +29,7 @@ api = Blueprint("api", __name__)
 dict_rows = {"A": 0, "B": 1, "C": 2, "D": 3, "E": 4, "F": 5}
 
 
-@api.route("/hello", methods=["GET"])
+@api.route("/perfil", methods=["GET"])
 @jwt_required()
 def handle_hello():
     try:
