@@ -10,6 +10,7 @@ export const Cards = (props) => {
         titulo={e.titulo}
         key={ix}
         idEvento={e.id}
+
       />
     );
   });

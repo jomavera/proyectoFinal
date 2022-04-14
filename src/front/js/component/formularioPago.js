@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import "react-credit-cards/es/styles-compiled.css";
 import Card from "react-credit-cards";
+
+const config = require("../../../mercadopago_config.json");
+
 
 const INITIAL_STATE = {
   cvc: "",
@@ -15,9 +19,14 @@ const INITIAL_STATE = {
 export const FormularioPago = (props) => {
   const [state, setState] = useState(INITIAL_STATE);
   const [cardFormState, setCardForm] = useState(null);
+  const history = useHistory();
+  const email = sessionStorage.getItem("email");
 
   useEffect(() => {
-    const mp = new MercadoPago("TEST-3dc70a75-1bf6-46aa-834d-a589926d8996");
+    const mp = new MercadoPago(config.PUBLIC_KEY, {
+      advancedFraudPrevention: false,
+    });
+
     const cardForm = mp.cardForm({
       amount: props.monto,
       autoMount: true,
@@ -80,6 +89,11 @@ export const FormularioPago = (props) => {
       },
     });
     setCardForm(cardForm);
+
+    return function cleanup() {
+      cardForm.unmount();
+    };
+
   }, []);
 
   async function onSubmit(event) {
@@ -95,11 +109,12 @@ export const FormularioPago = (props) => {
       installments,
       identificationNumber,
       identificationType,
+      cardholderName: cardholder_name,
     } = cardFormState.getCardFormData();
 
     if (token) {
       const response = await fetch(
-        `${process.env.BACKEND_URL}/api/procesarpago`,
+        "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/procesarpago",
         {
           method: "POST",
           headers: {
@@ -127,7 +142,17 @@ export const FormularioPago = (props) => {
       );
       let data = await response.json();
       console.log(data);
+      history.push(`/pagoexitoso`);
+      // if (data.status === "approved") {
+      //   history.push(`/pagoexitoso`);
+      // } else {
+      //   history.push(`/pagonoexitoso`);
+      // }
     }
+
+    // if (token === "") {
+    //   alert("Complete todos los campos!");
+    // }
   }
 
   const handleInputChange = (e) => {
@@ -195,8 +220,8 @@ export const FormularioPago = (props) => {
               type="email"
               name="cardholderEmail"
               id="form-checkout__cardholderEmail"
-              placeholder="E-mail"
               className="form-control m-1"
+              defaultValue={email}
             />
             <input
               type="text"

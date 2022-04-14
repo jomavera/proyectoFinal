@@ -27,17 +27,23 @@ export const Home = () => {
 
 
   useEffect(() => {
+    actions.limpiarSeleccion();
     actions.obtenerDatosEventos().then(() => {
       setDatosEventos(store.eventos)
       setFiltrando(store.eventos)
-
     })
   }, []);
 
 
   const handleClick = (e) => {
-    e.preventDefault
+    e.preventDefault()
     filtrar(texto)
+
+  }
+
+  const handleTodos = (e) => {
+    console.log("click")
+    setDatosEventos(store.eventos)
   }
 
   const filtrar = (texto) => {
@@ -47,7 +53,7 @@ export const Home = () => {
       if (elemento.nombre_categoria.toLocaleLowerCase() == texto.toLowerCase() && selectedOption.value == 1) {
         return elemento
       }
-     
+
       if (elemento.titulo.toString().toLowerCase() == texto.toLocaleLowerCase() && selectedOption.value == 3) {
         //  setDatosEventos(filtrado)
         console.log(elemento.titulo, "filtrando")
@@ -58,7 +64,7 @@ export const Home = () => {
       if (selectedOption.value == 4) {
         return elemento
       }
-      if(elemento.nombre_locacion.toString().toLowerCase() == texto.toLocaleLowerCase() && selectedOption.value ==2){
+      if (elemento.nombre_locacion.toString().toLowerCase() == texto.toLocaleLowerCase() && selectedOption.value == 2) {
 
       }
 
@@ -70,6 +76,9 @@ export const Home = () => {
     }
     setDatosEventos(filtrado)
   }
+
+
+  console.log(datosEventos)
 
   return (
     <div className="container-fluid" style={{ backgroundColor: "#e9ecef" }}>
@@ -115,32 +124,29 @@ export const Home = () => {
 
         </div>
         <div className="col-3">
-          {/* <form>
-            <label htmlFor="Categoria">Busqueda por título:</label>
-            <input onChange={capturarTexto} type="text" name="titulo" />
-            <input type="submit" value="Buscar" onClick={(e) => handleClick(e)}  />
-          </form> */}
-
-          <label htmlFor="">Filtro de búsqueda:</label>
-          <input
-            className="form-control inputBuscar"
-            value={texto}
-            placeholder="Ingrese texto"
-            onChange={(e) => setTexto(e.target.value)}
-          />
-          <label htmlFor="Categoria">Selecciona el filtro de búsqueda:</label>
-          <Select
-            defaultValue={selectedOption}
-            onChange={setSelectedOption}
-            options={options}
-            placeholder="Filtar"
-          />
-          <button className="btn btn-primary"
-            type="" value="Buscar"
-            onClick={(e) => handleClick(e)}>Buscar</button>
-
+          <form>
+            <label htmlFor="">Filtro de búsqueda:</label>
+            <input
+              className="form-control inputBuscar"
+              value={texto}
+              placeholder="Ingrese texto"
+              onChange={(e) => setTexto(e.target.value)}
+            />
+            <label htmlFor="Categoria">Selecciona el filtro de búsqueda:</label>
+            <Select
+              defaultValue={selectedOption}
+              onChange={setSelectedOption}
+              options={options}
+              placeholder="Filtar"
+            />
+            <button className="btn btn-primary"
+              type="" value="Buscar"
+              onClick={(e) => handleClick(e)}>Buscar</button>
+          </form>
         </div>
-
+        <button className="btn btn-primary"
+          type="" value="Buscar"
+          onClick={(e) => handleTodos(e)}>Listar todos</button>
         <Cards cartas={datosEventos} />
       </div>
       <div className="col"></div>

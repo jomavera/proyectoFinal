@@ -12,7 +12,7 @@ export const Evento = (props) => {
 
   async function obtenerDatosEventos(theid) {
     const response = await fetch(
-      `${process.env.BACKEND_URL}/api/evento/${theid}`,
+      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/evento/${theid}`,
       {
         method: "GET",
         headers: {
@@ -23,7 +23,7 @@ export const Evento = (props) => {
     let dataEvento = await response.json();
     setDatos(dataEvento[0]);
     const responseLoc = await fetch(
-      `${process.env.BACKEND_URL}/api/locacion_id/${dataEvento[0].locacion_id}`,
+      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/locacion_id/${dataEvento[0].locacion_id}`,
       {
         method: "GET",
         headers: {
@@ -62,11 +62,11 @@ export const Evento = (props) => {
         </div>
         <div className="col-4 py-4" style={{ fontFamily: "Montserrat" }}>
           <div className="row">
-            <div className="fs-4 fw-bold">Teatro:</div>
+            <div className="fs-4 fw-bold">Locación:</div>
             <div className="fs-4">{datosLocacion.name}</div>
           </div>
           <div className="row">
-            <div className="fs-4 fw-bold">Obra:</div>
+            <div className="fs-4 fw-bold">Evento:</div>
             <div className="fs-4">{datosEvento.titulo}</div>
           </div>
           <div className="row">

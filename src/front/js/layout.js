@@ -11,6 +11,9 @@ import { Evento } from "./pages/evento";
 import { EventoUbicaciones } from "./pages/eventoUbicaciones";
 import { DatosCompra } from "./pages/datosCompra";
 import { Pago } from "./pages/pago";
+import { PagoNoExitoso } from "./pages/pagoNoExitoso";
+import { PagoExitoso } from "./pages/pagoExitoso";
+import { IngresarEvento } from "./pages/ingresarEvento";
 import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
@@ -62,6 +65,15 @@ const Layout = () => {
             </Route>
             <Route exact path="/historial-compra">
               <HistorialCompra />
+              </Route>
+            <Route exact path="/pagoexitoso">
+              <PagoExitoso />
+            </Route>
+            <Route exact path="/pagonoexitoso">
+              <PagoNoExitoso />
+            </Route>
+            <Route exact path="/ingresoevento">
+              <IngresarEvento />
             </Route>
             <Route>
               <h1>Not found!</h1>

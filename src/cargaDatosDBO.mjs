@@ -1,3 +1,4 @@
+
 import fetch from "node-fetch";
 const datos = [
   {
@@ -16,6 +17,7 @@ const datos = [
     ],
     categoria: "Teatro",
     imagen: "https://via.placeholder.com/300x300",
+    comuna_id: 1
   },
   {
     titulo: "Evento 2",
@@ -33,6 +35,7 @@ const datos = [
     ],
     categoria: "Teatro",
     imagen: "https://via.placeholder.com/300x300",
+    comuna_id: 1
   },
   {
     titulo: "Evento 3",
@@ -50,6 +53,7 @@ const datos = [
     ],
     categoria: "Teatro",
     imagen: "https://via.placeholder.com/300x300",
+    comuna_id: 2
   },
   {
     titulo: "Evento 4",
@@ -67,6 +71,7 @@ const datos = [
     ],
     categoria: "Teatro",
     imagen: "https://via.placeholder.com/300x300",
+    comuna_id: 2
   },
   {
     titulo: "Evento 5",
@@ -84,6 +89,7 @@ const datos = [
     ],
     categoria: "Teatro",
     imagen: "https://via.placeholder.com/300x300",
+    comuna_id: 3
   },
   {
     titulo: "Evento 6",
@@ -101,6 +107,7 @@ const datos = [
     ],
     categoria: "Teatro",
     imagen: "https://via.placeholder.com/300x300",
+    comuna_id: 3
   },
   {
     titulo: "Evento 7",
@@ -118,6 +125,7 @@ const datos = [
     ],
     categoria: "Cine",
     imagen: "https://via.placeholder.com/300x300",
+    comuna_id: 3
   },
   {
     titulo: "Evento 8",
@@ -135,6 +143,25 @@ const datos = [
     ],
     categoria: "Cine",
     imagen: "https://via.placeholder.com/300x300",
+    comuna_id: 4
+  },
+  {
+    titulo: "Evento 9",
+    descripcion:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus consectetur blandit.",
+    sinopsis:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus blandit commodo tincidunt. Sed nulla ex, feugiat at arcu in, fringilla facilisis nisl. Phasellus placerat leo quis sapien euismod semper. Fusce molestie erat a velit tincidunt, eget rutrum massa bibendum. Suspendisse. ",
+    duracion: "1h20",
+    locacion: "Movistar Arena",
+    precio: 5300,
+    funciones: [
+      new Date(2022, 6, 30, 22, 15),
+      new Date(2022, 7, 20, 20),
+      new Date(2022, 5, 30, 21, 30),
+    ],
+    categoria: "Concierto",
+    imagen: "https://via.placeholder.com/300x300",
+    comuna_id: 4
   },
 ];
 
@@ -150,7 +177,7 @@ async function insertarDato(url, nombre) {
   };
   try {
     const resp = await fetch(
-      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/${url}`,
+      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/${url}`,
       opciones
     );
     if (resp.status != 200) {
@@ -173,7 +200,7 @@ async function getID(url, name) {
   };
   try {
     const resp = await fetch(
-      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/${url}/${name}`,
+      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/${url}/${name}`,
       opciones
     );
     if (resp.status != 200) {
@@ -202,11 +229,12 @@ async function insertarEvento(evento, locacion_id, categoria_id) {
       precio: parseInt(evento.precio),
       duracion: evento.duracion,
       imagen: evento.imagen,
+      comuna_id: evento.comuna_id
     }),
   };
   try {
     const resp = await fetch(
-      "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/nuevo_evento",
+      "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/nuevo_evento",
       opciones
     );
     if (resp.status != 200) {
@@ -254,7 +282,7 @@ async function getEventoID(name) {
   };
   try {
     const resp = await fetch(
-      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/evento_name/${name}`,
+      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/evento_name/${name}`,
       opciones
     );
     if (resp.status != 200) {
@@ -286,7 +314,7 @@ async function insertarFuncion(evento_id, funcion) {
   };
   try {
     const resp = await fetch(
-      "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/nueva_funcion",
+      "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/nueva_funcion",
       opciones
     );
     if (resp.status != 200) {
@@ -319,7 +347,7 @@ async function insertarTickets(evento_id, funcion, funcion_id) {
   };
   try {
     const resp = await fetch(
-      "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/tickets",
+      "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/tickets",
       opciones
     );
     if (resp.status != 200) {
@@ -335,41 +363,59 @@ async function insertarTickets(evento_id, funcion, funcion_id) {
 
 for (const evento of datos) {
   let respEvento = await getEventoID(evento.titulo);
+  console.log(respEvento,"RESP EVENTO")
   for (const funcion of evento.funciones) {
     const resp = await insertarFuncion(respEvento.id, funcion);
     const resp2 = await insertarTickets(respEvento.id, funcion, resp["id"]); //insertar tickets/ubicaciones para cada funcion
   }
 }
 
-const name = "jose";
-const lastname = "vera";
-const email = "jose@prueba.com";
-const password = "12345";
-const is_active = true;
-
-const opciones = {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
+const usuarios = [
+  {
+    name: "jose",
+    lastname: "vera",
+    email: "jose@prueba.com",
+    password: "12345",
+    is_active: true,
   },
-  body: JSON.stringify({
-    name: name,
-    lastname: lastname,
-    email: email,
-    password: password,
-    is_active: is_active,
-  }),
-};
-try {
-  const resp = await fetch(
-    "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us38.gitpod.io/api/new_user",
-    opciones
-  );
-  if (resp.status != 200) {
-    throw new Error("ERROR en respuesta");
+  {
+    name: "prueba",
+    lastname: "prueba",
+    email: "test_user_86167117@testuser.com",
+    password: "12345",
+    is_active: true,
+  },
+];
+
+async function insertarUsario(usuario) {
+  const opciones = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: usuario.name,
+      lastname: usuario.lastname,
+      email: usuario.email,
+      password: usuario.password,
+      is_active: usuario.is_active,
+    }),
+  };
+  try {
+    const resp = await fetch(
+      "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/new_user",
+      opciones
+    );
+    if (resp.status != 200) {
+      throw new Error("ERROR en respuesta crear nuevo usuario");
+    }
+    const data = await resp.json();
+    console.log("Se inserto usuario correctamente");
+  } catch (error) {
+    console.error(`Error API nuevo usuario: ${error}`);
   }
-  const data = await resp.json();
-  console.log("Se inserto usuario correctamente");
-} catch (error) {
-  console.error(`Error API nuevo usuario: ${error}`);
+}
+
+for (const usuario of usuarios) {
+  const resp = await insertarUsario(usuario);
 }
