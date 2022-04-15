@@ -20,7 +20,7 @@ export const CajaCompra = (props) => {
 
   async function obtenerDatosFunciones(evento_id) {
     const response = await fetch(
-      `${process.env.BASE_URL}api/funciones/${evento_id}`,
+      `${process.env.BACKEND_URL}/api/funciones/${evento_id}`,
       {
         method: "GET",
         headers: {
@@ -43,7 +43,7 @@ export const CajaCompra = (props) => {
 
   async function obtenerDatosHorasFuncion(evento_id, fecha) {
     const response = await fetch(
-      `${process.env.BASE_URL}api/horas/${evento_id}/${fecha}`,
+      `${process.env.BACKEND_URL}/api/horas/${evento_id}/${fecha}`,
       {
         method: "GET",
         headers: {

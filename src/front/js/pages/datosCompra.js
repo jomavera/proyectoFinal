@@ -25,7 +25,7 @@ export const DatosCompra = (props) => {
 
   async function obtenerDatosEventoLocacion() {
     const response = await fetch(
-      `${process.env.BASE_URL}api/datos_locacion?evento_id=${store.id}`,
+      `${process.env.BACKEND_URL}/api/datos_locacion?evento_id=${store.id}`,
       {
         method: "GET",
         headers: {

@@ -45,9 +45,10 @@ const getState = ({ getStore, getActions, setStore }) => {
           }),
         };
         console.log(typeof email, typeof password, "EMAIL; PASSWORD");
+        console.log(`${process.env.BACKEND_URL}/api/token`);
         try {
           const resp = await fetch(
-            `${process.env.BASE_URL}api/token`,
+            `${process.env.BACKEND_URL}/api/token`,
             opciones
           );
           if (resp.status !== 200) {
@@ -88,7 +89,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             Authorization: "Bearer " + store.token,
           },
         };
-        fetch(`${process.env.BASE_URL}api/hello`, opciones)
+        fetch(`${process.env.BACKEND_URL}/api/hello`, opciones)
           .then((resp) => resp.json())
           .then((data) => setStore({ message: data }))
 
@@ -112,7 +113,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         };
         try {
           const resp = await fetch(
-            `${process.env.BASE_URL}api/new_user`,
+            `${process.env.BACKEND_URL}/api/new_user`,
             opciones
           );
           if (resp.status != 200) {

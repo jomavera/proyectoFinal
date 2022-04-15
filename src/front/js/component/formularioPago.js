@@ -109,30 +109,33 @@ export const FormularioPago = (props) => {
     } = cardFormState.getCardFormData();
 
     if (token) {
-      const response = await fetch(`${process.env.BASE_URL}api/procesarpago`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          token,
-          issuer_id,
-          payment_method_id,
-          transaction_amount: Number(amount),
-          installments: Number(installments),
-          description: "Descripción del producto",
-          payer: {
-            email,
-            identification: {
-              type: identificationType,
-              number: identificationNumber,
-            },
+      const response = await fetch(
+        `${process.env.BACKEND_URL}/api/procesarpago`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-          evento_id: props.eventoId,
-          ubicaciones: props.ubicaciones,
-          fecha: props.fecha,
-        }),
-      });
+          body: JSON.stringify({
+            token,
+            issuer_id,
+            payment_method_id,
+            transaction_amount: Number(amount),
+            installments: Number(installments),
+            description: "Descripción del producto",
+            payer: {
+              email,
+              identification: {
+                type: identificationType,
+                number: identificationNumber,
+              },
+            },
+            evento_id: props.eventoId,
+            ubicaciones: props.ubicaciones,
+            fecha: props.fecha,
+          }),
+        }
+      );
       let data = await response.json();
       console.log(data);
       history.push(`/pagoexitoso`);

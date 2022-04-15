@@ -17,7 +17,7 @@ export const PagoExitoso = (props) => {
 
   async function obtenerDatosEventoLocacion() {
     const response = await fetch(
-      `${process.env.BASE_URL}api/datos_locacion?evento_id=${store.id}`,
+      `${process.env.BACKEND_URL}/api/datos_locacion?evento_id=${store.id}`,
       {
         method: "GET",
         headers: {
@@ -43,21 +43,24 @@ export const PagoExitoso = (props) => {
   async function manejarSubmit(e) {
     e.preventDefault();
 
-    const response = await fetch(`${process.env.BASE_URL}api/enviar_correo`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        nombre_evento: datosEvento.titulo,
-        ubicaciones: store.ubicaciones,
-        locacion: datosEvento.locacion,
-        fecha: store.fecha.toLocaleDateString("es-CL", options),
-        hora: store.hora,
-        total: store.precio * parseInt(store.numero),
-        correo: e.target.elements.correo.value,
-      }),
-    });
+    const response = await fetch(
+      `${process.env.BACKEND_URL}/api/enviar_correo`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nombre_evento: datosEvento.titulo,
+          ubicaciones: store.ubicaciones,
+          locacion: datosEvento.locacion,
+          fecha: store.fecha.toLocaleDateString("es-CL", options),
+          hora: store.hora,
+          total: store.precio * parseInt(store.numero),
+          correo: e.target.elements.correo.value,
+        }),
+      }
+    );
     let data = await response.json();
     alert("Confirmación enviada exitosamente");
     console.log(data);
