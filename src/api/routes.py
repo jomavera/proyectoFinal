@@ -3,6 +3,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 import base64
 import os
+from sqlalchemy.sql.functions import func
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from flask import Flask, request, jsonify, url_for, Blueprint, redirect
@@ -737,3 +738,57 @@ def ingresar_evento():
 
 
 
+@api.route('/historialCompras', methods=['GET'])
+#@jwt_required()
+def get_adm_compra():
+    try:
+     
+        join_query = db.session.query(User.name, Evento.name,  func.count(Evento.id))\
+            .join(User, User.id == Compra.user_id)\
+            .join(Ticket, Ticket.id == Compra.ticket_id)\
+            .join(Funcion, Funcion.id == Ticket.funcion_id)\
+            .join(Evento, Evento.id == Funcion.evento_id)\
+            .group_by(Evento.id, User)
+         
+        
+        for elemento in tuple(join_query):
+            print(elemento)
+        # response_body = []
+
+        # print(tuple(join_query))
+        # for elemento in tuple(join_query):
+        #     compra_id = elemento['Compra'].id
+        #     ticket_id = elemento['Compra'].ticket_id
+        #     name = f'{elemento["User"].name} {elemento["User"].lastname}'
+        #     name_event = elemento['Evento'].name
+        #     precio = elemento['Evento'].precio
+        #     hora = elemento['Funcion'].hora
+        #     duracion = elemento['Evento'].duracion
+        #     fecha = elemento['Funcion'].fecha
+        #     locacion = elemento['Locacion'].name
+        #     categoria = elemento['Categoria'].name
+        #     ubicacion = elemento['Ticket'].ubicacion
+
+        #     objeto = ({
+        #         "id": compra_id,
+        #         "ticket_id": ticket_id,
+        #         "name": name,
+        #         "name_event": name_event,
+        #         "precio": precio,
+        #         "hora": hora,
+        #         "duracion": duracion,
+        #         "fecha": fecha,
+        #         "locacion": locacion,
+        #         "categoria": categoria,
+        #         "ubicacion": ubicacion
+
+        #     })
+        #     response_body.append(objeto)
+        # if not response_body:
+        #     return jsonify({
+        #         'mensaje': 'No hay compras'
+        #     }), 204
+        # return jsonify(response_body), 200
+    except Exception as e:
+        print(f'ERROR/historialCompra {e}')
+        return (f'ERROR/historialCompra {e}')
