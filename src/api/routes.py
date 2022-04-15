@@ -544,6 +544,7 @@ def procesar_pago():
         fecha = request.json.get("fecha")
         ubicaciones = request.json.get("ubicaciones")
         evento_id = request.json.get("evento_id")
+        email = request.json.get("payer").get("email")
         payment_data = {
             "transaction_amount": float(request.json.get("transaction_amount")),
             "token": request.json.get("token"),
@@ -566,13 +567,14 @@ def procesar_pago():
         payment = payment_response["response"]
         # if payment["status"] == "approved":
         funcion = Funcion.query.filter_by(evento_id=evento_id, fecha=fecha).first()
+        usuario = User.query.filter_by(email=email).first()
         for ubicacion in ubicaciones:
             ubicacion_name = ubicacion["row"] + str(ubicacion["number"])
             ticket = Ticket.query.filter_by(
                 funcion_id=funcion.id, ubicacion=ubicacion_name
             ).first()
             ticket.sold = True
-            compra = Compra(ticket_id=ticket.id, user_id=1)
+            compra = Compra(ticket_id=ticket.id, user_id=usuario.id)
             db.session.add(compra)
             db.session.commit()
 
