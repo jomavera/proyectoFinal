@@ -1,4 +1,3 @@
-
 import fetch from "node-fetch";
 const datos = [
   {
@@ -17,7 +16,6 @@ const datos = [
     ],
     categoria: "Teatro",
     imagen: "https://via.placeholder.com/300x300",
-    comuna_id: 1
   },
   {
     titulo: "Evento 2",
@@ -35,7 +33,6 @@ const datos = [
     ],
     categoria: "Teatro",
     imagen: "https://via.placeholder.com/300x300",
-    comuna_id: 1
   },
   {
     titulo: "Evento 3",
@@ -53,7 +50,6 @@ const datos = [
     ],
     categoria: "Teatro",
     imagen: "https://via.placeholder.com/300x300",
-    comuna_id: 2
   },
   {
     titulo: "Evento 4",
@@ -71,7 +67,6 @@ const datos = [
     ],
     categoria: "Teatro",
     imagen: "https://via.placeholder.com/300x300",
-    comuna_id: 2
   },
   {
     titulo: "Evento 5",
@@ -89,7 +84,6 @@ const datos = [
     ],
     categoria: "Teatro",
     imagen: "https://via.placeholder.com/300x300",
-    comuna_id: 3
   },
   {
     titulo: "Evento 6",
@@ -107,7 +101,6 @@ const datos = [
     ],
     categoria: "Teatro",
     imagen: "https://via.placeholder.com/300x300",
-    comuna_id: 3
   },
   {
     titulo: "Evento 7",
@@ -125,7 +118,6 @@ const datos = [
     ],
     categoria: "Cine",
     imagen: "https://via.placeholder.com/300x300",
-    comuna_id: 3
   },
   {
     titulo: "Evento 8",
@@ -143,7 +135,6 @@ const datos = [
     ],
     categoria: "Cine",
     imagen: "https://via.placeholder.com/300x300",
-    comuna_id: 4
   },
   {
     titulo: "Evento 9",
@@ -161,7 +152,6 @@ const datos = [
     ],
     categoria: "Concierto",
     imagen: "https://via.placeholder.com/300x300",
-    comuna_id: 4
   },
 ];
 
@@ -177,7 +167,7 @@ async function insertarDato(url, nombre) {
   };
   try {
     const resp = await fetch(
-      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/${url}`,
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/${url}`,
       opciones
     );
     if (resp.status != 200) {
@@ -200,7 +190,7 @@ async function getID(url, name) {
   };
   try {
     const resp = await fetch(
-      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/${url}/${name}`,
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/${url}/${name}`,
       opciones
     );
     if (resp.status != 200) {
@@ -229,12 +219,11 @@ async function insertarEvento(evento, locacion_id, categoria_id) {
       precio: parseInt(evento.precio),
       duracion: evento.duracion,
       imagen: evento.imagen,
-      comuna_id: evento.comuna_id
     }),
   };
   try {
     const resp = await fetch(
-      "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/nuevo_evento",
+      "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/nuevo_evento",
       opciones
     );
     if (resp.status != 200) {
@@ -282,7 +271,7 @@ async function getEventoID(name) {
   };
   try {
     const resp = await fetch(
-      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/evento_name/${name}`,
+      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/evento_name/${name}`,
       opciones
     );
     if (resp.status != 200) {
@@ -314,7 +303,7 @@ async function insertarFuncion(evento_id, funcion) {
   };
   try {
     const resp = await fetch(
-      "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/nueva_funcion",
+      "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/nueva_funcion",
       opciones
     );
     if (resp.status != 200) {
@@ -347,7 +336,7 @@ async function insertarTickets(evento_id, funcion, funcion_id) {
   };
   try {
     const resp = await fetch(
-      "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/tickets",
+      "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/tickets",
       opciones
     );
     if (resp.status != 200) {
@@ -363,7 +352,6 @@ async function insertarTickets(evento_id, funcion, funcion_id) {
 
 for (const evento of datos) {
   let respEvento = await getEventoID(evento.titulo);
-  console.log(respEvento,"RESP EVENTO")
   for (const funcion of evento.funciones) {
     const resp = await insertarFuncion(respEvento.id, funcion);
     const resp2 = await insertarTickets(respEvento.id, funcion, resp["id"]); //insertar tickets/ubicaciones para cada funcion
@@ -403,7 +391,7 @@ async function insertarUsario(usuario) {
   };
   try {
     const resp = await fetch(
-      "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/new_user",
+      "https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/new_user",
       opciones
     );
     if (resp.status != 200) {
