@@ -26,6 +26,7 @@ export const FormularioNuevoEvento = () => {
           imagen: datos.imagen,
           fechas: datos.fechas,
           horas: datos.horas,
+          comuna: datos.comuna,
         }),
       }
     );
@@ -68,6 +69,7 @@ export const FormularioNuevoEvento = () => {
       imagen: e.target.elements.imagen.value,
       fechas: fechas_utc,
       horas: horas_utc,
+      comuna: e.target.elements.comuna.value,
     });
 
     alert("Evento ingresado exitosamente");
@@ -109,6 +111,13 @@ export const FormularioNuevoEvento = () => {
               className="form-control"
               placeholder="Nombre de la locacion"
               name="locacion"
+            ></input>
+            <div className="form-check-label">Ingresar Comuna</div>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Nombre de comuna"
+              name="comuna"
             ></input>
             <div className="form-check-label">Seleccionar funciones</div>
             <DatePicker
