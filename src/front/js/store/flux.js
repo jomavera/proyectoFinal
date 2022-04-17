@@ -4,7 +4,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       eventos: [],
       eventosFiltrados: [],
       token: null,
-      message: "",
+      perfil: '',
       historialCompra: [""],
       email: "",
       demo: [
@@ -79,19 +79,22 @@ const getState = ({ getStore, getActions, setStore }) => {
         console.log("Cerrar sesion");
         setStore({ token: null });
         setStore({ historialCompra: [] });
-        setStore({ message: "" });
+        setStore({ perfil: '' })
       },
 
-      getMessage: () => {
+      getPerfil: () => {
         const store = getStore();
         const opciones = {
           headers: {
             Authorization: "Bearer " + store.token,
           },
         };
-        fetch(`${process.env.BACKEND_URL}/api/hello`, opciones)
+        fetch(
+          `${process.env.BACKEND_URL}/api/perfil`,
+          opciones
+        )
           .then((resp) => resp.json())
-          .then((data) => setStore({ message: data }))
+          .then((data) => setStore({ perfil: data }))
 
           .catch((error) =>
             console.log("Error loading message from backend", error)
@@ -190,7 +193,8 @@ const getState = ({ getStore, getActions, setStore }) => {
           );
       },
 
-      obtenerDatosEventos: async (texto, dat) => {
+
+      obtenerDatosEventos: async () => {
         const opciones = {
           method: "GET",
           headers: {
@@ -198,13 +202,8 @@ const getState = ({ getStore, getActions, setStore }) => {
           },
         };
         try {
-          if (texto == undefined) {
-            texto = 0;
-          }
           const resp = await fetch(
-            `${process.env.BACKEND_URL}/api/eventos?categoria=${texto}&filtro=${dat}`,
-            opciones
-          );
+            `${process.env.BACKEND_URL}/api/eventos`, opciones);
           const data = await resp.json();
           setStore({ eventos: data });
           return data;

@@ -37,26 +37,26 @@ export const FormularioNuevoEvento = () => {
     e.preventDefault();
     const fechas_utc = Array.isArray(fechas)
       ? fechas.map((fecha) => {
-          return new Date(fecha).toUTCString();
-        })
+        return new Date(fecha).toUTCString();
+      })
       : [fechas.toUTCString()];
     const horas_utc = Array.isArray(fechas)
       ? fechas.map((fecha) => {
-          let fecha_date = new Date(fecha);
-          let minutos = fecha_date.getMinutes();
-          if (minutos < 10) {
-            minutos = `0${minutos}`;
-          }
-          return `${fecha_date.getHours()}h${minutos}`;
-        })
+        let fecha_date = new Date(fecha);
+        let minutos = fecha_date.getMinutes();
+        if (minutos < 10) {
+          minutos = `0${minutos}`;
+        }
+        return `${fecha_date.getHours()}h${minutos}`;
+      })
       : [fechas].map((fecha) => {
-          let fecha_date = new Date(fecha);
-          let minutos = fecha_date.getMinutes();
-          if (minutos < 10) {
-            minutos = `0${minutos}`;
-          }
-          return `${fecha_date.getHours()}h${minutos}`;
-        });
+        let fecha_date = new Date(fecha);
+        let minutos = fecha_date.getMinutes();
+        if (minutos < 10) {
+          minutos = `0${minutos}`;
+        }
+        return `${fecha_date.getHours()}h${minutos}`;
+      });
     const response = await ingresarEventoBase({
       nombre: e.target.elements.nombre.value,
       categoria_id: e.target.elements.categoria_id.value,

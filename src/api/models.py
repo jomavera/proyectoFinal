@@ -48,6 +48,9 @@ class Evento(db.Model):
     duracion = db.Column(db.String(10), unique=False, nullable=False)
     imagen = db.Column(db.String(120), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
+    comuna_id = db.Column(
+        db.Integer, db.ForeignKey("comunas.id"), unique=False, nullable=True
+    )
 
     def __init__(
         self,
@@ -58,7 +61,8 @@ class Evento(db.Model):
         sinopsis,
         precio,
         duracion,
-        imagen
+        imagen,
+        comuna_id
     ):
         self.name = name
         self.categoria_id = categoria_id
@@ -69,6 +73,7 @@ class Evento(db.Model):
         self.duracion = duracion
         self.imagen = imagen
         self.is_active = True
+        self.comuna_id = comuna_id
 
     def serialize(self):
         return {
@@ -81,6 +86,7 @@ class Evento(db.Model):
             "duracion": self.duracion,
             "imagen": self.imagen,
             "activo": self.is_active,
+            "comuna_id": self.comuna_id
         }
 
 
@@ -181,3 +187,17 @@ class Locacion(db.Model):
             "name": self.name,
         }
 
+
+class Comuna(db.Model):
+    __tablename__ = "comunas"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), unique=True, nullable=False)
+
+    def __init__(self, name):
+        self.name = name
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+        }

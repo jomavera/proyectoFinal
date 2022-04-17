@@ -35,7 +35,7 @@ export const Login = () => {
     }
 
     if (store.token && store.token != "" && store.token != undefined) history.push('/perfil')
-
+     
 
     return (
         <>

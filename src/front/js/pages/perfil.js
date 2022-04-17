@@ -8,37 +8,41 @@ import { Context } from "../store/appContext";
 
 export const Perfil = () => {
 	const { store, actions } = useContext(Context);
-	
+
 	const history = useHistory();
-	
+
 	useEffect(() => {
-		setTimeout(()=>{
-		if (store.token && store.token != "" && store.token != undefined)
-		 actions.getMessage()	 
-		},1000)	
+		setTimeout(() => {
+			if (store.token && store.token != "" && store.token != undefined)
+				actions.getPerfil()
+		}, 1000)
 	}, [store.token])
 
-	
-	const datosPerfil = store.message
+	if(store.token == ''){
+		console.log("vencio el token")
+	}
 
-	if(datosPerfil == 0 || datosPerfil == "") {
-return <>
-(<div className="row justify-content-center registro noCompra">
-					<div className="col-6">
-						<div className="login-form-1">Cargando Información...</div>
-					</div>
-				</div></>
+
+	const datosPerfil = store.perfil
+
+	if (datosPerfil == 0 || datosPerfil == "") {
+		return <>
+			<div className="row justify-content-center registro noCompra">
+				<div className="col-6">
+					<div className="login-form-1">Cargando Información...</div>
+				</div>
+			</div></>
 	}
 	return (
 		<>
-	
+
 			<div className="row rowPadding justify-content-center">
 				<div className="col-6">
 					<h3 className="row ">Mi datos de perfil</h3>
 					<div className="row login-form-1">
 						<div className="d-flex flex-column">
 							<div className="col"><h2>Nombre</h2>
-								<div className="letra">{datosPerfil.name} {datosPerfil.lastname}  </div></div>
+								<div className="letra">{datosPerfil.name.toUpperCase()} {datosPerfil.lastname.toUpperCase()}  </div></div>
 							<div className="col">
 								<h2>Email</h2>
 								<div className="letra">{datosPerfil.email}</div>
@@ -59,6 +63,6 @@ return <>
 					</Link>
 				</div>
 			</div>
-			</>
-			);
+		</>
+	);
 };
