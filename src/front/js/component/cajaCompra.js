@@ -20,7 +20,7 @@ export const CajaCompra = (props) => {
 
   async function obtenerDatosFunciones(evento_id) {
     const response = await fetch(
-      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/funciones/${evento_id}`,
+      `${process.env.BACKEND_URL}/api/funciones/${evento_id}`,
       {
         method: "GET",
         headers: {
@@ -35,16 +35,15 @@ export const CajaCompra = (props) => {
         label: fechaDate.toLocaleDateString("es-CL", options),
         value: e.fecha,
       };
-
-      // return e.fecha.slice(0,-12);
     });
 
     setFechas(respFechas);
+    obtenerDatosHorasFuncion(evento_id, data[0].fecha);
   }
 
   async function obtenerDatosHorasFuncion(evento_id, fecha) {
     const response = await fetch(
-      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/horas/${evento_id}/${fecha}`,
+      `${process.env.BACKEND_URL}/api/horas/${evento_id}/${fecha}`,
       {
         method: "GET",
         headers: {

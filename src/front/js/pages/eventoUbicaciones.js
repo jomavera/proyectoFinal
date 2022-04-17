@@ -29,7 +29,7 @@ export const EventoUbicaciones = (props) => {
   }
   async function obtenerDatosEventoLocacion(theid) {
     const response = await fetch(
-      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/evento/${theid}`,
+      `${process.env.BACKEND_URL}/api/evento/${theid}`,
       {
         method: "GET",
         headers: {
@@ -40,7 +40,7 @@ export const EventoUbicaciones = (props) => {
     let dataEvento = await response.json();
     setDatos(dataEvento[0]);
     const responseLoc = await fetch(
-      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/locacion_id/${dataEvento[0].locacion_id}`,
+      `${process.env.BACKEND_URL}/api/locacion_id/${dataEvento[0].locacion_id}`,
       {
         method: "GET",
         headers: {
@@ -54,7 +54,8 @@ export const EventoUbicaciones = (props) => {
 
   async function obtenerEstadosTickets() {
     const response = await fetch(
-      `https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/tickets/${store.id
+      `${process.env.BACKEND_URL}/api/tickets/${
+        store.id
       }/${store.fecha.toUTCString()}/${store.hora}`,
       {
         method: "GET",
@@ -149,7 +150,7 @@ export const EventoUbicaciones = (props) => {
           </div>
         </div>
         <div className="col align-items-end">
-          {numSelecc === store.numero &&
+          {numSelecc === store.numero && (
             <div className="btn btn-primary" style={buttonStyle2}>
               <Link
                 to={`/datosCompra`}
@@ -158,7 +159,7 @@ export const EventoUbicaciones = (props) => {
                 Continuar
               </Link>
             </div>
-          }
+          )}
         </div>
       </div>
     </div>
