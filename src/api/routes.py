@@ -158,16 +158,14 @@ def new_event():
 def get_events():
     try:
         #event = request.args.get['evet']
-        categoria = request.args.get('categoria', None)
-        filtro = request.args.get('filtro', None)
-        print(categoria, "Categoria")
-        print(filtro, "filtro")
-        if categoria == '0':
+        
+       
             print("entro al if")
-            join_query = db.session.query(Evento, Categoria, Evento.is_active, Locacion)\
+            join_query = db.session.query(Evento, Categoria, Evento.is_active, Locacion, Comuna)\
                 .join(Evento, Evento.categoria_id == Categoria.id)\
-                .join(Locacion, Locacion.id == Evento.locacion_id)
-            print(join_query, "del if 0")
+                .join(Locacion, Locacion.id == Evento.locacion_id)\
+                .join(Comuna, Comuna.id == Evento.comuna_id).limit(100).all()
+          
             response_body = []
             for elemento in tuple(join_query):
                 print(elemento)
@@ -183,6 +181,8 @@ def get_events():
                 duracion = elemento['Evento'].duracion
                 nombre_locacion = elemento['Locacion'].name
                 is_active = elemento['Evento'].is_active
+                comuna = elemento['Comuna'].name
+                
 
                 objeto = ({
                     "id": id,
@@ -197,50 +197,12 @@ def get_events():
                     "duracion": duracion,
                     "is_active": is_active,
                     "nombre_locacion": nombre_locacion,
+                    "comuna":comuna
 
                 })
 
                 response_body.append(objeto)
             return jsonify(response_body), 200
-
-        print(categoria, "no entro al if")
-        join_query = db.session.query(Evento, Categoria, Evento.is_active)\
-            .join(Evento, Evento.categoria_id == Categoria.id)\
-            .filter_by(categoria_id=filro).filter_by(is_active=True)
-
-        response_body = []
-        for elemento in tuple(join_query):
-            categoria_id = elemento['Categoria'].id
-            nombre_categoria = elemento['Categoria'].name
-            name = elemento['Evento'].name
-            descripcion = elemento['Evento'].descripcion
-            id = elemento['Evento'].id
-            sinopsis = elemento['Evento'].sinopsis
-            locacion_id = elemento['Evento'].locacion_id
-            precio = elemento['Evento'].precio
-            imagen = elemento['Evento'].imagen
-            duracion = elemento['Evento'].duracion
-            nombre_locacion = elemento['Locacion'].name
-            is_active = elemento['Evento'].is_active
-            print(elemento)
-
-            objeto = ({
-                "id": id,
-                "titulo": name,
-                "descripcion": descripcion,
-                "categoria_id": categoria_id,
-                "locacion_id": locacion_id,
-                "descripcion": descripcion,
-                "sinopsis": sinopsis,
-                "precio": precio,
-                "imagen": imagen,
-                "duracion": duracion,
-                "is_active": is_active
-
-            })
-            response_body.append(objeto)
-
-        return jsonify(response_body), 200
 
     except Exception as e:
         print(f"get events error: {e}")

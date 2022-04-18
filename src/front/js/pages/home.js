@@ -29,10 +29,11 @@ export const Home = () => {
       setFiltrando(store.eventos);
     });
   }, []);
-
+ 
   const handleClick = (e) => {
     e.preventDefault();
     filtrar(texto);
+
   };
 
   const handleTodos = (e) => {
@@ -42,7 +43,10 @@ export const Home = () => {
   };
 
   const filtrar = (texto) => {
+    console.log(texto)
+    console.log(selectedOption.value)
     const filtrado = filtrando.filter((elemento) => {
+      console.log(elemento.comuna,"elemento")
       if (
         elemento.nombre_categoria.toLocaleLowerCase() == texto.toLowerCase() &&
         selectedOption.value == 1
@@ -78,7 +82,6 @@ export const Home = () => {
     setDatosEventos(filtrado);
   };
 
-  console.log(datosEventos);
 
   return (
     <div className="container-fluid" style={{ backgroundColor: "#e9ecef" }}>
