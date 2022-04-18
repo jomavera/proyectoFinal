@@ -17,7 +17,7 @@ export const PagoExitoso = (props) => {
 
   async function obtenerDatosEventoLocacion() {
     const response = await fetch(
-      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/datos_locacion?evento_id=${store.id}`,
+      `${process.env.BACKEND_URL}/api/datos_locacion?evento_id=${store.id}`,
       {
         method: "GET",
         headers: {
@@ -44,7 +44,7 @@ export const PagoExitoso = (props) => {
     e.preventDefault();
 
     const response = await fetch(
-      `https://3001-jomavera-proyectofinal-f1p84es4rkr.ws-us39a.gitpod.io/api/enviar_correo`,
+      `${process.env.BACKEND_URL}/api/enviar_correo`,
       {
         method: "POST",
         headers: {
