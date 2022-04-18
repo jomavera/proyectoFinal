@@ -1,7 +1,7 @@
 const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
-      datosVenta: [],
+
       eventos: [],
       eventosFiltrados: [],
       token: null,
@@ -192,6 +192,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       },
 
       obtenerDatosEventos: async (texto, dat) => {
+        const store = getStore();
         const opciones = {
           method: "GET",
           headers: {
@@ -214,11 +215,12 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
       obtenerDatosVenta: async () => {
-       
+        const store = getStore();
         const opciones = {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Authorization: "Bearer " + store.token,
           },
         };
         try {

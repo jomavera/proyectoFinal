@@ -35,7 +35,7 @@ export const Perfil = () => {
       if (store.token && store.token != "" && store.token != undefined)
         actions.getMessage();
       chequearAdmin();
-    }, 1000);
+    }, 0);
   }, [store.token]);
 
   const datosPerfil = store.message;

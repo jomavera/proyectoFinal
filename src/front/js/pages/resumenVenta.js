@@ -13,7 +13,28 @@ export const ResumenVenta = () => {
   const [texto, setTexto] = useState("");
   const [filtrando, setFiltrando] = useState("");
   const [datos, setData] = useState("");
+  const [admin, setAdmin] = useState(false);
 
+  async function chequearAdmin() {
+    const opciones = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + store.token,
+      },
+    };
+    try {
+      const resp = await fetch(
+        `${process.env.BACKEND_URL}/api/check_role`,
+        opciones
+      );
+      if (resp.status == 200) {
+        setAdmin(true);
+      }
+    } catch (error) {
+      console.error(`Check admin error: ${error}`);
+    }
+  }
   useEffect(() => {
     // actions.obtenerDatosVenta().then((data) => {
     // 	SetVentas(store.datosVenta)
@@ -21,11 +42,14 @@ export const ResumenVenta = () => {
     // 	console.log(data[0].id,"data")
     // })
 
-    if (store.token && store.token != "" && store.token != undefined)
+    if (store.token && store.token != "" && store.token != undefined) {
+      chequearAdmin();
       actions.obtenerDatosVenta().then((data) => {
         SetVentas(store.datosVenta);
         setFiltrando(store.datosVenta);
       });
+    }
+
 
     //if (store.token == "") actions.logout()
   }, [store.token]);
@@ -71,19 +95,20 @@ export const ResumenVenta = () => {
     SetVentas(filtrado);
   };
 
-  // if (store.token == null){
-  // 	return (
-  // 		<>
-  // 			<div className="row justify-content-center registro noCompra">
-  // 				<div className="col-6">
-  // 					<div className="login-form-1">No tienes acceso para ver la pagina</div>
-  // 				</div>
-  // 			</div>
+  console.log(store.token,"TOKEN")
+  if (store.token == null){
+  	return (
+  		<>
+  			<div className="row justify-content-center registro noCompra">
+  				<div className="col-6">
+  					<div className="login-form-1">No tienes acceso para ver la pagina</div>
+  				</div>
+  			</div>
 
-  // 		</>
+  		</>
 
-  // 	)
-  // }
+  	)
+  }
 
   //const ventas = store.datosVenta
   console.log(ventas);
@@ -135,7 +160,104 @@ export const ResumenVenta = () => {
 
   return (
     <>
-      <div className="container-fluid col-8">
+
+      {admin ? (
+        <div className="container-fluid col-8">
+          <div className="titulo">
+            <h2 className="">Historial de Ventas</h2>
+          </div>
+          <form>
+            <div className="col">
+              <label htmlFor="">Filtro de búsqueda:</label>
+              <input
+                className="form-control inputBuscar"
+                value={texto}
+                placeholder="Ingrese texto"
+                onChange={(e) => setTexto(e.target.value)}
+              />
+            </div>
+            <div className="col">
+              <label htmlFor="Categoria">Selecciona el filtro de búsqueda:</label>
+              <Select
+                defaultValue={selectedOption}
+                onChange={setSelectedOption}
+                options={options}
+                placeholder="Filtar"
+              />
+            </div>
+
+            <div>
+              <button
+                className="btn btn-primary mt-2"
+                type=""
+                value="Buscar"
+                onClick={(e) => handleClick(e)}
+              >
+                Buscar
+              </button>
+            </div>
+          </form>
+
+          <table className="table tabla">
+            <thead>
+              { }
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre del evento</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Hora</th>
+                <th scope="col">Duración</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Ubicación</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((value, index) => (
+                <tr key={value.id}>
+                  <th scope="row">{index + 1}</th>
+                  <td>{value.nombre_evento}</td>
+                  <td className="fecha">{value.fecha}</td>
+                  <td>{value.hora}</td>
+                  <td>{value.duracion}</td>
+                  <td>{value.name.toUpperCase()}</td>
+                  <td>{value.ubicacion}</td>
+                  <td>$ {value.precio}</td>
+                </tr>
+              ))}
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>Total :</th>
+                <th>$ {sumWithInitial}</th>
+              </tr>
+            </tbody>
+          </table>
+          <div className="col">
+            <button
+              className="btn btn-primary btn-lg"
+              type=""
+              value="Buscar"
+              onClick={(e) => handleTodos(e)}
+            >
+              Listar todas las ventas
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="row justify-content-center registro noCompra">
+        				<div className="col-6">
+        				<div className="login-form-1">No tienes acceso para ver la pagina</div>
+        				</div>
+         			</div>
+      )}
+
+
+      {/* <div className="container-fluid col-8">
         <div className="titulo">
           <h2 className="">Historial de Ventas</h2>
         </div>
@@ -220,7 +342,7 @@ export const ResumenVenta = () => {
             Listar todas las ventas
           </button>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

@@ -841,6 +841,7 @@ def check_role():
         print("ERROR! " f"{e}")
 
 @api.route('/resumenVenta', methods=['GET'])
+@jwt_required()
 def get_adm_compra():
     try:
      
