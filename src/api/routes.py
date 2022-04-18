@@ -740,7 +740,7 @@ def ingresar_evento():
 
 
 @api.route('/resumenVenta', methods=['GET'])
-#@jwt_required()
+@jwt_required()
 def get_adm_compra():
     try:
      

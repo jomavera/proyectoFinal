@@ -15,11 +15,11 @@ export const ResumenVenta = () => {
 	const [datos, setData] = useState("");
 
 	useEffect(() => {
-		actions.obtenerDatosVenta().then((data) => {
-			SetVentas(store.datosVenta)
-			setFiltrando(store.datosVenta)
-			console.log(data[0].id,"data")
-		})
+		// actions.obtenerDatosVenta().then((data) => {
+		// 	SetVentas(store.datosVenta)
+		// 	setFiltrando(store.datosVenta)
+		// 	console.log(data[0].id,"data")
+		// })
 
 		if (store.token && store.token != "" && store.token != undefined) actions.obtenerDatosVenta().then((data) => {
 			SetVentas(store.datosVenta)
@@ -44,6 +44,12 @@ console.log(ventas.name)
 
 	}
 
+	const handleTodos = (e) => {
+		e.preventDefault()
+	
+		SetVentas(store.datosVenta)
+	  }
+
  console.log(selectedOption.value)
 	const filtrar = (texto) => {
 
@@ -65,19 +71,19 @@ console.log(ventas.name)
 		SetVentas(filtrado)
 	}
 
-	// if (store.token == null){
-	// 	return (
-	// 		<>
-	// 			<div className="row justify-content-center registro noCompra">
-	// 				<div className="col-6">
-	// 					<div className="login-form-1">No tienes acceso para ver la pagina</div>
-	// 				</div>
-	// 			</div>
+	if (store.token == null){
+		return (
+			<>
+				<div className="row justify-content-center registro noCompra">
+					<div className="col-6">
+						<div className="login-form-1">No tienes acceso para ver la pagina</div>
+					</div>
+				</div>
 
-	// 		</>
+			</>
 
-	// 	)
-	// } 
+		)
+	} 
 
 	//const ventas = store.datosVenta
 	console.log(ventas)
@@ -202,7 +208,11 @@ console.log(ventas.name)
 
 					</tbody>
 				</table>
+				<div className="col">
 
+<button className="btn btn-primary btn-lg" type="" value="Buscar" onClick={(e) => handleTodos(e)}>Listar todas las ventas</button>
+
+</div>
 			</div>
 		</>
 	);

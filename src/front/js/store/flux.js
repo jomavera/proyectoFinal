@@ -49,7 +49,6 @@ const getState = ({ getStore, getActions, setStore }) => {
         console.log(`${process.env.BACKEND_URL}/api/token`);
         try {
           const resp = await fetch(
-            
             `${process.env.BACKEND_URL}/api/token`,
             opciones
           );
@@ -195,8 +194,8 @@ const getState = ({ getStore, getActions, setStore }) => {
           );
       },
 
+
       obtenerDatosEventos: async () => {
-       
         const opciones = {
           method: "GET",
           headers: {
@@ -204,7 +203,6 @@ const getState = ({ getStore, getActions, setStore }) => {
           },
         };
         try {
-      
           const resp = await fetch(
             `${process.env.BACKEND_URL}/api/eventos`, opciones);
           const data = await resp.json();
