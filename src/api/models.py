@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+import base64
 
 db = SQLAlchemy()
 
@@ -11,13 +12,20 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
+    code = db.Column(
+        db.String(80), db.ForeignKey("roles.code"), unique=False, nullable=False
+    )
 
-    def __init__(self, name, lastname, email, password, is_active):
+    def __init__(self, name, lastname, email, password, is_active, code=None):
         self.name = name
         self.lastname = lastname
         self.email = email
         self.password = password
         self.is_active = is_active
+        if code == None:
+            self.code = base64.b64encode(str(1102038).encode('utf-8'))
+        else:
+            self.code = base64.b64encode(str(code).encode('utf-8'))
 
     # def __repr__(self):
     #     return '<User %r>' % self.email
@@ -86,7 +94,6 @@ class Evento(db.Model):
             "duracion": self.duracion,
             "imagen": self.imagen,
             "activo": self.is_active,
-            "comuna_id": self.comuna_id
         }
 
 
@@ -186,8 +193,6 @@ class Locacion(db.Model):
             "id": self.id,
             "name": self.name,
         }
-
-
 class Comuna(db.Model):
     __tablename__ = "comunas"
     id = db.Column(db.Integer, primary_key=True)
@@ -200,4 +205,18 @@ class Comuna(db.Model):
         return {
             "id": self.id,
             "name": self.name,
+        }
+
+class Role(db.Model):
+    __tablename__ = "roles"
+    id = db.Column(db.Integer, primary_key=True)
+    code = db.Column(db.String(120), unique=True, nullable=False)
+
+    def __init__(self, id, code):
+        self.id = id
+        self.code = base64.b64encode(str(code).encode('utf-8'))
+
+    def serialize(self):
+        return {
+            "code": self.code,
         }

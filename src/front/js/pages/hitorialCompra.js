@@ -28,7 +28,7 @@ export const HistorialCompra = () => {
 		let mes = fecha.getMonth();
 		let anio = fecha.getFullYear();
 		const fechacompleta = `${dia + 1}/${mes + 1}/${anio}`
-		data.push({ "fecha": fechacompleta, "hora": item.hora, "duracion": item.duracion, "ticket_id": item.ticket_id, "categoria": item.categoria, "precio": item.precio, "locacion": item.locacion, "name_event": item.name_event, "ubicacion": item.ubicacion, "id":item.id })
+		data.push({ "fecha": fechacompleta, "hora": item.hora, "duracion": item.duracion, "ticket_id": item.ticket_id, "categoria": item.categoria, "precio": item.precio, "locacion": item.locacion, "name_event": item.name_event, "ubicacion": item.ubicacion })
 	})
 
 	//if(data == '') return <>Cargando</>
@@ -75,8 +75,8 @@ export const HistorialCompra = () => {
 					</thead>
 					<tbody>
 						{data.map((value, index) => (
-							<tr key={value.id}>
-								<th  scope="row">{index+ 1}</th>
+							<tr>
+								<th key={index} scope="row">{index + 1}</th>
 								< td >{value.name_event}</td>
 								< td className="fecha">{value.fecha}</td>
 								< td >{value.hora}</td>

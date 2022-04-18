@@ -1,17 +1,16 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
-import base64
 import os
 from sqlalchemy.sql.functions import func
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from flask import Flask, request, jsonify, url_for, Blueprint, redirect
-from api.models import db, User, Evento, Categoria, Locacion, Funcion, Compra, Ticket, Comuna
+from api.models import db, User, Evento, Categoria, Locacion, Funcion, Compra, Ticket, Comuna, Role
 from api.utils import generate_sitemap, APIException
 
 from flask_jwt_extended import create_access_token
-from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import get_jwt_identity, get_jwt
 from flask_jwt_extended import jwt_required
 
 from datetime import datetime
@@ -30,7 +29,7 @@ api = Blueprint("api", __name__)
 dict_rows = {"A": 0, "B": 1, "C": 2, "D": 3, "E": 4, "F": 5}
 
 
-@api.route("/perfil", methods=["GET"])
+@api.route("/hello", methods=["GET"])
 @jwt_required()
 def handle_hello():
     try:
@@ -67,13 +66,6 @@ def get_user():
         print("ERROR! " f"{e}")
 
 
-us = "usuario"
-adm = "administrador"
-hello_encoded = base64.b64encode(us.encode("utf8")).decode("utf8")
-hello_encoded2 = base64.b64encode(adm.encode("utf8")).decode("utf8")
-print(hello_encoded, hello_encoded2)
-
-
 @api.route("/new_user", methods=["POST"])
 def new_user():
     try:
@@ -82,9 +74,7 @@ def new_user():
         email = request.json.get("email", None)
         password = request.json.get("password", None)
         is_active = request.json.get("is_active", None)
-
-        if rol == a:
-            id_rol = isvalo
+        code = request.json.get("code", None)
         # if is_active.lower() == 'true':
         #     is_active = True
         # if is_active.lower()== 'false':
@@ -93,7 +83,7 @@ def new_user():
         if userR:
             return {"Error": "Correo ya registrado"}
         user = User(
-            name=name, lastname=lastname, email=email, password=password, is_active=True
+            name=name, lastname=lastname, email=email, password=password, is_active=True, code=code
         )
         db.session.add(user)
         db.session.commit()
@@ -120,7 +110,9 @@ def create_token():
         if user is None:
             return jsonify({"msg": "Bad username or password"}), 401
 
-        access_token = create_access_token(identity=user.id)
+        role = Role.query.filter_by(code=user.code).first()
+        additional_claims = {"role": role.id}
+        access_token = create_access_token(identity=user.id, additional_claims=additional_claims)
         return jsonify({"access_token": access_token, "user_id": user.id})
     except Exception as e:
         print(f"ERROR CREATE_TOKEN: {e}")
@@ -161,18 +153,63 @@ def new_event():
         print(f"Error nuevo evento : {e}")
         return "ERROR", 500
 
+
 @api.route("/eventos", methods=["GET"])
-def get_eventss():
+def get_events():
     try:
         #event = request.args.get['evet']
-        join_query = db.session.query(Evento, Categoria, Evento.is_active, Locacion, Comuna)\
+        categoria = request.args.get('categoria', None)
+        filtro = request.args.get('filtro', None)
+        print(categoria, "Categoria")
+        print(filtro, "filtro")
+        if categoria == '0':
+            print("entro al if")
+            join_query = db.session.query(Evento, Categoria, Evento.is_active, Locacion)\
+                .join(Evento, Evento.categoria_id == Categoria.id)\
+                .join(Locacion, Locacion.id == Evento.locacion_id)
+            print(join_query, "del if 0")
+            response_body = []
+            for elemento in tuple(join_query):
+                print(elemento)
+                categoria_id = elemento['Categoria'].id
+                nombre_categoria = elemento['Categoria'].name
+                name = elemento['Evento'].name
+                descripcion = elemento['Evento'].descripcion
+                id = elemento['Evento'].id
+                sinopsis = elemento['Evento'].sinopsis
+                locacion_id = elemento['Evento'].locacion_id
+                precio = elemento['Evento'].precio
+                imagen = elemento['Evento'].imagen
+                duracion = elemento['Evento'].duracion
+                nombre_locacion = elemento['Locacion'].name
+                is_active = elemento['Evento'].is_active
+
+                objeto = ({
+                    "id": id,
+                    "titulo": name,
+                    "nombre_categoria": nombre_categoria,
+                    "descripcion": descripcion,
+                    "categoria_id": categoria_id,
+                    "locacion_id": locacion_id,
+                    "sinopsis": sinopsis,
+                    "precio": precio,
+                    "imagen": imagen,
+                    "duracion": duracion,
+                    "is_active": is_active,
+                    "nombre_locacion": nombre_locacion,
+
+                })
+
+                response_body.append(objeto)
+            return jsonify(response_body), 200
+
+        print(categoria, "no entro al if")
+        join_query = db.session.query(Evento, Categoria, Evento.is_active)\
             .join(Evento, Evento.categoria_id == Categoria.id)\
-            .join(Comuna, Evento.comuna_id == Comuna.id)\
-            .join(Locacion, Locacion.id == Evento.locacion_id).limit(100).all()
+            .filter_by(categoria_id=filro).filter_by(is_active=True)
 
         response_body = []
         for elemento in tuple(join_query):
-            print(elemento)
             categoria_id = elemento['Categoria'].id
             nombre_categoria = elemento['Categoria'].name
             name = elemento['Evento'].name
@@ -185,26 +222,24 @@ def get_eventss():
             duracion = elemento['Evento'].duracion
             nombre_locacion = elemento['Locacion'].name
             is_active = elemento['Evento'].is_active
-            comuna = elemento['Comuna'].name
+            print(elemento)
 
             objeto = ({
                 "id": id,
                 "titulo": name,
-                "nombre_categoria": nombre_categoria,
                 "descripcion": descripcion,
                 "categoria_id": categoria_id,
                 "locacion_id": locacion_id,
+                "descripcion": descripcion,
                 "sinopsis": sinopsis,
                 "precio": precio,
                 "imagen": imagen,
                 "duracion": duracion,
-                "is_active": is_active,
-                "nombre_locacion": nombre_locacion,
-                "comuna": comuna
+                "is_active": is_active
 
             })
-
             response_body.append(objeto)
+
         return jsonify(response_body), 200
 
     except Exception as e:
@@ -298,6 +333,24 @@ def new_location():
         return "ERROR", 500
 
 
+@api.route("/nueva_comuna", methods=["POST"])
+def new_comune():
+    try:
+        name = request.json.get("name", None)
+        query = Comuna.query.filter_by(name=name)
+        results = list(map(lambda x: x.serialize(), query))
+        if results == []:
+            comuna = Comuna(name)
+            db.session.add(comuna)
+            db.session.commit()
+
+        return {"mensaje": "ok"}, 200
+
+    except Exception as e:
+        print(f"Error nueva comuna : {e}")
+        return "ERROR", 500
+
+
 @api.route("/locacion/<name>", methods=["GET"])
 def get_location(name):
     try:
@@ -369,6 +422,21 @@ def new_function():
         print(f"Error nueva funcion : {e}")
         return "ERROR", 500
 
+@api.route("/nuevo_rol", methods=["POST"])
+def new_role():
+    try:
+        role = request.json.get("role", None)
+        code = request.json.get("code", None)
+
+        rol = Role(role, code)
+        db.session.add(rol)
+        db.session.commit()
+
+        return {"id": rol.id}, 200
+
+    except Exception as e:
+        print(f"Error nuevo rol : {e}")
+        return "ERROR", 500
 
 @api.route("/funciones/<int:evento_id>", methods=["GET"])
 def get_functions(evento_id):
@@ -404,6 +472,11 @@ def get_function_hour(evento_id, fecha):
     except Exception as e:
         print(f"get function hour error: {e}")
         return "ERROR", 500
+
+
+@api.route("/hitorial", methods=["GET"])
+def handle_historial():
+    return {"mess": "mensaje"}
 
 
 @api.route("/tickets", methods=["POST"])
@@ -536,7 +609,8 @@ def procesar_pago():
         payment_response = sdk.payment().create(payment_data)
         payment = payment_response["response"]
         # if payment["status"] == "approved":
-        funcion = Funcion.query.filter_by(evento_id=evento_id, fecha=fecha).first()
+        funcion = Funcion.query.filter_by(
+            evento_id=evento_id, fecha=fecha).first()
         usuario = User.query.filter_by(email=email).first()
         for ubicacion in ubicaciones:
             ubicacion_name = ubicacion["row"] + str(ubicacion["number"])
@@ -555,11 +629,10 @@ def procesar_pago():
 
 
 @api.route('/historialCompra', methods=['GET'])
-#@jwt_required()
+@jwt_required()
 def get_user_orden():
     try:
-        #user_id = get_jwt_identity()
-        user_id = 1
+        user_id = get_jwt_identity()
         print(user_id, "JWT USERid")
         join_query = db.session.query(Compra, Ticket, User, Funcion, Evento, Locacion, Categoria)\
             .join(Ticket, Ticket.id == Compra.ticket_id)\
@@ -574,7 +647,6 @@ def get_user_orden():
 
         print(tuple(join_query))
         for elemento in tuple(join_query):
-            compra_id = elemento['Compra'].id
             ticket_id = elemento['Compra'].ticket_id
             name = f'{elemento["User"].name} {elemento["User"].lastname}'
             name_event = elemento['Evento'].name
@@ -587,7 +659,6 @@ def get_user_orden():
             ubicacion = elemento['Ticket'].ubicacion
 
             objeto = ({
-                "id": compra_id,
                 "ticket_id": ticket_id,
                 "name": name,
                 "name_event": name_event,
@@ -691,7 +762,7 @@ def ingresar_evento():
         is_active = request.json.get("is_active", None)
         fechas = request.json.get("fechas", None)
         horas = request.json.get("horas", None)
-        comuna_id = request.json.get("comuna_id", None)
+        comuna = request.json.get("comuna", None)
 
         query = Locacion.query.filter_by(name=locacion)
         results = list(map(lambda x: x.serialize(), query))
@@ -702,6 +773,17 @@ def ingresar_evento():
             locacion_id = locacion_obj.id
         else:
             locacion_id = results[0]['id']
+
+        query = Comuna.query.filter_by(name=comuna)
+        results = list(map(lambda x: x.serialize(), query))
+        if results == []:
+            comuna_obj = Comuna(comuna)
+            db.session.add(comuna_obj)
+            db.session.commit()
+            comuna_id = comuna_obj.id
+        else:
+            comuna_id = results[0]['id']
+
         evento = Evento(
             name,
             categoria_id,
@@ -738,6 +820,25 @@ def ingresar_evento():
         return "ERROR", 500
 
 
+@api.route("/check_role", methods=["GET"])
+@jwt_required()
+def check_role():
+    try:
+        claims = get_jwt()
+        print(claims)
+        role_id = claims["role"]
+        if role_id == 39851:
+            response_body = {
+                "message": "Usuario es admin"
+            }
+            return jsonify(response_body), 200
+        else:
+            response_body = {
+                "message": "Usuario no es admin"
+            }
+            return jsonify(response_body), 403
+    except Exception as e:
+        print("ERROR! " f"{e}")
 
 @api.route('/resumenVenta', methods=['GET'])
 @jwt_required()

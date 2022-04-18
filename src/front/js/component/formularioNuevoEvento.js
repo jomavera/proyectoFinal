@@ -26,6 +26,7 @@ export const FormularioNuevoEvento = () => {
           imagen: datos.imagen,
           fechas: datos.fechas,
           horas: datos.horas,
+          comuna: datos.comuna,
         }),
       }
     );
@@ -37,26 +38,26 @@ export const FormularioNuevoEvento = () => {
     e.preventDefault();
     const fechas_utc = Array.isArray(fechas)
       ? fechas.map((fecha) => {
-        return new Date(fecha).toUTCString();
-      })
+          return new Date(fecha).toUTCString();
+        })
       : [fechas.toUTCString()];
     const horas_utc = Array.isArray(fechas)
       ? fechas.map((fecha) => {
-        let fecha_date = new Date(fecha);
-        let minutos = fecha_date.getMinutes();
-        if (minutos < 10) {
-          minutos = `0${minutos}`;
-        }
-        return `${fecha_date.getHours()}h${minutos}`;
-      })
+          let fecha_date = new Date(fecha);
+          let minutos = fecha_date.getMinutes();
+          if (minutos < 10) {
+            minutos = `0${minutos}`;
+          }
+          return `${fecha_date.getHours()}h${minutos}`;
+        })
       : [fechas].map((fecha) => {
-        let fecha_date = new Date(fecha);
-        let minutos = fecha_date.getMinutes();
-        if (minutos < 10) {
-          minutos = `0${minutos}`;
-        }
-        return `${fecha_date.getHours()}h${minutos}`;
-      });
+          let fecha_date = new Date(fecha);
+          let minutos = fecha_date.getMinutes();
+          if (minutos < 10) {
+            minutos = `0${minutos}`;
+          }
+          return `${fecha_date.getHours()}h${minutos}`;
+        });
     const response = await ingresarEventoBase({
       nombre: e.target.elements.nombre.value,
       categoria_id: e.target.elements.categoria_id.value,
@@ -68,6 +69,7 @@ export const FormularioNuevoEvento = () => {
       imagen: e.target.elements.imagen.value,
       fechas: fechas_utc,
       horas: horas_utc,
+      comuna: e.target.elements.comuna.value,
     });
 
     alert("Evento ingresado exitosamente");
@@ -109,6 +111,13 @@ export const FormularioNuevoEvento = () => {
               className="form-control"
               placeholder="Nombre de la locacion"
               name="locacion"
+            ></input>
+            <div className="form-check-label">Ingresar Comuna</div>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Nombre de comuna"
+              name="comuna"
             ></input>
             <div className="form-check-label">Seleccionar funciones</div>
             <DatePicker
