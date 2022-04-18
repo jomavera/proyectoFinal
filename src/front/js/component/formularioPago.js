@@ -3,9 +3,6 @@ import { useHistory } from "react-router-dom";
 import "react-credit-cards/es/styles-compiled.css";
 import Card from "react-credit-cards";
 
-const config = require("../../../mercadopago_config.json");
-
-
 const INITIAL_STATE = {
   cvc: "",
   cardExpirationMonth: "",
@@ -21,9 +18,9 @@ export const FormularioPago = (props) => {
   const [cardFormState, setCardForm] = useState(null);
   const history = useHistory();
   const email = sessionStorage.getItem("email");
-
+console.log(process.env.PUBLIC_KEY,"key mercado")
   useEffect(() => {
-    const mp = new MercadoPago(config.PUBLIC_KEY, {
+    const mp = new MercadoPago(process.env.PUBLIC_KEY, {
       advancedFraudPrevention: false,
     });
 
@@ -93,7 +90,6 @@ export const FormularioPago = (props) => {
     return function cleanup() {
       cardForm.unmount();
     };
-
   }, []);
 
   async function onSubmit(event) {
@@ -114,7 +110,7 @@ export const FormularioPago = (props) => {
 
     if (token) {
       const response = await fetch(
-        "https://3001-jomavera-proyectofinal-kaws94oob0w.ws-us39a.gitpod.io/api/procesarpago",
+        `${process.env.BACKEND_URL}/api/procesarpago`,
         {
           method: "POST",
           headers: {

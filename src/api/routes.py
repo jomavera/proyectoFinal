@@ -514,6 +514,7 @@ def procesar_pago():
         fecha = request.json.get("fecha")
         ubicaciones = request.json.get("ubicaciones")
         evento_id = request.json.get("evento_id")
+        email = request.json.get("payer").get("email")
         payment_data = {
             "transaction_amount": float(request.json.get("transaction_amount")),
             "token": request.json.get("token"),
@@ -535,15 +536,15 @@ def procesar_pago():
         payment_response = sdk.payment().create(payment_data)
         payment = payment_response["response"]
         # if payment["status"] == "approved":
-        funcion = Funcion.query.filter_by(
-            evento_id=evento_id, fecha=fecha).first()
+        funcion = Funcion.query.filter_by(evento_id=evento_id, fecha=fecha).first()
+        usuario = User.query.filter_by(email=email).first()
         for ubicacion in ubicaciones:
             ubicacion_name = ubicacion["row"] + str(ubicacion["number"])
             ticket = Ticket.query.filter_by(
                 funcion_id=funcion.id, ubicacion=ubicacion_name
             ).first()
             ticket.sold = True
-            compra = Compra(ticket_id=ticket.id, user_id=1)
+            compra = Compra(ticket_id=ticket.id, user_id=usuario.id)
             db.session.add(compra)
             db.session.commit()
 
@@ -738,57 +739,63 @@ def ingresar_evento():
 
 
 
-@api.route('/historialCompras', methods=['GET'])
+@api.route('/resumenVenta', methods=['GET'])
 #@jwt_required()
 def get_adm_compra():
     try:
      
-        join_query = db.session.query(User.name, Evento.name,  func.count(Evento.id))\
+        join_query = db.session.query(Compra, User, Evento,Ticket,Funcion, Compra)\
             .join(User, User.id == Compra.user_id)\
             .join(Ticket, Ticket.id == Compra.ticket_id)\
             .join(Funcion, Funcion.id == Ticket.funcion_id)\
             .join(Evento, Evento.id == Funcion.evento_id)\
-            .group_by(Evento.id, User)
-         
+           
         
+        # userList = Compra.query\
+        # .join(User, User.id==Compra.user_id)\
+        # .join(Ticket, Ticket.id == Compra.ticket_id)\
+        # .join(Funcion, Funcion.id == Ticket.funcion_id)\
+        # .join(Evento, Evento.id == Funcion.evento_id)\
+        # .add_columns(User.name, func.count(Compra.user_id), func.count(Evento.id))\
+        # .filter(User.id == Compra.user_id)\
+        # .group_by(Evento.id, Compra.id, User, Compra )
+        response_body = []
+
+        print(tuple(join_query))
         for elemento in tuple(join_query):
             print(elemento)
-        # response_body = []
+            compra_id = elemento['Compra'].id
+            ticket_id = elemento['Compra'].ticket_id
+            name = f'{elemento["User"].name} {elemento["User"].lastname}'
+            nombre_evento = elemento['Evento'].name
+            precio = elemento['Evento'].precio
+            hora = elemento['Funcion'].hora
+            duracion = elemento['Evento'].duracion
+            fecha = elemento['Funcion'].fecha
+            evento_id = elemento['Evento'].id
+           
+          
+            ubicacion = elemento['Ticket'].ubicacion
 
-        # print(tuple(join_query))
-        # for elemento in tuple(join_query):
-        #     compra_id = elemento['Compra'].id
-        #     ticket_id = elemento['Compra'].ticket_id
-        #     name = f'{elemento["User"].name} {elemento["User"].lastname}'
-        #     name_event = elemento['Evento'].name
-        #     precio = elemento['Evento'].precio
-        #     hora = elemento['Funcion'].hora
-        #     duracion = elemento['Evento'].duracion
-        #     fecha = elemento['Funcion'].fecha
-        #     locacion = elemento['Locacion'].name
-        #     categoria = elemento['Categoria'].name
-        #     ubicacion = elemento['Ticket'].ubicacion
+            objeto = ({
+                "id": compra_id,
+                "ticket_id": ticket_id,
+                "name": name,
+                "nombre_evento": nombre_evento,
+                "precio": precio,
+                "hora": hora,
+                "duracion": duracion,
+                "fecha": fecha,
+                "ubicacion": ubicacion,
+                "evento_id": evento_id
 
-        #     objeto = ({
-        #         "id": compra_id,
-        #         "ticket_id": ticket_id,
-        #         "name": name,
-        #         "name_event": name_event,
-        #         "precio": precio,
-        #         "hora": hora,
-        #         "duracion": duracion,
-        #         "fecha": fecha,
-        #         "locacion": locacion,
-        #         "categoria": categoria,
-        #         "ubicacion": ubicacion
-
-        #     })
-        #     response_body.append(objeto)
-        # if not response_body:
-        #     return jsonify({
-        #         'mensaje': 'No hay compras'
-        #     }), 204
-        # return jsonify(response_body), 200
+            })
+            response_body.append(objeto)
+        if not response_body:
+            return jsonify({
+                'mensaje': 'No hay compras'
+            }), 204
+        return jsonify(response_body), 200
     except Exception as e:
-        print(f'ERROR/historialCompra {e}')
-        return (f'ERROR/historialCompra {e}')
+        print(f'ERROR/resumenVentas {e}')
+        return (f'ERROR/resumenVentas {e}')

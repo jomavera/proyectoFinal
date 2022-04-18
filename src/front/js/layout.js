@@ -20,6 +20,7 @@ import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import { Registrado } from "./component/registrado";
 import { HistorialCompra } from "./pages/hitorialCompra";
+import { ResumenVenta } from "./pages/resumenVenta";
 
 //create your first component
 const Layout = () => {
@@ -65,15 +66,15 @@ const Layout = () => {
             </Route>
             <Route exact path="/historial-compra">
               <HistorialCompra />
-              </Route>
+            </Route>
             <Route exact path="/pagoexitoso">
               <PagoExitoso />
             </Route>
             <Route exact path="/pagonoexitoso">
               <PagoNoExitoso />
             </Route>
-            <Route exact path="/ingresoevento">
-              <IngresarEvento />
+            <Route exact path="/ventas">
+              <ResumenVenta />
             </Route>
             <Route>
               <h1>Not found!</h1>

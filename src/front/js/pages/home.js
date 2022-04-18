@@ -3,7 +3,6 @@ import { Context } from "../store/appContext";
 import "../../styles/home.css";
 import { Box } from "../component/box.js";
 import { Cards } from "../component/cards.js";
-// import { datos } from "../../../datosPrueba.js";
 import Select from 'react-select'
 
 export const Home = () => {

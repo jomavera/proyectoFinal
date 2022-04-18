@@ -1,6 +1,7 @@
 const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
+      datosVenta: [],
       eventos: [],
       eventosFiltrados: [],
       token: null,
@@ -44,7 +45,8 @@ const getState = ({ getStore, getActions, setStore }) => {
             password: password,
           }),
         };
-        console.log(typeof email, typeof password, "EMAIL; PASSWORD")
+        console.log(typeof email, typeof password, "EMAIL; PASSWORD");
+        console.log(`${process.env.BACKEND_URL}/api/token`);
         try {
           const resp = await fetch(
             
@@ -185,10 +187,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             Authorization: "Bearer " + store.token,
           },
         };
-        fetch(
-          `${process.env.BACKEND_URL}/api/historialCompra`,
-          opciones
-        )
+        fetch(`${process.env.BACKEND_URL}/api/historialCompra`, opciones)
           .then((resp) => resp.json())
           .then((data) => setStore({ historialCompra: data }))
           .catch((error) =>
@@ -203,7 +202,6 @@ const getState = ({ getStore, getActions, setStore }) => {
           headers: {
             "Content-Type": "application/json",
           },
-
         };
         try {
       
@@ -211,12 +209,31 @@ const getState = ({ getStore, getActions, setStore }) => {
             `${process.env.BACKEND_URL}/api/eventos`, opciones);
           const data = await resp.json();
           setStore({ eventos: data });
-          return data
+          return data;
         } catch (error) {
-          console.log(error)
+          console.log(error);
         }
       },
-    },
+      obtenerDatosVenta: async () => {
+       
+        const opciones = {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+        try {
+      
+          const resp = await fetch(
+            `${process.env.BACKEND_URL}/api/resumenVenta`, opciones);
+          const data = await resp.json();
+          setStore({ datosVenta: data });
+          return data;
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
   };
 };
 

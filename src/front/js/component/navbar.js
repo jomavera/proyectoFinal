@@ -23,7 +23,7 @@ export const Navbar = () => {
                 <div style={linksStyle}>Inicio</div>
               </Link>
             </li>
-            <li className="nav-item dropdown">
+            {/* <li className="nav-item dropdown">
               <div
                 className="nav-link dropdown-toggle"
                 href="#"
@@ -57,7 +57,7 @@ export const Navbar = () => {
                   </div>
                 </li>
               </ul>
-            </li>
+            </li> */}
           </ul>
         </div>
         <div className="ml-auto">
