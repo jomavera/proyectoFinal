@@ -252,6 +252,8 @@ for (const comuna of comunas) {
   const respInsertCom = await insertarDato("nueva_comuna", comuna);
 }
 
+
+
 async function procesarEvento(evento) {
   // Insertar locacion
   const respInsertLoc = await insertarDato("nueva_locacion", evento.locacion);
@@ -375,11 +377,13 @@ for (const evento of datos) {
 
 const usuarios = [
   {
-    name: "jose",
-    lastname: "vera",
-    email: "jose@prueba.com",
+    name: "admin",
+    lastname: "admin",
+    email: "admin@prueba.com",
     password: "12345",
     is_active: true,
+    role: 39851,
+    code: 475869
   },
   {
     name: "prueba",
@@ -387,10 +391,53 @@ const usuarios = [
     email: "test_user_86167117@testuser.com",
     password: "12345",
     is_active: true,
+    role: 184,
+    code: 1102038
+  },
+  {
+      name: "jose",
+      lastname: "vera",
+      email: "jose@prueba.com",
+      password: "12345",
+      is_active: true,
+      role: 184,
+      code: 1102038
   },
 ];
 
+async function insertarRol(url, role, code) {
+  const opciones = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      role:role,
+      code: code,
+    }),
+  };
+  try {
+    const resp = await fetch(
+      `https://3001-jomavera-proyectofinal-mtm8x1vvx3d.ws-us40.gitpod.io/api/${url}`,
+      opciones
+    );
+    if (resp.status != 200) {
+      throw new Error("ERROR en respuesta");
+    }
+    const data = await resp.json();
+    console.log(`Se inserto ${url} correctamente`);
+    return data;
+  } catch (error) {
+    console.error(`Error API ${url}: ${error}`);
+  }
+}
+
+
+
 async function insertarUsario(usuario) {
+
+  const respInsertRole = await insertarRol("nuevo_rol", usuario.role, usuario.code);
+
   const opciones = {
     method: "POST",
     headers: {
@@ -402,6 +449,7 @@ async function insertarUsario(usuario) {
       email: usuario.email,
       password: usuario.password,
       is_active: usuario.is_active,
+      code:usuario.code
     }),
   };
   try {

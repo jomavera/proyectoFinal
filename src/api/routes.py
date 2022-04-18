@@ -5,11 +5,11 @@ import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from flask import Flask, request, jsonify, url_for, Blueprint, redirect
-from api.models import db, User, Evento, Categoria, Locacion, Funcion, Compra, Ticket, Comuna
+from api.models import db, User, Evento, Categoria, Locacion, Funcion, Compra, Ticket, Comuna, Role
 from api.utils import generate_sitemap, APIException
 
 from flask_jwt_extended import create_access_token
-from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import get_jwt_identity, get_jwt
 from flask_jwt_extended import jwt_required
 
 from datetime import datetime
@@ -73,6 +73,7 @@ def new_user():
         email = request.json.get("email", None)
         password = request.json.get("password", None)
         is_active = request.json.get("is_active", None)
+        code = request.json.get("code", None)
         # if is_active.lower() == 'true':
         #     is_active = True
         # if is_active.lower()== 'false':
@@ -81,7 +82,7 @@ def new_user():
         if userR:
             return {"Error": "Correo ya registrado"}
         user = User(
-            name=name, lastname=lastname, email=email, password=password, is_active=True
+            name=name, lastname=lastname, email=email, password=password, is_active=True, code=code
         )
         db.session.add(user)
         db.session.commit()
@@ -108,7 +109,9 @@ def create_token():
         if user is None:
             return jsonify({"msg": "Bad username or password"}), 401
 
-        access_token = create_access_token(identity=user.id)
+        role = Role.query.filter_by(code=user.code).first()
+        additional_claims = {"role": role.id}
+        access_token = create_access_token(identity=user.id, additional_claims=additional_claims)
         return jsonify({"access_token": access_token, "user_id": user.id})
     except Exception as e:
         print(f"ERROR CREATE_TOKEN: {e}")
@@ -418,6 +421,21 @@ def new_function():
         print(f"Error nueva funcion : {e}")
         return "ERROR", 500
 
+@api.route("/nuevo_rol", methods=["POST"])
+def new_role():
+    try:
+        role = request.json.get("role", None)
+        code = request.json.get("code", None)
+
+        rol = Role(role, code)
+        db.session.add(rol)
+        db.session.commit()
+
+        return {"id": rol.id}, 200
+
+    except Exception as e:
+        print(f"Error nuevo rol : {e}")
+        return "ERROR", 500
 
 @api.route("/funciones/<int:evento_id>", methods=["GET"])
 def get_functions(evento_id):
@@ -799,3 +817,25 @@ def ingresar_evento():
     except Exception as e:
         print(f"Error ingresar funcion por formulario: {e}")
         return "ERROR", 500
+
+
+@api.route("/check_role", methods=["GET"])
+@jwt_required()
+def check_role():
+    try:
+        claims = get_jwt()
+        print(claims)
+        role_id = claims["role"]
+        if role_id == 39851:
+            response_body = {
+                "message": "Usuario es admin"
+            }
+            return jsonify(response_body), 200
+        else:
+            response_body = {
+                "message": "Usuario no es admin"
+            }
+            return jsonify(response_body), 403
+
+    except Exception as e:
+        print("ERROR! " f"{e}")
