@@ -18,9 +18,9 @@ export const FormularioPago = (props) => {
   const [cardFormState, setCardForm] = useState(null);
   const history = useHistory();
   const email = sessionStorage.getItem("email");
-console.log(process.env.PUBLIC_KEY,"key mercado")
+
   useEffect(() => {
-    const mp = new MercadoPago(process.env.PUBLIC_KEY, {
+    const mp = new MercadoPago(process.env.MERCADO_PUBLIC_KEY, {
       advancedFraudPrevention: false,
     });
 

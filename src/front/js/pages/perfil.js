@@ -15,7 +15,7 @@ export const Perfil = () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-		Authorization: "Bearer " + store.token,
+        Authorization: "Bearer " + store.token,
       },
     };
     try {
@@ -34,15 +34,9 @@ export const Perfil = () => {
     setTimeout(() => {
       if (store.token && store.token != "" && store.token != undefined)
         actions.getMessage();
-		chequearAdmin();
+      chequearAdmin();
     }, 1000);
   }, [store.token]);
-
-//   useEffect(() => {
-//     setTimeout(() => {
-//       chequearAdmin();
-//     }, 1000);
-//   }, []);
 
   const datosPerfil = store.message;
 
@@ -80,34 +74,49 @@ export const Perfil = () => {
         </div>
       </div>
 
-      <div className="row row2">
-        <div className="btn">
-          <Link to="/historial-compra">
-            <span
-              href="#"
-              className="btn btn-primary btn-lg active"
-              role="button"
-              aria-pressed="true"
-            >
-              Ver compras
-            </span>
-          </Link>
-        </div>
-        {admin && (
-          <div className="btn">
-            <Link to="/ingresoevento">
-              <span
-                href="#"
-                className="btn btn-primary btn-lg active"
-                role="button"
-                aria-pressed="true"
-              >
-                Ingresar Nuevo Evento
-              </span>
-            </Link>
+        {admin ? (
+          <div className="row row2 justify-content-center">
+            <div className="btn">
+              <Link to="/ventas">
+                <span
+                  href="#"
+                  className="btn btn-primary btn-lg active"
+                  role="button"
+                  aria-pressed="true"
+                >
+                  Ver ventas
+                </span>
+              </Link>
+            </div>
+            <div className="btn">
+              <Link to="/ingresoevento">
+                <span
+                  href="#"
+                  className="btn btn-primary btn-lg active"
+                  role="button"
+                  aria-pressed="true"
+                >
+                  Ingresar Nuevo Evento
+                </span>
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <div className="row row2 justify-content-center">
+            <div className="btn">
+              <Link to="/historial-compra">
+                <span
+                  href="#"
+                  className="btn btn-primary btn-lg active"
+                  role="button"
+                  aria-pressed="true"
+                >
+                  Ver compras
+                </span>
+              </Link>
+            </div>
           </div>
         )}
-      </div>
     </>
   );
 };

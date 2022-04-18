@@ -5,7 +5,6 @@ const logoStyle = {
 const linksStyle = {
   fontFamily: "Montserrat",
   marginLeft: "10px",
-  marginTop: "8px",
   color: "#5BB2F5",
 };
 

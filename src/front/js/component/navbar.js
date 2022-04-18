@@ -23,41 +23,6 @@ export const Navbar = () => {
                 <div style={linksStyle}>Inicio</div>
               </Link>
             </li>
-            {/* <li className="nav-item dropdown">
-              <div
-                className="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                style={dropDownsStyle}
-              >
-                Categorias
-              </div>
-              <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li>
-                  <div className="dropdown-item">
-                    <Link
-                      to="/"
-                      style={{ textDecoration: "none", color: "#5BB2F5" }}
-                    >
-                      Teatro
-                    </Link>
-                  </div>
-                </li>
-                <li>
-                  <div className="dropdown-item">
-                    <Link
-                      to="/"
-                      style={{ textDecoration: "none", color: "#5BB2F5" }}
-                    >
-                      Cine
-                    </Link>
-                  </div>
-                </li>
-              </ul>
-            </li> */}
           </ul>
         </div>
         <div className="ml-auto">

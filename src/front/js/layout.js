@@ -76,6 +76,9 @@ const Layout = () => {
             <Route exact path="/ventas">
               <ResumenVenta />
             </Route>
+            <Route exact path="/ingresoevento">
+              <IngresarEvento />
+            </Route>
             <Route>
               <h1>Not found!</h1>
             </Route>
