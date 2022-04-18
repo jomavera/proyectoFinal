@@ -1,6 +1,7 @@
 const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
+      datosVenta: [],
       eventos: [],
       eventosFiltrados: [],
       token: null,
@@ -212,7 +213,26 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log(error);
         }
       },
-    },
+      obtenerDatosVenta: async () => {
+       
+        const opciones = {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+        try {
+      
+          const resp = await fetch(
+            `${process.env.BACKEND_URL}/api/resumenVenta`, opciones);
+          const data = await resp.json();
+          setStore({ datosVenta: data });
+          return data;
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
   };
 };
 
