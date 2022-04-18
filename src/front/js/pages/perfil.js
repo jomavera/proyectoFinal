@@ -62,7 +62,8 @@ export const Perfil = () => {
               <div className="col">
                 <h2>Nombre</h2>
                 <div className="letra">
-                  {datosPerfil.name} {datosPerfil.lastname}{" "}
+                  {datosPerfil.name.toUpperCase()}{" "}
+                  {datosPerfil.lastname.toUpperCase()}{" "}
                 </div>
               </div>
               <div className="col">
@@ -74,49 +75,49 @@ export const Perfil = () => {
         </div>
       </div>
 
-        {admin ? (
-          <div className="row row2 justify-content-center">
-            <div className="btn">
-              <Link to="/ventas">
-                <span
-                  href="#"
-                  className="btn btn-primary btn-lg active"
-                  role="button"
-                  aria-pressed="true"
-                >
-                  Ver ventas
-                </span>
-              </Link>
-            </div>
-            <div className="btn">
-              <Link to="/ingresoevento">
-                <span
-                  href="#"
-                  className="btn btn-primary btn-lg active"
-                  role="button"
-                  aria-pressed="true"
-                >
-                  Ingresar Nuevo Evento
-                </span>
-              </Link>
-            </div>
+      {admin ? (
+        <div className="row row2 justify-content-center">
+          <div className="btn">
+            <Link to="/ventas">
+              <span
+                href="#"
+                className="btn btn-primary btn-lg active"
+                role="button"
+                aria-pressed="true"
+              >
+                Ver ventas
+              </span>
+            </Link>
           </div>
-        ) : (
-          <div className="row row2 justify-content-center">
-            <div className="btn">
-              <Link to="/historial-compra">
-                <span
-                  href="#"
-                  className="btn btn-primary btn-lg active"
-                  role="button"
-                  aria-pressed="true"
-                >
-                  Ver compras
-                </span>
-              </Link>
-            </div>
+          <div className="btn">
+            <Link to="/ingresoevento">
+              <span
+                href="#"
+                className="btn btn-primary btn-lg active"
+                role="button"
+                aria-pressed="true"
+              >
+                Ingresar Nuevo Evento
+              </span>
+            </Link>
           </div>
-        )}
+        </div>
+      ) : (
+        <div className="row row2 justify-content-center">
+          <div className="btn">
+            <Link to="/historial-compra">
+              <span
+                href="#"
+                className="btn btn-primary btn-lg active"
+                role="button"
+                aria-pressed="true"
+              >
+                Ver compras
+              </span>
+            </Link>
+          </div>
+        </div>
+      )}
     </>
   );
 };
