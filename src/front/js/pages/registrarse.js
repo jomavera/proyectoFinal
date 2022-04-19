@@ -47,17 +47,20 @@ export const Registrarse = () => {
   }
 
   if (store.estado != "") {
-    setTimeout('history.back()', 3000);
-    return (
-      <>
-        <div className="row justify-content-center registro">
-          <div className="col col-lg-6">
-            <div className="login-form-1">Usuario registrado correctamente, inicia sesión para ver tu perfil</div>
-          </div>
-        </div>
+   
+    alert("Usuario registrado correctamente")
+    location.reload()
+    // setTimeout('history.back()', 3000);
+    // return (
+    //   <>
+    //     <div className="row justify-content-center registro">
+    //       <div className="col col-lg-6">
+    //         <div className="login-form-1">Usuario registrado correctamente, inicia sesión para ver tu perfil</div>
+    //       </div>
+    //     </div>
 
-      </>
-    );
+    //   </>
+    // );
 
   }
   return (
@@ -98,7 +101,7 @@ export const Registrarse = () => {
 
               <div className="form-group">
                 <label htmlFor="inputEmail" className="control-label">Email</label>
-                <input type="email" className="form-control" id="inputEmail" placeholder="Correo electónico"  required value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input type="email" className="form-control" id="inputEmail" placeholder="Correo electónico"  required value={email} onChange={(e) => setEmail(e.target.value)} minLength={5}/>
                 <div className="help-block with-errors"></div>
               </div>
 
