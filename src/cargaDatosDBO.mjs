@@ -1,63 +1,63 @@
 import fetch from "node-fetch";
 const datos = [
   {
-    titulo: "Evento 1",
-    descripcion:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. . Sed maximus consectetur blandit. ",
+    titulo: "The Batman",
+    descripcion: "Pelicula: The Batman",
     sinopsis:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus blandit commodo tincidunt. Sed nulla ex, feugiat at arcu in, fringilla facilisis nisl. Phasellus placerat leo quis sapien euismod semper. Fusce molestie erat a velit tincidunt, eget rutrum massa bibendum. Suspendisse. ",
     duracion: "1h30",
-    locacion: "Teatro Municipal de Santiago",
+    locacion: "Cineplanet Costanera",
     precio: 8000,
     funciones: [
       new Date(2022, 6, 30, 22, 15),
       new Date(2022, 7, 20, 20),
       new Date(2022, 5, 30, 21, 30),
     ],
-    categoria: "Teatro",
-    imagen: "https://via.placeholder.com/300x300",
+    categoria: "Cine",
+    imagen:
+      "https://res.cloudinary.com/dcx9ohrdq/image/upload/v1650387581/cine01_ueooml.jpg",
     comuna_id: 1,
   },
   {
-    titulo: "Evento 2",
+    titulo: "Festival Musical Music",
     descripcion:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus consectetur blandit.",
+      "Concierto: Festival Musical Music. Mas de 30 bandas se presentan durante todo el dia",
     sinopsis:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus blandit commodo tincidunt. Sed nulla ex, feugiat at arcu in, fringilla facilisis nisl. Phasellus placerat leo quis sapien euismod semper. Fusce molestie erat a velit tincidunt, eget rutrum massa bibendum. Suspendisse. ",
     duracion: "1h50",
-    locacion: "Teatro Municipal de Las Condes",
+    locacion: "Parque O'Higgins",
     precio: 12000,
     funciones: [
       new Date(2022, 6, 30, 22, 15),
       new Date(2022, 7, 20, 20),
       new Date(2022, 5, 30, 21, 30),
     ],
-    categoria: "Teatro",
-    imagen: "https://via.placeholder.com/300x300",
+    categoria: "Concierto",
+    imagen:
+      "https://res.cloudinary.com/dcx9ohrdq/image/upload/v1650387581/concierto02_yacnwa.jpg",
     comuna_id: 1,
   },
   {
-    titulo: "Evento 3",
-    descripcion:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus consectetur blandit.",
+    titulo: "Bad Bunny: World Tour",
+    descripcion: "Concierto: Bad Bunny se presentara en Santaigo.",
     sinopsis:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus blandit commodo tincidunt. Sed nulla ex, feugiat at arcu in, fringilla facilisis nisl. Phasellus placerat leo quis sapien euismod semper. Fusce molestie erat a velit tincidunt, eget rutrum massa bibendum. Suspendisse. ",
     duracion: "1h25",
-    locacion: "Teatro Municipal de  Providencia",
+    locacion: "Movistar Arena",
     precio: 10000,
     funciones: [
       new Date(2022, 6, 30, 22, 15),
       new Date(2022, 7, 20, 20),
       new Date(2022, 5, 30, 21, 30),
     ],
-    categoria: "Teatro",
-    imagen: "https://via.placeholder.com/300x300",
+    categoria: "Concierto",
+    imagen:
+      "https://res.cloudinary.com/dcx9ohrdq/image/upload/v1650387581/concierto01_nvxmhs.jpg",
     comuna_id: 2,
   },
   {
-    titulo: "Evento 4",
-    descripcion:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus consectetur blandit.",
+    titulo: "Los Payasos",
+    descripcion: "Teatro: Los Payasos",
     sinopsis:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus blandit commodo tincidunt. Sed nulla ex, feugiat at arcu in, fringilla facilisis nisl. Phasellus placerat leo quis sapien euismod semper. Fusce molestie erat a velit tincidunt, eget rutrum massa bibendum. Suspendisse. ",
     duracion: "1h15",
@@ -69,13 +69,13 @@ const datos = [
       new Date(2022, 5, 30, 21, 30),
     ],
     categoria: "Teatro",
-    imagen: "https://via.placeholder.com/300x300",
+    imagen:
+      "https://res.cloudinary.com/dcx9ohrdq/image/upload/v1650387581/teatro02_zuztiw.jpg",
     comuna_id: 2,
   },
   {
-    titulo: "Evento 5",
-    descripcion:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus consectetur blandit.",
+    titulo: "Los Tres Mosqueteros",
+    descripcion: "Teatro: Los Tres Mosqueteros",
     sinopsis:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus blandit commodo tincidunt. Sed nulla ex, feugiat at arcu in, fringilla facilisis nisl. Phasellus placerat leo quis sapien euismod semper. Fusce molestie erat a velit tincidunt, eget rutrum massa bibendum. Suspendisse. ",
     duracion: "1h35",
@@ -87,31 +87,31 @@ const datos = [
       new Date(2022, 5, 30, 21, 30),
     ],
     categoria: "Teatro",
-    imagen: "https://via.placeholder.com/300x300",
+    imagen:
+      "https://res.cloudinary.com/dcx9ohrdq/image/upload/v1650387581/teatro01_fkn0lc.jpg",
     comuna_id: 3,
   },
   {
-    titulo: "Evento 6",
-    descripcion:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus consectetur blandit.",
+    titulo: "Spiderman No Way Home",
+    descripcion: "Cine: Spiderman No Way Home",
     sinopsis:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus blandit commodo tincidunt. Sed nulla ex, feugiat at arcu in, fringilla facilisis nisl. Phasellus placerat leo quis sapien euismod semper. Fusce molestie erat a velit tincidunt, eget rutrum massa bibendum. Suspendisse. ",
     duracion: "1h15",
-    locacion: "Teatro Nescafe",
+    locacion: "Cinemark Mall Plaza Nuñoa",
     precio: 15300,
     funciones: [
       new Date(2022, 6, 30, 22, 15),
       new Date(2022, 7, 20, 20),
       new Date(2022, 5, 30, 21, 30),
     ],
-    categoria: "Teatro",
-    imagen: "https://via.placeholder.com/300x300",
+    categoria: "Cine",
+    imagen:
+      "https://res.cloudinary.com/dcx9ohrdq/image/upload/v1650387581/cine02_rstgmz.jpg",
     comuna_id: 3,
   },
   {
-    titulo: "Evento 7",
-    descripcion:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus consectetur blandit.",
+    titulo: "Aida",
+    descripcion: "Teatro: Aida.",
     sinopsis:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus blandit commodo tincidunt. Sed nulla ex, feugiat at arcu in, fringilla facilisis nisl. Phasellus placerat leo quis sapien euismod semper. Fusce molestie erat a velit tincidunt, eget rutrum massa bibendum. Suspendisse. ",
     duracion: "1h15",
@@ -122,8 +122,9 @@ const datos = [
       new Date(2022, 7, 20, 20),
       new Date(2022, 5, 30, 21, 30),
     ],
-    categoria: "Cine",
-    imagen: "https://via.placeholder.com/300x300",
+    categoria: "Teatro",
+    imagen:
+      "https://res.cloudinary.com/dcx9ohrdq/image/upload/v1650387581/teatro03_bgtcjq.jpg",
     comuna_id: 3,
   },
   {
@@ -176,7 +177,7 @@ async function insertarDato(url, nombre) {
   };
   try {
     const resp = await fetch(
-      `https://3001-jomavera-proyectofinal-mtm8x1vvx3d.ws-us40.gitpod.io/api/${url}`,
+      `https://3001-jomavera-proyectofinal-mtm8x1vvx3d.ws-us34.gitpod.io/api/${url}`,
       opciones
     );
     if (resp.status != 200) {
@@ -199,7 +200,7 @@ async function getID(url, name) {
   };
   try {
     const resp = await fetch(
-      `https://3001-jomavera-proyectofinal-mtm8x1vvx3d.ws-us40.gitpod.io/api/${url}/${name}`,
+      `https://3001-jomavera-proyectofinal-mtm8x1vvx3d.ws-us34.gitpod.io/api/${url}/${name}`,
       opciones
     );
     if (resp.status != 200) {
@@ -233,7 +234,7 @@ async function insertarEvento(evento, locacion_id, categoria_id) {
   };
   try {
     const resp = await fetch(
-      "https://3001-jomavera-proyectofinal-mtm8x1vvx3d.ws-us40.gitpod.io/api/nuevo_evento",
+      "https://3001-jomavera-proyectofinal-mtm8x1vvx3d.ws-us34.gitpod.io/api/nuevo_evento",
       opciones
     );
     if (resp.status != 200) {
@@ -251,8 +252,6 @@ const comunas = ["Providencia", "Vitacura", "Santiago Centro", "Recoleta"];
 for (const comuna of comunas) {
   const respInsertCom = await insertarDato("nueva_comuna", comuna);
 }
-
-
 
 async function procesarEvento(evento) {
   // Insertar locacion
@@ -288,7 +287,7 @@ async function getEventoID(name) {
   };
   try {
     const resp = await fetch(
-      `https://3001-jomavera-proyectofinal-mtm8x1vvx3d.ws-us40.gitpod.io/api/evento_name/${name}`,
+      `https://3001-jomavera-proyectofinal-mtm8x1vvx3d.ws-us34.gitpod.io/api/evento_name/${name}`,
       opciones
     );
     if (resp.status != 200) {
@@ -320,7 +319,7 @@ async function insertarFuncion(evento_id, funcion) {
   };
   try {
     const resp = await fetch(
-      "https://3001-jomavera-proyectofinal-mtm8x1vvx3d.ws-us40.gitpod.io/api/nueva_funcion",
+      "https://3001-jomavera-proyectofinal-mtm8x1vvx3d.ws-us34.gitpod.io/api/nueva_funcion",
       opciones
     );
     if (resp.status != 200) {
@@ -353,7 +352,7 @@ async function insertarTickets(evento_id, funcion, funcion_id) {
   };
   try {
     const resp = await fetch(
-      "https://3001-jomavera-proyectofinal-mtm8x1vvx3d.ws-us40.gitpod.io/api/tickets",
+      "https://3001-jomavera-proyectofinal-mtm8x1vvx3d.ws-us34.gitpod.io/api/tickets",
       opciones
     );
     if (resp.status != 200) {
@@ -383,7 +382,7 @@ const usuarios = [
     password: "12345",
     is_active: true,
     role: 39851,
-    code: 475869
+    code: 475869,
   },
   {
     name: "prueba",
@@ -392,16 +391,16 @@ const usuarios = [
     password: "12345",
     is_active: true,
     role: 184,
-    code: 1102038
+    code: 1102038,
   },
   {
-      name: "jose",
-      lastname: "vera",
-      email: "jose@prueba.com",
-      password: "12345",
-      is_active: true,
-      role: 184,
-      code: 1102038
+    name: "jose",
+    lastname: "vera",
+    email: "jose@prueba.com",
+    password: "12345",
+    is_active: true,
+    role: 184,
+    code: 1102038,
   },
 ];
 
@@ -412,13 +411,13 @@ async function insertarRol(url, role, code) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      role:role,
+      role: role,
       code: code,
     }),
   };
   try {
     const resp = await fetch(
-      `https://3001-jomavera-proyectofinal-mtm8x1vvx3d.ws-us40.gitpod.io/api/${url}`,
+      `https://3001-jomavera-proyectofinal-mtm8x1vvx3d.ws-us34.gitpod.io/api/${url}`,
       opciones
     );
     if (resp.status != 200) {
@@ -432,11 +431,12 @@ async function insertarRol(url, role, code) {
   }
 }
 
-
-
 async function insertarUsario(usuario) {
-
-  const respInsertRole = await insertarRol("nuevo_rol", usuario.role, usuario.code);
+  const respInsertRole = await insertarRol(
+    "nuevo_rol",
+    usuario.role,
+    usuario.code
+  );
 
   const opciones = {
     method: "POST",
@@ -449,12 +449,12 @@ async function insertarUsario(usuario) {
       email: usuario.email,
       password: usuario.password,
       is_active: usuario.is_active,
-      code:usuario.code
+      code: usuario.code,
     }),
   };
   try {
     const resp = await fetch(
-      "https://3001-jomavera-proyectofinal-mtm8x1vvx3d.ws-us40.gitpod.io/api/new_user",
+      "https://3001-jomavera-proyectofinal-mtm8x1vvx3d.ws-us34.gitpod.io/api/new_user",
       opciones
     );
     if (resp.status != 200) {
