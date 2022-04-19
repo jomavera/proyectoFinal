@@ -4,6 +4,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import "../../styles/login.css";
 import { useHistory } from "react-router-dom";
+import swal from 'sweetalert';
+
 
 
 import { Context } from "../store/appContext";
@@ -25,31 +27,44 @@ export const Registrarse = () => {
         e.preventDefault()
         actions.registrarse(name, lastname, email, password).then((data) => {
           console.log(data,"data")
-         
+          
           
           if (data && data.mensaje && data.mensaje.toLowerCase() === "ok") {
   
             actions.actualizarEstado("Registrado");
+            setName("")
+            setLastname("")
+            setEmail("")
+            setPassword("")
           }
-  
+          
           if(data.Error != undefined){
-            alert(data.Error)
+            swal({
+              text: "Correo ya registrado",
+              icon: "error"
+            });
           }
-  
+          
         });
      
       }else{
-        alert("La contraseña debe tener más de 5 caracteres")
+        swal({
+          text: "La contraseña debe tener más de 5 caracteres",
+          icon: "info"
+        });
       }
       
     };
-
+  
   }
 
-  if (store.estado != "") {
-   
-    alert("Usuario registrado correctamente")
-    location.reload()
+  console.log(store.estado,"store stado")
+  if (store.estado == "Registrado") {
+    swal("Registrado!", "Usuario registrado correctamente!", "success");
+    actions.actualizarEstado("");
+   // history.push('/home')
+   // alert("Usuario registrado correctamente")
+    
     // setTimeout('history.back()', 3000);
     // return (
     //   <>

@@ -90,7 +90,8 @@
     "react-tooltip": "^4.2.21",
     "sass": "^1.49.9",
     "sass-loader": "^12.6.0",
-    "seatchart": "^0.1.0"
+    "seatchart": "^0.1.0",
+    "sweetalert": "^2.1.2"
   },
   "react-dotenv": {
     "whitelist": [
