@@ -74,9 +74,8 @@ export const PagoExitoso = (props) => {
           </div>
         </div>
       </div>
-      <div className="row align-items-center">
-        <div className="col-3"></div>
-        <div className="col-md-auto" style={cajaStyle}>
+      <div className="row justify-content-center p-3">
+        <div className="col-5" style={cajaStyle}>
           <div className="row">
             <div className="fs-4 fw-bold">Locación:</div>
             <div className="fs-4">{datosEvento.locacion}</div>
