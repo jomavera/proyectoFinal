@@ -74,14 +74,6 @@ export const FormularioPago = (props) => {
         },
         onFetching: (resource) => {
           console.log("Fetching resource: ", resource);
-
-          // Animate progress bar
-          const progressBar = document.querySelector(".progress-bar");
-          progressBar.removeAttribute("value");
-
-          return () => {
-            progressBar.setAttribute("value", "0");
-          };
         },
       },
     });
@@ -259,11 +251,8 @@ export const FormularioPago = (props) => {
             >
               Pagar
             </button>
-            <hr></hr>
-            <progress value="0" className="progress-bar">
-              Cargando...
-            </progress>
           </form>
+          <hr></hr>
         </div>
       </div>
     </div>
